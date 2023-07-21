@@ -16,7 +16,9 @@
 > Supported Browser's (Chrome, Opera, OperaGX, Edge, Brave) 
 
 > Passwords, Cookies, Cards, Downloads, Historys
-
+> 
+> Discord Token and info Stealer
+> 
 > Instagram Session stealer & validator
 > 
 > Roblox Session stealer & validator
@@ -37,13 +39,10 @@
 #### Additional
 
 > Ultra Anti-VM (Exela uses 8 different methods for Anti-VM)
->
-> Validates a found discord token and then sends it to your discord webhook
->
+
 > Sends all files to your discord webhook in beautiful embeds and a structured zip file
 
 
-- Sends all files to your discord webhook in beautiful embeds and a structured zip file
 
 # Warning
 
