@@ -50,11 +50,17 @@
 
 - All Browsers versions Supported
 
-# Browsers to be added
+# Todo
 
-- FTP (Firefox)
+- FTP (Firefox) Stealer
 
-- Yandex
+- Yandex Stealer
+
+- Youtube Session stealer & validator
+
+- Spotify Session stealer & validator
+
+- Twitch Session stealer & validator
 
 # Additional
 
