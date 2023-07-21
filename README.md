@@ -79,7 +79,7 @@
 - just compile and execute on windows operating system
 
 # Note's
-- If there is anything you want me to add to this project, you can contact me via telegram or Discord.
+- If there is something you want me to add to this project or you want to buy the premium version of this project, you can contact me via telegram or Discord.
 
 - My telegram => https://t.me/quicaxd
 
