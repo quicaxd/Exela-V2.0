@@ -62,6 +62,12 @@
 
 - Twitch Session stealer & validator
 
+- Wifi grabber
+
+- Capture Screenshot
+
+- Undetectable Startup 
+
 # Additional
 
 - Ultra Strong Anti-VM (Exela use 12 different Anti-VM method)
