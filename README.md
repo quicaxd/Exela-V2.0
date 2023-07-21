@@ -1,6 +1,6 @@
-
+ 
    Telegram server: https://t.me/ExelaStealer
-### 📁  〢 Setting Up
+### Settings
 
 > Install [Python 3.10](https://www.python.org/downloads/release/python-3100/) `Exela`
 >
@@ -45,12 +45,13 @@
 
 
 # Warning
+-Just build and execute windows opereting systems
 
 - This project was developed for educational purposes only.
 
 - I am not responsible for any illegal use
 
-### 📝 〢 Todo
+### Todo
 > - More grabbers (Twitch, spootfiy, Netflix, YouTube)
 > - Capture Screenshot
 > - Grab Wifi passwords
