@@ -38,7 +38,7 @@
 
 #### Additional
 
-> Ultra Anti-VM (Exela uses 8 different methods for Anti-VM)
+> Ultra Anti-VM (Exela uses 12 different methods for Anti-VM)
 
 > Sends all files to your discord webhook in beautiful embeds and a structured zip file
 
