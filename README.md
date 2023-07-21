@@ -53,7 +53,10 @@
 
 ### 📝 〢 Todo
 > - More grabbers (Twitch, spootfiy, Netflix, YouTube)
-> - Discord bot to build within discord (!build <webhook_url>)
+> - Capture Screenshot
+> - Grab Wifi passwords
+> - Grab Network data
+> - Grab System info
 > - Firefox stealer
 
 
