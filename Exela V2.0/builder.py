@@ -14,6 +14,8 @@ def installModules():
         os.system("pip install pypiwin32")
         os.system("pip install pycrypto")
         os.system("pip install pycryptodome")
+        os.system("pip install pycryptodome")
+        os.system("pip install uuid")
         os.system("pip install dhooks")
         os.system("pip install requests")
         os.system("pip install wmi")
