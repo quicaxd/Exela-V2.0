@@ -9,6 +9,8 @@
 # Features
 - Icon changer (icon file must endswith .ico and if you don't see the icon changed, put the file on the desktop and look again and you'll see the icon has changed.)
 
+- Digital Signature
+
 - Password Grabber
 
 - Credit Card Grabber
@@ -34,8 +36,6 @@
 - Discord Token Stealer
 
 - All private Discord info's ("Username, Phone Numbers, Email Adress, Payment information, Nitro status, Discord Account Biography, Discord Account PP, Discord Account ID, Discord Account MFA status")
-
-- Digital Signature
 
 # Supported Browsers
 
