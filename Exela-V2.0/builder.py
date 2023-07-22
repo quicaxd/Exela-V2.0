@@ -20,7 +20,7 @@ if icon.lower() == "yes" or icon.lower == "y":
         time.sleep(2)
         exit()
 else:
-    pass
+    iconchange = False
 
 
 with open("Exela.py", "r", encoding="utf-8", errors="ignore") as sourceCode:
