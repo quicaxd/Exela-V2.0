@@ -40,7 +40,6 @@ def buildFile():
   
     os.system("cls")
     print("your file build succesfully\nYour file is => Exela.exe")
-    shutil.rmtree("dist")
     
 def digitalSign(path, signedFile):
     os.system(f"python digital-sign.py -i {signedFile} -t {path} -o Exela.exe")
