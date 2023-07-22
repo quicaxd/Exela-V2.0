@@ -7,6 +7,8 @@
 - Runtime and Scantime FUD Stealer
 
 # Features
+- Icon changer (icon file must endswith .ico)
+
 - Password Grabber
 
 - Credit Card Grabber
