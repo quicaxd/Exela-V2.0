@@ -15,7 +15,7 @@ iconpath = ""
 if icon.lower() == "yes" or icon.lower == "y":
     iconchange = True
     iconpath = str(input("icon file must be .ico otherwise the icon will not change\nEnter the path of the icon file : "))
-    if not iconpath.endswith(".icon"):
+    if not iconpath.endswith(".ico"):
         print("Pls use .ico files")
         time.sleep(2)
         exit()
