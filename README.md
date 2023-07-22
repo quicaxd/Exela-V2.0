@@ -7,7 +7,7 @@
 - Runtime and Scantime FUD Stealer
 
 # Features
-- Icon changer (icon file must endswith .ico)
+- Icon changer (icon file must endswith .ico and if you don't see the icon changed, put the file on the desktop and look again and you'll see the icon has changed.)
 
 - Password Grabber
 
