@@ -7,7 +7,6 @@
 - Runtime and Scantime FUD Stealer
 
 # Features
-- Icon changer (icon file must endswith .ico and if you don't see the icon changed, put the file on the desktop and look again and you'll see the icon has changed.)
 
 - Digital Signature
 
@@ -38,6 +37,13 @@
 - Discord Token Stealer
 
 - All private Discord info's ("Username, Phone Numbers, Email Adress, Payment information, Nitro status, Discord Account Biography, Discord Account PP, Discord Account ID, Discord Account MFA status")
+
+
+# Builder Options
+
+- Icon changer (icon file must endswith .ico and if you don't see the icon changed, put the file on the desktop and look again and you'll see the icon has changed.) ( Optional )
+
+- Ultra Strong Anti-VM (Exela use 12 different Anti-VM method) ( Optional )
 
 # Supported Browsers
 
@@ -73,7 +79,7 @@
 
 # Additional
 
-- Ultra Strong Anti-VM (Exela use 12 different Anti-VM method) ( Optional )
+- Resources Settings from builder
 
 - Sends all files to your discord webhook in beautiful embeds and a structured zip file
 
