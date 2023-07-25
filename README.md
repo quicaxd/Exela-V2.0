@@ -104,7 +104,7 @@
 
 - My telegram => https://t.me/quicaxd
 
-- My discord => quicaxd#6889
+- My discord => quicaxd#1888
 
 
 ## Screenshot's
