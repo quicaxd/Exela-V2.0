@@ -11,6 +11,8 @@
 
 - Digital Signature
 
+- Capture Screenshot
+
 - Password Grabber
 
 - Credit Card Grabber
@@ -73,7 +75,7 @@
 
 # Additional
 
-- Ultra Strong Anti-VM (Exela use 12 different Anti-VM method)
+- Ultra Strong Anti-VM (Exela use 12 different Anti-VM method) ( Optional )
 
 - Sends all files to your discord webhook in beautiful embeds and a structured zip file
 
