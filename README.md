@@ -111,8 +111,6 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pukzrjo.png)
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/shuxkeq.png)
-
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/r9g6g2n.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/iw1jtiw.png)
@@ -129,3 +127,4 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
 
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/shuxkeq.png)
