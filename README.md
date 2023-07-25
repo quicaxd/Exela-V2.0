@@ -68,7 +68,7 @@
 - Twitch Session stealer & validator
 
 - Wifi grabber
-- 
+  
 - Undetectable Startup 
 
 # Additional
