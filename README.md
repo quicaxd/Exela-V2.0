@@ -77,9 +77,9 @@
   
 - Undetectable Startup 
 
-# Additional
-
 - Resources Settings from builder
+
+# Additional
 
 - Sends all files to your discord webhook in beautiful embeds and a structured zip file
 
