@@ -816,7 +816,6 @@ class HardAntiVM:
         self.check_processes,
         self.check_files,
         self.check_gdb,
-        self.check_debugger,
         self.check_cursor_position,
         self.check_hypervisor,
         self.sandboxie,
@@ -903,13 +902,6 @@ class HardAntiVM:
         except:
             pass
         return False
-    def check_debugger(self):
-        try:
-            if ctypes.windll.kernel32.IsDebuggerPresent():
-                return True
-            return False
-        except:
-            return False
     def check_cursor_position(self):
         try:
             x, y = win32api.GetCursorPos()
