@@ -8,6 +8,8 @@
 
 # Features
 
+- Startup (Optional)
+
 - Digital Signature
 
 - Capture Screenshot
@@ -40,6 +42,8 @@
 
 
 # Builder Options
+
+- Startup Methods (if you want a startup exela gives you 2 different options these are schtask and regedit startup)
 
 - Icon changer (icon file must endswith .ico and if you don't see the icon changed, put the file on the desktop and look again and you'll see the icon has changed.) ( Optional )
 
@@ -108,6 +112,14 @@
 
 
 ## Screenshot's
+
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/s9agwgx.png)
+
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/tk98bsc.png)
+
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/puph3x2.png)
+
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/bmp8fcl.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pukzrjo.png)
 
