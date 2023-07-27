@@ -78,8 +78,6 @@
 - Twitch Session stealer & validator
 
 - Wifi grabber
-  
-- Undetectable Startup 
 
 - Resources Settings from builder
 
