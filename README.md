@@ -109,8 +109,6 @@
 
 ## Screenshot's
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/qfljpqt.png)
-
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pukzrjo.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/r9g6g2n.png)
@@ -128,5 +126,7 @@
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/t28m15t.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
+
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/qfljpqt.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/shuxkeq.png)
