@@ -109,6 +109,8 @@
 
 ## Screenshot's
 
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/qfljpqt.png)
+
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pukzrjo.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/r9g6g2n.png)
