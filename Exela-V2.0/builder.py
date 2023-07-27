@@ -2,7 +2,7 @@ import os, shutil, time, sys
 
 class Build:
     def __init__(self) -> None:
-        self.pyinstallerCommand = "pyinstaller --onefile --noconsole --clean --upx-dir upx-4.0.2-win64 "
+        self.pyinstallerCommand = "pyinstaller --onefile --noconsole --clean --noconfirm --version-file version.txt --upx-dir upx-4.0.2-win64 "
         self.useIcon = False
         self.startup = "false"
         self.startupMethod = "regedit"
