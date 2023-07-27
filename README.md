@@ -43,7 +43,7 @@
 
 # Builder Options
 
-- Startup Methods (if you want a startup exela gives you 2 different options these are schtask and regedit startup)
+- Startup Methods (if you want a startup exela gives you 2 different options these are schtask and regedit startup) ( Optional )
 
 - Icon changer (icon file must endswith .ico and if you don't see the icon changed, put the file on the desktop and look again and you'll see the icon has changed.) ( Optional )
 
