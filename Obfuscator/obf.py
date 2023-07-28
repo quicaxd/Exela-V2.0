@@ -3,7 +3,6 @@ import argparse
 from cryptography.fernet import Fernet
 import base64
 import random
-import base64
 import marshal
 import zlib
 from colorama import Fore, init
