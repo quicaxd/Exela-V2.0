@@ -109,11 +109,9 @@
 
 ## Screenshot's
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/h7gzzcw.png)
-
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/bmp8fcl.png)
-
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pukzrjo.png)
+
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/h7gzzcw.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/r9g6g2n.png)
 
