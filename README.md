@@ -109,11 +109,7 @@
 
 ## Screenshot's
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/s9agwgx.png)
-
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/tk98bsc.png)
-
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/puph3x2.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/h7gzzcw.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/bmp8fcl.png)
 
@@ -134,7 +130,5 @@
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/t28m15t.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
-
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/qfljpqt.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/shuxkeq.png)
