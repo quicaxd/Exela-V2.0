@@ -82,9 +82,11 @@ class Build:
     def moduleInstaller(self):
         try:
             os.system('cls')
+            os.system('pip install pygetwindow')
             os.system("pip install colorama")
             os.system("pip install cryptography")
             os.system("pip install psutil")
+            os.system("pip install GPUtil")
             os.system("pip install wmi")
             os.system("pip install mss")
             os.system("pip install pycryptodome")
