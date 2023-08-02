@@ -135,4 +135,4 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/shuxkeq.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/8memiod.png)
