@@ -14,6 +14,12 @@
 
 - Capture Screenshot
 
+- System info Stealer
+
+- Active Window Tittle Stealer
+
+- Process Stealer
+
 - Password Grabber
 
 - Credit Card Grabber
