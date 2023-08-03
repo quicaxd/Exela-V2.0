@@ -8,10 +8,6 @@
 
 # Features
 
-- Startup (Optional)
-
-- Digital Signature
-
 - Capture Screenshot
 
 - System info Stealer
@@ -48,6 +44,10 @@
 
 
 # Builder Options
+
+- Digital Signature
+
+- Realtime Obfuscation
 
 - Startup Methods (if you want a startup exela gives you 2 different options these are schtask and regedit startup) ( Optional )
 
