@@ -84,7 +84,7 @@
 - FTP (Firefox) Stealer
 
 - Yandex Stealer
-- 
+  
 - Take Webcamshot
 
 - Record Audio
