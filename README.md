@@ -14,6 +14,8 @@
 
 - System info Stealer
 
+- Last Clipboard text/image Stealer
+
 - Active Window Tittle Stealer
 
 - Process Stealer
