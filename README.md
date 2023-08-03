@@ -8,6 +8,8 @@
 
 # Features
 
+- After stealing process Inject Keylogger (Optional)
+
 - Capture Screenshot
 
 - System info Stealer
@@ -48,6 +50,8 @@
 - Digital Signature
 
 - Realtime Obfuscation
+
+- after stealing process Inject Keylogger (Optional)
 
 - Startup Methods (if you want a startup exela gives you 2 different options these are schtask and regedit startup) ( Optional )
 
