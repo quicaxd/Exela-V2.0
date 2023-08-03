@@ -137,7 +137,7 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.ibb.co/jw0xM40/image.png)
 
-![Uygulama Ekran Görüntüsü](https://img.imgyukle.com/2023/08/03/r2Ezqe.png)
+![Uygulama Ekran Görüntüsü](https://i.ibb.co/2nrWkjY/image2.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/iw1jtiw.png)
   
@@ -153,4 +153,4 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
 
-![Uygulama Ekran Görüntüsü](https://img.imgyukle.com/2023/08/03/r2E948.png)
+![Uygulama Ekran Görüntüsü](https://i.ibb.co/YR6fj5L/image3.png)
