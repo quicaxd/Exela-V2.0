@@ -135,7 +135,9 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/h7gzzcw.png)
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/r9g6g2n.png)
+![Uygulama Ekran Görüntüsü](https://img.imgyukle.com/2023/08/03/r2EvNR.png)
+
+![Uygulama Ekran Görüntüsü](https://img.imgyukle.com/2023/08/03/r2Ezqe.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/iw1jtiw.png)
   
@@ -151,4 +153,4 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/8memiod.png)
+![Uygulama Ekran Görüntüsü](https://img.imgyukle.com/2023/08/03/r2E948.png)
