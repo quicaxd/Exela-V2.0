@@ -135,7 +135,7 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/h7gzzcw.png)
 
-![Uygulama Ekran Görüntüsü](https://img.imgyukle.com/2023/08/03/r2EvNR.png)
+![Uygulama Ekran Görüntüsü](https://i.ibb.co/jw0xM40/image.png)
 
 ![Uygulama Ekran Görüntüsü](https://img.imgyukle.com/2023/08/03/r2Ezqe.png)
 
