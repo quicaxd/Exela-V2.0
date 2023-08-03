@@ -1,5 +1,5 @@
- 
-   Telegram server: https://t.me/ExelaStealer
+
+    Telegram server: https://t.me/ExelaStealer
    
 # Exela's Title
 - Exela Stealer
@@ -76,6 +76,14 @@
 - FTP (Firefox) Stealer
 
 - Yandex Stealer
+
+- Injecting the keylogger after the stealing process is finished
+
+- Take Webcamshot
+
+- Record Audio
+
+- Mining
 
 - Youtube Session stealer & validator
 
