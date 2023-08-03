@@ -84,9 +84,7 @@
 - FTP (Firefox) Stealer
 
 - Yandex Stealer
-
-- Injecting the keylogger after the stealing process is finished
-
+- 
 - Take Webcamshot
 
 - Record Audio
