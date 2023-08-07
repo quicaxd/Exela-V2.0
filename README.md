@@ -75,6 +75,8 @@
 
 - Vivaldi
 
+- And Much More
+
 - All Browsers versions Supported
 
 # Todo
