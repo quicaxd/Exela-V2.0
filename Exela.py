@@ -192,7 +192,7 @@ class QuicaxdExela:
                     shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 except:
                     try:
-                        #subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
+                        subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
                         time.sleep(1.5)
                         shutil.copy2(self.login_data_path, self.backup_login_data_path)
                     except:
