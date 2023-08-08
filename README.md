@@ -153,4 +153,4 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
 
-![Uygulama Ekran Görüntüsü](https://i.ibb.co/YR6fj5L/image3.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/16n1tka.png)
