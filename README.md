@@ -12,13 +12,7 @@
 
 - Capture Screenshot
 
-- System info Stealer
-
-- Last Clipboard text/image Stealer
-
-- Active Window Tittle Stealer
-
-- Process Stealer
+- Create Mutex (Anti Spam)
 
 - Password Grabber
 
@@ -45,6 +39,14 @@
 - Discord Token Stealer
 
 - All private Discord info's ("Username, Phone Numbers, Email Adress, Payment information, Nitro status, Discord Account Biography, Discord Account PP, Discord Account ID, Discord Account MFA status")
+
+- System info Stealer
+
+- Last Clipboard text/image Stealer
+
+- Active Window Tittle Stealer
+
+- Process Stealer
 
 
 # Builder Options
