@@ -69,6 +69,8 @@
 
 - Google Chrome
 
+- Firefox
+
 - Opera
 
 - Opera GX
@@ -86,8 +88,6 @@
 # Todo
 
 -https://t.me/ExelaStealer to be informed about the developments
-
-- FTP (Firefox) Stealer
 
 - Yandex Stealer
   
