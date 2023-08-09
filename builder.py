@@ -99,7 +99,6 @@ class Build:
             os.system('pip install pygetwindow')
             os.system("pip install dhooks")
             os.system("pip install requests")
-            os.system("pip install uuid")
             os.system("pip install pyinstaller")
         except:
             os.system('cls')
