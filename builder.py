@@ -88,8 +88,6 @@ class Build:
         try:
             os.system('cls')
             os.system('pip install pynput')
-            os.system('pip install pillow')
-            os.system('pip install clipboard')
             os.system("pip install colorama")
             os.system("pip install cryptography")
             os.system("pip install psutil")
