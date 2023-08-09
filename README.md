@@ -12,6 +12,8 @@
 
 - Capture Screenshot
 
+- Wifi Grabber
+
 - Create Mutex (Anti Spam)
 
 - Password Grabber
@@ -100,8 +102,6 @@
 - Spotify Session stealer & validator
 
 - Twitch Session stealer & validator
-
-- Wifi grabber
 
 # Additional
 
