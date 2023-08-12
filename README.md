@@ -34,6 +34,8 @@
 
 - Reddit Session stealer & validator
 
+- Roblox Session stealer $ validator
+
 - Steam Session stealer & validator
 
 - Growtopia save.dat stealer
