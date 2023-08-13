@@ -146,6 +146,8 @@
 ![Uygulama Ekran Görüntüsü](https://i.ibb.co/2nrWkjY/image2.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/iw1jtiw.png)
+
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/p6g34k7.png)
   
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/1iilk44.png)
 
