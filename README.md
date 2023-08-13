@@ -147,7 +147,7 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/5c0yqdu.png)
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/iw1jtiw.png)
+
   
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/1iilk44.png)
 
