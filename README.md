@@ -159,6 +159,6 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/t28m15t.png)
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/jxsfrne.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/rkf9h1w.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/16n1tka.png)
