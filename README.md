@@ -113,7 +113,7 @@
 
 # Usage
 
-- Download the latest version of python from https://www.python.org/
+- Download the python 3.11 or 3.10 from https://www.python.org/
 
 - Open the Exela and click to install.bat
 
