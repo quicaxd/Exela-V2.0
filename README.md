@@ -139,7 +139,7 @@
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pukzrjo.png)
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/h7gzzcw.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/2t4wk7a.png)
 
 ![Uygulama Ekran Görüntüsü](https://i.ibb.co/jw0xM40/image.png)
 
