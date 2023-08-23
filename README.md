@@ -132,7 +132,7 @@
 
 - My telegram => https://t.me/quicaxd
 
-- My discord => quicaxddddd
+- My discord => exela0
 
 
 ## Screenshot's
