@@ -251,7 +251,7 @@ if __name__ == '__main__':
                     continue
 
         else:
-            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls use 3.10.0 or 3.11.0", "Error",  0x10)
+            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls use 3.10.0 or 3.11.0", "Error",  0x40)
     else:
         print("Just windows os supported by Exela")
         os._exit(0)
