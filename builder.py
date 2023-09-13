@@ -115,6 +115,7 @@ class Builder:
             os.system("pip install dhooks")
             os.system("pip install requests")
             os.system("pip install pyinstaller")
+            os.system("cls")
         except:pass
     def GetUserReqs(self) -> None:
         try:
