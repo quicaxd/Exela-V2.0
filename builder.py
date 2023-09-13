@@ -246,7 +246,7 @@ if __name__ == '__main__':
             except Exception as error:
                 ctypes.windll.user32.MessageBoxW(0, f"An error occurred while Building your file\n\nError : {str(error)}", "Error",  0x10)
             else:
-                ctypes.windll.user32.MessageBoxW(0, "Your File compiled succesfully, now u can close the window", "Error",  0x10)
+                ctypes.windll.user32.MessageBoxW(0, "Your File compiled succesfully, now u can close the window", "Information",  0x10)
                 while True:
                     continue
 
