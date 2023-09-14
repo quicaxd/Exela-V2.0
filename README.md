@@ -10,6 +10,8 @@
 
 - After stealing process Inject Keylogger (Optional)
 
+- Fake Error
+
 - Capture Screenshot
 
 - Wifi Grabber
@@ -56,6 +58,8 @@
 # Builder Options
 
 - Digital Signature
+
+- File Pumper
 
 - Realtime Obfuscation
 
