@@ -243,11 +243,12 @@ if __name__ == '__main__':
                 Builder().InstallModules()
                 Builder().MakeExe()
             except Exception as error:
-                ctypes.windll.user32.MessageBoxW(0, f"An error occurred while Building your file\n\nError : {str(error)}", "Error",  0x10)
                 ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | File cannot Compiled!") 
+                ctypes.windll.user32.MessageBoxW(0, f"An error occurred while Building your file\n\nError : {str(error)}", "Error",  0x10)
+                
             else:
+                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | File Compiled!")
                 ctypes.windll.user32.MessageBoxW(0, "Your File compiled succesfully, now u can close the window", "Information",  0x40)
-                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | File Compiled!") 
                 while True:
                     continue
                 
