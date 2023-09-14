@@ -17,7 +17,7 @@ class SubModules:
                 time.sleep(1)
                 SubModules().RemoveMetaData(file_path)
                 print("Renaming Entrypoints")
-                SubModules().RenameEntryPoint(file_path, "Exela-o")
+                SubModules().RenameEntryPoint(file_path, "loader-o")
             else:print("err")
         except Exception as e:
             print(f"Error for exe headers : {str(e)}")
