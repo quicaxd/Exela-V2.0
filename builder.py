@@ -216,7 +216,7 @@ class Builder:
     def GetStartupMethod(self) -> None:
         startupReq = str(input("Do u want to use Startup : "))
         if startupReq.lower() == "y" or startupReq.lower() == "yes":
-            print("--------------------------------------------\n1-) HKCLM/HKLM Startup (This method copies the file to startup using the registry)\n2-)Schtask Startup (This method uses the task scheduler to save the file to the task scheduler and automatically restarts it when any user logs in, this method is more private than the other method but requires admin privilege)\n--------------------------------------------\n\n")
+            print("--------------------------------------------\n1-) HKCLM/HKLM Startup (This method copies the file to startup using the registry)\n2-)Schtask Startup (This method uses the task scheduler to save the file to the task scheduler and automatically restarts it when any user logs in and restart every 1 hour\n--------------------------------------------\n\n")
             getMethod = str(input("1/2 Enter your selection: "))
             if getMethod == "1":
                 self.StartpMethod = "regedit"
