@@ -6,29 +6,32 @@
 
 ## Features 🚀
 
-- After stealing process Inject Keylogger (Optional)
-- Fake Error
-- Capture Screenshot
-- Wifi Grabber
-- Create Mutex (Anti Spam)
-- Discord Injection (Sending token, password, and email on login or password change)
-- Password Grabber
-- Credit Card Grabber
-- Cookie Grabber
-- History Grabber
-- Download's Grabber
-- Instagram Session stealer & validator
-- Twitter Session stealer & validator
-- Tiktok Session stealer & validator
-- Reddit Session stealer & validator
-- Roblox Session stealer $ validator
-- Steam Session stealer & validator
-- Growtopia save.dat stealer
-- Discord Token Stealer
-- System info Stealer
-- Last Clipboard text/image Stealer
-- Active Window Tittle Stealer
-- Process Stealer
+Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
+
+1. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
+2. :page_with_curl: **Fake Error** - Create fake error messages.
+3. :camera: **Capture Screenshot** - Take screenshots.
+4. :signal_strength: **WiFi Grabber** - Retrieve WiFi information.
+5. :lock: **Create Mutex** (Anti Spam) - Prevent spamming.
+6. :calling: **Discord Injection** - Send token, password, and email on login or password change.
+7. :key: **Password Grabber** - Grab passwords.
+8. :credit_card: **Credit Card Grabber** - Capture credit card information.
+9. :cookie: **Cookie Grabber** - Steal browser cookies.
+10. :hourglass_flowing_sand: **History Grabber** - Collect browsing history.
+11. :floppy_disk: **Downloads Grabber** - Retrieve downloaded files.
+12. :camera: **Instagram Session Stealer & Validator** - Steal and validate Instagram sessions.
+13. :bird: **Twitter Session Stealer & Validator** - Steal and validate Twitter sessions.
+14. :notes: **Tiktok Session Stealer & Validator** - Steal and validate Tiktok sessions.
+15. :speech_balloon: **Reddit Session Stealer & Validator** - Steal and validate Reddit sessions.
+16. :video_game: **Roblox Session Stealer & Validator** - Steal and validate Roblox sessions.
+17. :video_game: **Steam Session Stealer & Validator** - Steal and validate Steam sessions.
+18. :video_game: **Growtopia save.dat Stealer** - Steal Growtopia save data.
+19. :telephone_receiver: **Discord Token Stealer** - Steal Discord tokens.
+20. :computer: **System Info Stealer** - Collect system information.
+21. :clipboard: **Last Clipboard Text/Image Stealer** - Steal the last clipboard text/image.
+22. :computer: **Active Window Title Stealer** - Retrieve active window titles.
+23. :computer: **Process Stealer** - Steal running processes.
+
 
 ## Builder Options 🔧
 
