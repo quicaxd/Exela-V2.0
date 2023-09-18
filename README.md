@@ -17,8 +17,8 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 7. :key: **Password Grabber** - Grab passwords.
 8. :credit_card: **Credit Card Grabber** - Capture credit card information.
 9. :cookie: **Cookie Grabber** - Steal browser cookies.
-10. :hourglass_flowing_sand: **History Grabber** - Collect browsing history.
-11. :floppy_disk: **Downloads Grabber** - Retrieve downloaded files.
+10. :hourglass_flowing_sand: **History Grabber** - Steal browsing history.
+11. :floppy_disk: **Downloads Grabber** - Steal downloaded files.
 12. :camera: **Instagram Session Stealer & Validator** - Steal and validate Instagram sessions.
 13. :bird: **Twitter Session Stealer & Validator** - Steal and validate Twitter sessions.
 14. :notes: **Tiktok Session Stealer & Validator** - Steal and validate Tiktok sessions.
