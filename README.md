@@ -83,11 +83,6 @@ Exela Stealer supports the following web browsers:
 
 - Sends all files to your Discord webhook in beautiful embeds and a structured zip file
 
-## Usage 📌
-
-- Download the python 3.11 or 3.10 from [python.org](https://www.python.org/)
-- Open the Exela and click to install.bat
-
 ## Warning ⚠️
 
 - This project was developed for educational purposes only.
