@@ -2,7 +2,7 @@
 
 **Runtime and Scantime FUD Stealer**
 
-Join our [Telegram channel](https://t.me/ExelaStealer) for developments.
+**📢 Join our [Telegram channel](https://t.me/ExelaStealer) for the latest developments!**
 
 ## Features 🚀
 
