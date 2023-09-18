@@ -45,6 +45,16 @@ Exela Stealer's builder provides the following options:
 6. :art: **Icon Changer** (Optional) - Change the program icon (must end with .ico).
 7. :no_entry_sign: **Ultra Strong Anti-VM** (Optional) - Use 12 different Anti-VM methods for enhanced security.
 
+## How to Setup 🛠️
+
+To set up Exela Stealer, follow these steps:
+
+1. :arrow_down: Download Python 3.11 or 3.10 from [python.org](https://www.python.org/).
+2. :arrow_double_click: Open Exela and click on `install.bat`.
+3. :rocket: Follow the on-screen instructions to complete the setup.
+
+Once you have completed these steps, Exela Stealer will be ready to use on your Windows operating system.
+
 ## Supported Browsers 🌐
 Exela Stealer supports the following web browsers:
 
