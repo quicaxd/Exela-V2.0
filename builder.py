@@ -16,23 +16,9 @@ class SubModules:
                 print("Removing EXE Metada")
                 time.sleep(1)
                 SubModules().RemoveMetaData(file_path)
-                print("Renaming Entrypoints")
-                SubModules().RenameEntryPoint(file_path, "loader-o")
             else:print("err")
         except Exception as e:
             print(f"Error for exe headers : {str(e)}")
-    @staticmethod
-    def RenameEntryPoint(file_path:str, entryPoint:str) -> None:
-        with open(file_path, "rb") as file:
-            data = file.read()
-
-        entryPoint = entryPoint.encode()
-        new_entryPoint = b'\x00' + os.urandom(len(entryPoint) - 1)
-        data = data.replace(entryPoint, new_entryPoint)
-
-        with open(file_path, "wb") as file:
-            file.write(data)
-            del data # remove variable from memory
     @staticmethod
     def RemoveMetaData(file_path:str) -> None:
         try:
