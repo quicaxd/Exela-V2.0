@@ -92,7 +92,7 @@ Exela Stealer supports the following web browsers:
 
 ## Note's 📢
 
-- If there is something you want me to add to this project or you want to buy the premium version of this project, you can contact me via :speech_balloon: [Telegram](https://t.me/quicaxd) or :telephone_receiver: [Discord](https://discordapp.com/users/quicaxd00)
+- If there is something you want me to add to this project or you want to buy the premium version of this project, you can contact me via :speech_balloon: [Telegram](https://t.me/quicaxd) or :telephone_receiver: [Discord](https://discordapp.com/users/quicaxd.)
 
 
 ## Screenshots 📸
