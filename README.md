@@ -49,7 +49,7 @@ Exela Stealer's builder provides the following options:
 
 To set up Exela Stealer, follow these steps:
 
-1. :arrow_down: Download Python 3.11 or 3.10 from [python.org](https://www.python.org/).
+1. :arrow_down: Download Python 3.11.0 or 3.10.0 from [python 3.10.0](https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe) [python 3.11.0](https://www.python.org/ftp/python/3.11.0/python-3.11.0-amd64.exe).
 2. :arrow_double_click: Open Exela and click on `install.bat`.
 3. :rocket: Follow the on-screen instructions to complete the setup.
 
