@@ -217,11 +217,11 @@ class Build:
 if __name__ == '__main__':
     if os.name == 'nt':
         version = '.'.join([str(x) for x in (sys.version_info.major, sys.version_info.minor, sys.version_info.micro)])
-        if (parse_version(version) < parse_version("3.11.0")):
-            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls upgrade 3.11.0", "Error",  0x10)
-        elif (parse_version(version) > parse_version("3.11.0")):
-            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls downgrade 3.11.0", "Error",  0x10)
-        elif (parse_version(version) == parse_version("3.11.0")):
+        if (parse_version(version) < parse_version("3.10")):
+            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls upgrade 3.10 or 3.11", "Error",  0x10)
+        elif (parse_version(version) > parse_version("3.11")):
+            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls downgrade 3.11 or 3.10", "Error",  0x10)
+        elif (parse_version(version) == parse_version("3.11") or parse_version(version) == parse_version("3.10")):
             Build().CallFuncions()
         else:
             ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls use 3.11.0", "Error",  0x10)
