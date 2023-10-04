@@ -3,7 +3,7 @@
 **Runtime and Scantime FUD Stealer**
 
 **📢 Join our [Telegram channel](https://t.me/ExelaStealer) for the latest developments!**
-
+[🔰Features](#Features)
 ## Features 🚀
 
 Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
