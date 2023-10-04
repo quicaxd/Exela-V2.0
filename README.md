@@ -3,6 +3,7 @@
 **Runtime and Scantime FUD Stealer**
 
 **📢 Join our [Telegram channel](https://t.me/ExelaStealer) for the latest developments!**
+
 (Note: build 3.9.0 for less av detection.)
 
 ## Features 🚀
