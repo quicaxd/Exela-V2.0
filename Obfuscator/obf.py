@@ -5,7 +5,6 @@ import random
 import marshal
 import zlib
 
-
 parser = argparse.ArgumentParser(description="Python Code Obfuscator")
 parser.add_argument("file", help="Enter the file name containing the Python code to obfuscate")
 parser.add_argument("--junk", action="store_true", help="Inject junk code into the obfuscated code")
@@ -92,7 +91,7 @@ newdata = encrypted_data.decode()
 hex_str = newdata.encode().hex()
 
 
-stub = f"""import sqlite3, ctypes, sys\nimport os, wmi, platform, psutil, time\nimport shutil\nimport base64, json, threading, requests, dhooks, re, subprocess\nfrom cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes\nfrom cryptography.hazmat.backends import default_backend\nfrom pynput import keyboard\n__VareObfuscator__ = ''
+stub = f"""import ctypes,json,sys,base64,shutil,sqlite3\nimport platform, re, os, asyncio, aiohttp, base64, time\nfrom cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes\nfrom cryptography.hazmat.backends import default_backend\n\n__VareObfuscator__ = ''
 {junkgenerator(100)}
 import base64 as ______;import marshal as ____;import zlib as __________;from cryptography.fernet import Fernet;import base64;__mikey__="{base64.b64encode(stubkey).decode()}";mydata="{hex_str}";__vare__ = lambda x: ____.loads(__________.decompress(______.b32decode(______.b64decode(x[::-1]))));__mycip__= Fernet(base64.b64decode(__mikey__));__step1__=bytes.fromhex(mydata);__step2__=__mycip__.decrypt(__step1__);__decr__=base64.b64decode(__step2__);__decrdata__=__decr__;__gotnew__=base64.b32decode(__decr__);__newdecr__={random.randint(999999,999999999999)};__getnew__=__newdecr__;__myb64code__=base64.b64decode(__gotnew__);__myb64codee__=base64.b64decode(__myb64code__);___ = __myb64codee__;exec(__vare__(___))
 {junkgenerator(100)}"""
@@ -102,8 +101,7 @@ stub2 = f"""__VareObfuscator__ = ''
 import base64 as ______;import marshal as ____;import zlib as __________;from cryptography.fernet import Fernet;import base64;__mikey__="{base64.b64encode(stubkey).decode()}";mydata="{hex_str}";__vare__ = lambda x: ____.loads(__________.decompress(______.b32decode(______.b64decode(x[::-1]))));__mycip__= Fernet(base64.b64decode(__mikey__));__step1__=bytes.fromhex(mydata);__step2__=__mycip__.decrypt(__step1__);__decr__=base64.b64decode(__step2__);__decrdata__=__decr__;__gotnew__=base64.b32decode(__decr__);__newdecr__={random.randint(999999,999999999999)};__getnew__=__newdecr__;__myb64code__=base64.b64decode(__gotnew__);__myb64codee__=base64.b64decode(__myb64code__);___ = __myb64codee__;exec(__vare__(___))"""
 
 
-with open('Stub.py', "w") as file:
+with open('stub.py', "w", encoding="utf-8", errors="ignore") as file:
     file.write(stub)
 
-print(f'File obfuscated succesffuly\n')
 
