@@ -4,7 +4,7 @@
 
 **📢 Join our [Telegram channel](https://t.me/ExelaStealer) for the latest developments!**
 
-(Note: build 3.9.0 for less av detection.)
+(Note: build with `python 3.9.0` for less av detection.)
 
 ## Features 🚀
 
