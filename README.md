@@ -17,7 +17,7 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 7. :key: **Password Grabber** - Grab passwords.
 8. :credit_card: **Credit Card Grabber** - Capture credit card information.
 9. :cookie: **Cookie Grabber** - Steal browser cookies.
-10. ::moneybag: **Crypto & Wallet Stealer** - Steal cryptocurrency and wallet information.
+10. :moneybag: **Crypto & Wallet Stealer** - Steal cryptocurrency and wallet information.
 11. :cookie: **AutoFill Stealer** - Steal autofill data.
 12. :bookmark: **Bookmark Stealer** - Steal browser bookmarks.
 13. :hourglass_flowing_sand: **History Grabber** - Steal browser history.
