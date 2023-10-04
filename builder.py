@@ -20,7 +20,7 @@ class Build:
         self.current_path = os.getcwd()
         self.pump = bool()
         self.pumSize = int() #mb
-        self.pyinstaller = "pyinstaller --onefile --noconsole --clean --noconfirm --upx-dir upx-4.1.0-win64 --version-file version.txt"
+        self.pyinstaller = "pyinstaller --onefile --noconsole --clean --noconfirm --upx-dir upx-4.0.2-win64 --version-file version.txt"
     def CallFuncions(self) -> None:
         try:
             self.InstallModules()
