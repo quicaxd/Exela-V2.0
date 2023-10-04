@@ -2,7 +2,7 @@ import os, ctypes, shutil, sys, time
 from pkg_resources import parse_version
 
 try:
-    ctypes.windll.kernel32.SetConsoleTitleW(f"Exela Premium | Builder | {os.getenv('computername')}")
+    ctypes.windll.kernel32.SetConsoleTitleW(f"Exela Stealer | Builder | {os.getenv('computername')}")
 except:pass
 try:
     os.system("color d & cls")
