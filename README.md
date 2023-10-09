@@ -102,7 +102,6 @@ Exela Stealer supports the following web browsers:
 
 ## Screenshots 📸
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pukzrjo.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/2t4wk7a.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/tlw310u.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/3z9533v.png)
