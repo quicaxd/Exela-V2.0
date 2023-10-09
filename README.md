@@ -45,13 +45,12 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 
 Exela Stealer's builder provides the following options:
 
-1. :pencil2: **Digital Signature** - Add a digital signature to your build.
-2. :floppy_disk: **File Pumper** - Pump your file size to evade detection.
-3. :twisted_rightwards_arrows: **Realtime Obfuscation** - Apply real-time obfuscation techniques.
-4. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
-5. :rocket: **Startup Methods** (Optional) - Choose from schtask and regedit and windows common folders startup options.
-6. :art: **Icon Changer** (Optional) - Change the program icon (must end with .ico).
-7. :no_entry_sign: **Ultra Strong Anti-VM** (Optional) - Use 12 different Anti-VM methods for enhanced security.
+1. :floppy_disk: **File Pumper** - Pump your file size to evade detection.
+2. :twisted_rightwards_arrows: **Realtime Obfuscation** - Apply real-time obfuscation techniques.
+3. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
+4. :rocket: **Startup Methods** (Optional) - Choose from schtask and regedit and windows common folders startup options.
+5. :art: **Icon Changer** (Optional) - Change the program icon (must end with .ico).
+6. :no_entry_sign: **Ultra Strong Anti-VM** (Optional) - Use 12 different Anti-VM methods for enhanced security.
 
 ## How to Setup 🛠️
 
