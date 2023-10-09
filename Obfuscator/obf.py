@@ -103,5 +103,5 @@ import base64 as ______;import marshal as ____;import zlib as __________;from cr
 
 with open('stub.py', "w", encoding="utf-8", errors="ignore") as file:
     file.write(stub)
-
+print("File obfuscated Succesfully.\n")
 
