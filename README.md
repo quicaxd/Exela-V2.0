@@ -10,10 +10,6 @@
 
 Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
 
-## Features 🚀
-
-Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
-
 1. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
 2. :page_with_curl: **Fake Error** - Create fake error messages.
 3. :camera: **Capture Screenshot** - Take screenshots.
