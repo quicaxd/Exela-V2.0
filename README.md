@@ -10,6 +10,10 @@
 
 Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
 
+## Features 🚀
+
+Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
+
 1. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
 2. :page_with_curl: **Fake Error** - Create fake error messages.
 3. :camera: **Capture Screenshot** - Take screenshots.
@@ -21,24 +25,25 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 9. :cookie: **Cookie Grabber** - Steal browser cookies.
 10. :moneybag: **Crypto & Wallet Stealer** - Steal cryptocurrency and wallet information.
 11. :cookie: **AutoFill Stealer** - Steal autofill data.
-12. :bookmark: **Bookmark Stealer** - Steal browser bookmarks.
-13. :hourglass_flowing_sand: **History Grabber** - Steal browser history.
-14. :floppy_disk: **Downloads Grabber** - Steal downloaded files.
-15. :camera: **Instagram Session Stealer & Validator** - Steal and validate Instagram sessions.
-16. :bird: **Twitter Session Stealer & Validator** - Steal and validate Twitter sessions.
-17. :notes: **Tiktok Session Stealer & Validator** - Steal and validate Tiktok sessions.
-18. :tv: **Twitch Session Stealer & Validator** - Steal and validate Twitch sessions.
-19. :musical_note: **Spotify Session Stealer & Validator** - Steal and validate Spotify sessions.
-20. :video_game: **Riot Games Session Stealer & Validator** - Steal and validate Riot Games sessions (valorant and lol).
-21. :speech_balloon: **Reddit Session Stealer & Validator** - Steal and validate Reddit sessions.
-22. :video_game: **Roblox Session Stealer & Validator** - Steal and validate Roblox sessions.
-23. :video_game: **Steam Session Stealer & Validator** - Steal and validate Steam sessions.
-24. :video_game: **Growtopia save.dat Stealer** - Steal Growtopia save data.
-25. :telephone_receiver: **Discord Token Stealer** - Steal Discord tokens.
-26. :computer: **System Info Stealer** - Collect system information.
-27. :clipboard: **Last Clipboard Text** - Steal the last clipboard text.
-28. :computer: **Active Window Title Stealer** - Retrieve active window titles.
-29. :computer: **Process Stealer** - Steal running processes.
+12. :iphone: **Telegram Session Stealer** - Steal Telegram session files.
+13. :bookmark: **Bookmark Stealer** - Steal browser bookmarks.
+14. :hourglass_flowing_sand: **History Grabber** - Steal browser history.
+15. :floppy_disk: **Downloads Grabber** - Steal downloaded files.
+16. :camera: **Instagram Session Stealer & Validator** - Steal and validate Instagram sessions.
+17. :bird: **Twitter Session Stealer & Validator** - Steal and validate Twitter sessions.
+18. :notes: **Tiktok Session Stealer & Validator** - Steal and validate Tiktok sessions.
+19. :tv: **Twitch Session Stealer & Validator** - Steal and validate Twitch sessions.
+20. :musical_note: **Spotify Session Stealer & Validator** - Steal and validate Spotify sessions.
+21. :video_game: **Riot Games Session Stealer & Validator** - Steal and validate Riot Games sessions (valorant and lol).
+22. :speech_balloon: **Reddit Session Stealer & Validator** - Steal and validate Reddit sessions.
+23. :video_game: **Roblox Session Stealer & Validator** - Steal and validate Roblox sessions.
+24. :video_game: **Steam Session Stealer & Validator** - Steal and validate Steam sessions.
+25. :video_game: **Growtopia save.dat Stealer** - Steal Growtopia save data.
+26. :telephone_receiver: **Discord Token Stealer** - Steal Discord tokens.
+27. :computer: **System Info Stealer** - Collect system information.
+28. :clipboard: **Last Clipboard Text** - Steal the last clipboard text.
+29. :computer: **Active Window Title Stealer** - Retrieve active window titles.
+30. :computer: **Process Stealer** - Steal running processes.
 
 
 ## Builder Options 🔧
@@ -102,10 +107,8 @@ Exela Stealer supports the following web browsers:
 
 ## Screenshots 📸
 
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/2t4wk7a.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/tlw310u.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/3z9533v.png)
-![Uygulama Ekran Görüntüsü](https://i.ibb.co/2nrWkjY/image2.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/fkrwgnz.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/p6g34k7.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pwjcr7q.png)
@@ -117,3 +120,4 @@ Exela Stealer supports the following web browsers:
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/hoih3vl.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/d94lzcd.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/4tcrjeo.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/2t4wk7a.png)
