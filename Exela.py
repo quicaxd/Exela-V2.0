@@ -1,6 +1,5 @@
 import ctypes, platform
 import json, sys
-import base64
 import shutil
 import sqlite3
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
