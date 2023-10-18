@@ -16,11 +16,11 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 4. :signal_strength: **WiFi Grabber** - Retrieve WiFi information.
 5. :lock: **Create Mutex** (Anti Spam) - Prevent spamming.
 6. :calling: **Discord Injection** - Send token, password, and email on login or password change.
-7. :key: **Password Grabber** - Grab passwords.
-8. :credit_card: **Credit Card Grabber** - Capture credit card information.
+7. :key: **Password Stealer** - Steal Browser passwords.
+8. :credit_card: **Credit Card Stealer** - Steal Browser Cards.
 9. :cookie: **Cookie Grabber** - Steal browser cookies.
 10. :moneybag: **Crypto & Wallet Stealer** - Steal cryptocurrency and wallet information.
-11. :cookie: **AutoFill Stealer** - Steal autofill data.
+11. :cookie: **AutoFill Stealer** - Steal browser autofill data.
 12. :iphone: **Telegram Session Stealer** - Steal Telegram session files.
 13. :bookmark: **Bookmark Stealer** - Steal browser bookmarks.
 14. :hourglass_flowing_sand: **History Grabber** - Steal browser history.
@@ -34,11 +34,11 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 22. :speech_balloon: **Reddit Session Stealer & Validator** - Steal and validate Reddit sessions.
 23. :video_game: **Roblox Session Stealer & Validator** - Steal and validate Roblox sessions.
 24. :video_game: **Steam Session Stealer & Validator** - Steal and validate Steam sessions.
-25. :video_game: **Growtopia save.dat Stealer** - Steal Growtopia save data.
+25. :video_game: **Growtopia save.dat Stealer** - Steal Growtopia save.dat.
 26. :telephone_receiver: **Discord Token Stealer** - Steal Discord tokens.
-27. :computer: **System Info Stealer** - Collect system information.
+27. :computer: **System Info Stealer** - Steal system information.
 28. :clipboard: **Last Clipboard Text** - Steal the last clipboard text.
-29. :computer: **Active Window Title Stealer** - Retrieve active window titles.
+29. :computer: **Active Window Title Stealer** - Steal active window titles.
 30. :computer: **Process Stealer** - Steal running processes.
 
 
@@ -51,7 +51,7 @@ Exela Stealer's builder provides the following options:
 3. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
 4. :rocket: **Startup Methods** (Optional) - Choose from schtask and regedit and windows common folders startup options.
 5. :art: **Icon Changer** (Optional) - Change the program icon (must end with .ico).
-6. :no_entry_sign: **Ultra Strong Anti-VM** (Optional) - Use 12 different Anti-VM methods for enhanced security.
+6. :no_entry_sign: **Anti-VM** (Optional) - Use 12 different Anti-VM methods for enhanced security.
 
 ## How to Setup 🛠️
 
