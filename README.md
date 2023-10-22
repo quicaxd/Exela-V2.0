@@ -24,7 +24,7 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 12. :bookmark: **Bookmark Stealer** - Steals browser bookmarks.
 13. :hourglass_flowing_sand: **History Grabber** - Steals  browser history.
 14. :floppy_disk: **Downloads Grabber** - Steals downloaded files.
-15. :camera: **Instagram Session Stealer & Validator** - Steal  and validate Instagram sessions.
+15. :camera: **Instagram Session Stealer & Validator** - Steals and validate Instagram sessions.
 16. :bird: **Twitter Session Stealer & Validator** - Steals and validate Twitter sessions.
 17. :notes: **Tiktok Session Stealer & Validator** - Steals and validate Tiktok sessions.
 18. :tv: **Twitch Session Stealer & Validator** - Steals and validate Twitch sessions.
