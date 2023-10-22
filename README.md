@@ -91,9 +91,8 @@ Exela Stealer supports the following web browsers:
 
 ## Warning ⚠️
 
-- This project was developed for educational purposes only.
-- I am not responsible for any illegal use
-- do not try to compile and execute on non windows operating system
+- This software was developed for personal training and sandbox testing. The developer of the software is not responsible in any way for its misuse.By downloading or using this 
+   program, you acknowledge that you are solely responsible for any consequences that may result from the use of this program.
 - just compile and execute on windows operating system
 
 ## Note's 📢
