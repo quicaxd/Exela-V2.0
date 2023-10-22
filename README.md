@@ -66,14 +66,14 @@ To set up Exela Stealer, follow these steps:
 ## Supported Browsers 🌐
 Exela Stealer supports the following web browsers:
 
-1. :globe_with_meridians: **Google Chrome** - Support for Google's popular web browser.
-2. :fox_face: **Firefox** - Compatibility with Mozilla Firefox.
-3. :o: **Opera** - Opera browser support.
-4. :atom_symbol: **Opera GX** - Support for Opera GX.
-5. :shield: **Brave** - Compatibility with the Brave browser.
-6. :european_castle: **Microsoft Edge** - Support for Microsoft Edge.
-7. :musical_note: **Vivaldi** - Compatibility with Vivaldi.
-8. :heavy_plus_sign: **And Much More** - Compatibility with various other web browsers.
+1. :globe_with_meridians: **Google Chrome**
+2. :fox_face: **Firefox**
+3. :o: **Opera**
+4. :atom_symbol: **Opera GX**
+5. :shield: **Brave**
+6. :european_castle: **Microsoft Edge**
+7. :musical_note: **Vivaldi** 
+8. :heavy_plus_sign: **And Much More** 
 9. :arrows_counterclockwise: **All Browsers Versions Supported** - Support for multiple versions of each browser.
 
 ## Todo 📝
