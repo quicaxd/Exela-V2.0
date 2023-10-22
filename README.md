@@ -37,9 +37,7 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 25. :telephone_receiver: **Discord Token Stealer** - Steals Discord tokens.
 26. :computer: **System Info Stealer** - Steals system information.
 27. :clipboard: **Last Clipboard Text** - Steals the last clipboard text.
-28. :computer: **Active Window Title Stealer** - Steals active window titles.
-29. :computer: **Process Stealer** - Steals running processes.
-
+28. :computer: **Process Stealer** - Steals running processes.
 
 ## Builder Settings 🔧
 
