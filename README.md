@@ -77,7 +77,6 @@ Exela Stealer supports the following web browsers:
 
 ## Todo 📝
 
-- [Join our Telegram channel](https://t.me/ExelaStealer) to be informed about the developments
 - Yandex Stealer
 - Take Webcamshot
 - Record Audio
