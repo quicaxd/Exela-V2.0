@@ -16,42 +16,41 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 4. :signal_strength: **WiFi Grabber** - Retrieve WiFi information.
 5. :lock: **Create Mutex** (Anti Spam) - Prevent spamming.
 6. :calling: **Discord Injection** - Send token, password, and email on login or password change.
-7. :key: **Password Stealer** - Steal Browser passwords.
-8. :credit_card: **Credit Card Stealer** - Steal Browser Cards.
-9. :cookie: **Cookie Grabber** - Steal browser cookies.
-10. :moneybag: **Crypto & Wallet Stealer** - Steal cryptocurrency and wallet information.
-11. :cookie: **AutoFill Stealer** - Steal browser autofill data.
-12. :iphone: **Telegram Session Stealer** - Steal Telegram session files.
-13. :bookmark: **Bookmark Stealer** - Steal browser bookmarks.
-14. :hourglass_flowing_sand: **History Grabber** - Steal browser history.
-15. :floppy_disk: **Downloads Grabber** - Steal downloaded files.
-16. :camera: **Instagram Session Stealer & Validator** - Steal and validate Instagram sessions.
-17. :bird: **Twitter Session Stealer & Validator** - Steal and validate Twitter sessions.
-18. :notes: **Tiktok Session Stealer & Validator** - Steal and validate Tiktok sessions.
-19. :tv: **Twitch Session Stealer & Validator** - Steal and validate Twitch sessions.
-20. :musical_note: **Spotify Session Stealer & Validator** - Steal and validate Spotify sessions.
-21. :video_game: **Riot Games Session Stealer & Validator** - Steal and validate Riot Games sessions (valorant and lol).
-22. :speech_balloon: **Reddit Session Stealer & Validator** - Steal and validate Reddit sessions.
-23. :video_game: **Roblox Session Stealer & Validator** - Steal and validate Roblox sessions.
-24. :video_game: **Steam Session Stealer & Validator** - Steal and validate Steam sessions.
-25. :video_game: **Growtopia save.dat Stealer** - Steal Growtopia save.dat.
-26. :telephone_receiver: **Discord Token Stealer** - Steal Discord tokens.
-27. :computer: **System Info Stealer** - Steal system information.
-28. :clipboard: **Last Clipboard Text** - Steal the last clipboard text.
-29. :computer: **Active Window Title Stealer** - Steal active window titles.
-30. :computer: **Process Stealer** - Steal running processes.
+7. :key: **Password Stealer** - Steals  Browser passwords.
+8. :credit_card: **Credit Card Stealer** - Steals Browser Cards.
+9. :cookie: **Cookie Grabber** - Steals  browser cookies.
+10. :moneybag: **Crypto & Wallet Stealer** - Steals cryptocurrency and wallet information.
+11. :cookie: **AutoFill Stealer** - Steals  browser autofill data.
+12. :iphone: **Telegram Session Stealer** - Steals Telegram session files.
+13. :bookmark: **Bookmark Stealer** - Steals browser bookmarks.
+14. :hourglass_flowing_sand: **History Grabber** - Steals  browser history.
+15. :floppy_disk: **Downloads Grabber** - Steals downloaded files.
+16. :camera: **Instagram Session Stealer & Validator** - Steal  and validate Instagram sessions.
+17. :bird: **Twitter Session Stealer & Validator** - Steals and validate Twitter sessions.
+18. :notes: **Tiktok Session Stealer & Validator** - Steals and validate Tiktok sessions.
+19. :tv: **Twitch Session Stealer & Validator** - Steals and validate Twitch sessions.
+20. :musical_note: **Spotify Session Stealer & Validator** - Steals and validate Spotify sessions.
+21. :video_game: **Riot Games Session Stealer & Validator** - Steals and validate Riot Games sessions (valorant and lol).
+22. :speech_balloon: **Reddit Session Stealer & Validator** - Steals and validate Reddit sessions.
+23. :video_game: **Roblox Session Stealer & Validator** - Steals and validate Roblox sessions.
+24. :video_game: **Steam Session Stealer & Validator** - Steals and validate Steam sessions.
+25. :video_game: **Growtopia save.dat Stealer** - Steals Growtopia save.dat.
+26. :telephone_receiver: **Discord Token Stealer** - Steals Discord tokens.
+27. :computer: **System Info Stealer** - Steals system information.
+28. :clipboard: **Last Clipboard Text** - Steals the last clipboard text.
+29. :computer: **Active Window Title Stealer** - Steals active window titles.
+30. :computer: **Process Stealer** - Steals running processes.
 
 
-## Builder Options 🔧
+## Builder Settings 🔧
 
 Exela Stealer's builder provides the following options:
 
-1. :floppy_disk: **File Pumper** - Pump your file size to evade detection.
-2. :twisted_rightwards_arrows: **Realtime Obfuscation** - Apply real-time obfuscation techniques.
-3. :keyboard: **Keylogger Injection** (Optional) - Inject a keylogger after the stealing process.
-4. :rocket: **Startup Methods** (Optional) - Choose from schtask and regedit and windows common folders startup options.
-5. :art: **Icon Changer** (Optional) - Change the program icon (must end with .ico).
-6. :no_entry_sign: **Anti-VM** (Optional) - Use 12 different Anti-VM methods for enhanced security.
+1. :twisted_rightwards_arrows: **Realtime Obfuscation** - Applies real-time obfuscation techniques.
+2. :floppy_disk: **File Pumper** (Optional) - Pump your file size to evade detection.
+3. :rocket: **Startup Methods** (Optional) - Use from schtask or regedit or folder startup options for startup.
+4. :art: **Icon Changer** (Optional) - Changes the program icon (must end in .ico).
+5. :no_entry_sign: **Anti-VM** (Optional) - It uses 12 different Anti-VM methods for enhanced security..
 
 ## How to Setup 🛠️
 
