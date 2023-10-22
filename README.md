@@ -52,7 +52,7 @@ Exela Stealer's builder provides the following options:
 4. :art: **Icon Changer** (Optional) - Changes the program icon (must end in .ico).
 5. :no_entry_sign: **Anti-VM** (Optional) - It uses 12 different Anti-VM methods for enhanced security..
 
-## How to Setup 🛠️
+## How to Build 🛠️
 
 To set up Exela Stealer, follow these steps:
 
