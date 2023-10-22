@@ -12,18 +12,18 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 
 1. :page_with_curl: **Fake Error** - Create fake error messages.
 2. :camera: **Capture Screenshot** - Take screenshots.
-3. :signal_strength: **WiFi Grabber** - Retrieve WiFi information.
+3. :signal_strength: **WiFi Stealer** - Retrieve WiFi information.
 4. :lock: **Create Mutex** (Anti Spam) - Prevent spamming.
 5. :calling: **Discord Injection** - Send token, password, and email on login or password change.
 6. :key: **Password Stealer** - Steals  Browser passwords.
 7. :credit_card: **Credit Card Stealer** - Steals Browser Cards.
-8. :cookie: **Cookie Grabber** - Steals  browser cookies.
+8. :cookie: **Cookie Stealer** - Steals  browser cookies.
 9. :moneybag: **Crypto & Wallet Stealer** - Steals cryptocurrency and wallet information.
 10. :cookie: **AutoFill Stealer** - Steals  browser autofill data.
 11. :iphone: **Telegram Session Stealer** - Steals Telegram session files.
 12. :bookmark: **Bookmark Stealer** - Steals browser bookmarks.
-13. :hourglass_flowing_sand: **History Grabber** - Steals  browser history.
-14. :floppy_disk: **Downloads Grabber** - Steals downloaded files.
+13. :hourglass_flowing_sand: **History Stealer** - Steals  browser history.
+14. :floppy_disk: **Downloads Stealer** - Steals downloaded files.
 15. :camera: **Instagram Session Stealer & Validator** - Steals and validate Instagram sessions.
 16. :bird: **Twitter Session Stealer & Validator** - Steals and validate Twitter sessions.
 17. :notes: **Tiktok Session Stealer & Validator** - Steals and validate Tiktok sessions.
