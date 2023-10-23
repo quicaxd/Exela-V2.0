@@ -99,5 +99,5 @@ To set up Exela Stealer, follow these steps:
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/74f0h7v.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/hoih3vl.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/d94lzcd.png)
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/4tcrjeo.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/48jljml.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/2t4wk7a.png)
