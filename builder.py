@@ -24,7 +24,7 @@ class Build:
         self.current_path = os.getcwd()
         self.pump = bool()
         self.pumSize = int()  # mb
-        self.PyInstallerCommand = 'pyinstaller --onefile --noconsole --noconfirm --upx-dir UPX --version-file AssemblyFile\\version.txt'
+        self.PyInstallerCommand = "pyinstaller --onefile --noconsole --noconfirm --upx-dir UPX --version-file AssemblyFile\\version.txt"
 
     def CallFuncions(self) -> None:
         try:
@@ -133,23 +133,21 @@ class Build:
             )
             if not get_icon_path.endswith(".ico"):
                 print("pls use .ico file, now icon change has been disabled")
-                self.PyInstallerCommand += " stub.py"
+                self.PyInstallerCommand += " --icon=NONE stub.py"
             else:
                 if not os.path.isfile(get_icon_path):
                     print("file does not exist, icon change has been disabled.")
-                    self.PyInstallerCommand += " stub.py"
+                    self.PyInstallerCommand += " --icon=NONE stub.py"
                 else:
                     if self.CheckIcoFile(get_icon_path):
-                        self.PyInstallerCommand += (
-                            f" --icon={get_icon_path} stub.py"
-                        )
+                        self.PyInstallerCommand += f" --icon={get_icon_path} stub.py"
                     else:
                         print(
                             "Your file doesnt current a ico file, icon change has been disabled"
                         )
-                        self.PyInstallerCommand += " stub.py"
+                        self.PyInstallerCommand += " --icon=NONE stub.py"
         else:
-            self.PyInstallerCommand += " stub.py"
+            self.PyInstallerCommand += " --icon=NONE stub.py"
 
     def CheckIcoFile(self, file_path: str) -> bool:
         try:
