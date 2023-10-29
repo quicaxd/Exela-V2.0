@@ -24,7 +24,7 @@ class Build:
         self.current_path = os.getcwd()
         self.pump = bool()
         self.pumSize = int()  # mb
-        self.PyInstallerCommand = "pyinstaller --onefile --noconsole --noconfirm --upx-dir UPX --version-file AssemblyFile\\version.txt"
+        self.PyInstallerCommand = "pyinstaller --onefile --noconsole --clean --noconfirm --upx-dir UPX --version-file AssemblyFile\\version.txt"
 
     def CallFuncions(self) -> None:
         try:
