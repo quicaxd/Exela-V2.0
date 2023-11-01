@@ -41,6 +41,7 @@ Exela Stealer, a powerful and feature-rich tool, offers the following functional
 29. :computer: **System Info Stealer** - Steals system information.
 30. :clipboard: **Last Clipboard Text** - Steals the last clipboard text.
 31. :computer: **Process Stealer** - Steals running processes.
+32. :computer: **File Stealer** - Steals Common files.
 
 ## Builder Settings 🔧
 
