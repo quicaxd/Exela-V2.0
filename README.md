@@ -6,6 +6,15 @@
 
 (Note: build with `python 3.11.0` for less av detection.)
 
+## Table of Contents
+
+- [Features](#features)
+- [Builder Settings](#builder-settings)
+- [How to Build?](#how-to-build)
+- [Disclaimer](#disclaimer)
+- [Support the Project](#support-the-project)
+- [Screenshots](#screenshots)
+
 ## Features 🚀
 
 Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:
