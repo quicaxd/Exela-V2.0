@@ -85,6 +85,19 @@ To set up Exela Stealer, follow these steps:
 
 - If there is something you want me to add to this project, you can contact me via :speech_balloon: [Telegram](https://t.me/quicaxd) or :telephone_receiver: [Discord](https://discordapp.com/users/quicaxd.)
 
+## Support the Project
+
+If you find this project useful and would like to show your support, you can make a donation using the following cryptocurrencies:
+
+- **Bitcoin (BTC):**
+  - Wallet Address: bc1qy8r6ck0c5nqcyhgnhvlpc0drjp9c2lergjqy5d
+
+- **Ethereum (ETH):**
+  - Wallet Address: 0x6285dCe8F35d7f31FBf41a648CC35212caF690B1
+
+- **USDT (Tron network):**
+  - Wallet Address: 
+  TGRk3pvcWvoKrXMDATPrVstQHa9c9hqhHQ
 
 ## Screenshots 📸
 
