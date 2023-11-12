@@ -102,7 +102,7 @@ If you find this project useful and would like to show your support, you can mak
 ## Screenshots 📸
 
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/tlw310u.png)
-![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/3z9533v.png)
+![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/lydcp4j.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/fkrwgnz.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/p6g34k7.png)
 ![Uygulama Ekran Görüntüsü](https://i.hizliresim.com/pwjcr7q.png)
