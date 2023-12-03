@@ -193,7 +193,7 @@ class Main:
 
         stdout, stderr = await process.communicate()
         if not process.returncode != 0:
-            output_lines = stdout.decode().split('\n')
+            output_lines = stdout.decode(errors="ignore").split('\n')
             for line in output_lines:
                 for process_name in process_names:
                     if process_name.lower() in line.lower():
