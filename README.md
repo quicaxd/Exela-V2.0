@@ -6,11 +6,12 @@
   <title>Exela Stealer README</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       margin: 20px;
+      line-height: 1.6;
     }
     h1, h2, h3, h4, h5, h6 {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
     ul {
       list-style-type: none;
@@ -20,8 +21,6 @@
       margin-bottom: 5px;
     }
   </style>
-</head>
-<body>
 
 <!-- Table of Contents -->
 <h2>Table of Contents</h2>
