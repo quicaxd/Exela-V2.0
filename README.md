@@ -3,24 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Exela Stealer README</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-    }
-    h1, h2, h3, h4, h5, h6 {
-      margin-bottom: 10px;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 5px;
-    }
   </style>
+
+<!-- Content -->
+<h1 id="exela-stealer">Exela Stealer</h1>
+
+<!-- Features Section -->
+<h2 id="features">Features 🚀</h2>
+<p>Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:</p>
 
 <!-- Table of Contents -->
 <h2>Table of Contents</h2>
@@ -37,12 +27,7 @@
   <li><a href="#screenshots">Screenshots</a></li>
 </ul>
 
-<!-- Content -->
-<h1 id="exela-stealer">Exela Stealer</h1>
 
-<!-- Features Section -->
-<h2 id="features">Features 🚀</h2>
-<p>Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:</p>
 <ul>
   <li>:page_with_curl: <strong>Fake Error</strong> - Create fake error messages.</li>
   <li>:camera: <strong>Capture Screenshot</strong> - Take screenshots.</li>
