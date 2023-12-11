@@ -8,7 +8,7 @@
 <h1 id="exela-stealer">Exela Stealer</h1>
 <p>Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:</p>
 <!-- Features Section -->
-<h2 id="features">Features 🚀</h2>
+
 
 <!-- Table of Contents -->
 <h2>Table of Contents</h2>
@@ -25,7 +25,7 @@
   <li><a href="#screenshots">Screenshots</a></li>
 </ul>
 
-
+<h2 id="features">Features 🚀</h2>
 <ul>
   <li>:page_with_curl: <strong>Fake Error</strong> - Create fake error messages.</li>
   <li>:camera: <strong>Capture Screenshot</strong> - Take screenshots.</li>
