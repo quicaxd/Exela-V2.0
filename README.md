@@ -17,10 +17,7 @@
   <li><a href="#features">Features</a></li>
   <li><a href="#builder-settings">Builder Settings</a></li>
   <li><a href="#how-to-build">How to Build</a></li>
-  <li><a href="#todo">Todo</a></li>
-  <li><a href="#additional">Additional</a></li>
   <li><a href="#disclaimer">Disclaimer</a></li>
-  <li><a href="#notes">Notes</a></li>
   <li><a href="#support-the-project">Support the Project</a></li>
   <li><a href="#screenshots">Screenshots</a></li>
 </ul>
