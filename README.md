@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  </style>
 
 <!-- Content -->
 <h1 id="exela-stealer">Exela Stealer</h1>
-
+<p>Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:</p>
 <!-- Features Section -->
 <h2 id="features">Features 🚀</h2>
-<p>Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:</p>
 
 <!-- Table of Contents -->
 <h2>Table of Contents</h2>
