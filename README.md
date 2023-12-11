@@ -28,21 +28,21 @@
 <h2 id="features">Features 🚀</h2>
 <ul>
   <li>:page_with_curl: <strong>Fake Error</strong> - Create fake error messages.</li>
-  <li>:camera: <strong>Capture Screenshot</strong> - Take screenshots.</li>
-  <li>:signal_strength: <strong>WiFi Stealer</strong> - Retrieve WiFi information.</li>
+  <li>:camera: <strong>Capture Screenshot</strong> - Capture screenshot from all monitors.</li>
+  <li>:signal_strength: <strong>WiFi Stealer</strong> - Extract wifi profiles & passwords.</li>
   <li>:lock: <strong>Create Mutex</strong> (Anti Spam) - Prevent spamming.</li>
   <li>:calling: <strong>Discord Injection</strong> - Send token, password, and email on login or password change.</li>
   <li>:key: <strong>Password Stealer</strong> - Steals Browser passwords.</li>
   <li>:credit_card: <strong>Credit Card Stealer</strong> - Steals Browser Cards.</li>
-  <li>:cookie: <strong>Cookie Stealer</strong> - Steals browser cookies.</li>
+  <li>:cookie: <strong>Cookie Stealer</strong> - Steals Browser cookies.</li>
   <li>:moneybag: <strong>Crypto & Wallet Stealer</strong> - Steals cryptocurrency and wallet information.</li>
-  <li>:cookie: <strong>AutoFill Stealer</strong> - Steals browser autofill data.</li>
+  <li>:cookie: <strong>AutoFill Stealer</strong> - Steals Browser autofill data.</li>
   <li>:iphone: <strong>Telegram Session Stealer</strong> - Steals Telegram session files.</li>
   <li>:video_game: <strong>Uplay Session Stealer</strong> - Steals Uplay session files.</li>
   <li>:video_game: <strong>Epic Session Stealer</strong> - Steals Epic session files.</li>
   <li>:video_game: <strong>Growtopia Session Stealer</strong> - Steals Growtopia `save.dat`.</li>
-  <li>:bookmark: <strong>Bookmark Stealer</strong> - Steals browser bookmarks.</li>
-  <li>:hourglass_flowing_sand: <strong>History Stealer</strong> - Steals browser history.</li>
+  <li>:bookmark: <strong>Bookmark Stealer</strong> - Steals Browser bookmarks.</li>
+  <li>:hourglass_flowing_sand: <strong>History Stealer</strong> - Steals Browser history.</li>
   <li>:floppy_disk: <strong>Downloads Stealer</strong> - Steals downloaded files.</li>
   <li>:camera: <strong>Instagram Session Stealer & Validator</strong> - Steals and validate Instagram sessions.</li>
   <li>:bird: <strong>Twitter Session Stealer & Validator</strong> - Steals and validate Twitter sessions.</li>
