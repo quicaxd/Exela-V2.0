@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
 
 <!-- Content -->
 <h1 id="exela-stealer">Exela Stealer</h1>
@@ -13,7 +14,6 @@
 <!-- Table of Contents -->
 <h2>Table of Contents</h2>
 <ul>
-  <li><a href="#exela-stealer">Exela Stealer</a></li>
   <li><a href="#features">Features</a></li>
   <li><a href="#builder-settings">Builder Settings</a></li>
   <li><a href="#how-to-build">How to Build</a></li>
