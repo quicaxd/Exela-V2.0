@@ -8,7 +8,7 @@
 <!-- Content -->
 <h1 id="exela-stealer">Exela Stealer</h1>
 <p>Exela Stealer, a powerful and feature-rich tool, offers the following functionalities:<br>
-   <a href="https://t.me/ExelaStealer">Exela Stealer</a>
+   <a Join our telegram channale for the latest devolopments href="https://t.me/ExelaStealer">Exela Stealer</a>
 </p>
 
 <!-- Features Section -->
