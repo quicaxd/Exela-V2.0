@@ -96,7 +96,7 @@
 
 <!-- Notes Section -->
 <h2 id="notes">Note's 📢</h2>
-<p>- If there is something you want me to add to this project, you can contact me via :speech_balloon: <a href="https://t.me/quicaxd">Telegram.</a></p>
+<p>- If there is something you want me to add to this project, you can contact me via :speech_balloon: <a href="https://t.me/quicaxd">Telegram</a></p>
 
 <!-- Support the Project Section -->
 <h2 id="support-the-project">Support the Project</h2>
