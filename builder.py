@@ -162,8 +162,7 @@ class Build:
     # Function to prompt user for webhook URL
     def GetWebhook(self) -> None:
         user_webhook = str(input("Enter your webhook URL : "))
-        webhook_pattern = re.compile(r'^https://(?:\w+\.)?discord\.com/api/webhooks/\d+/\w+-?\w+$')
-        if webhook_pattern.match(user_webhook):
+        if user_webhook.startswith("https://") and "discord" in user_webhook:
             self.webhook = user_webhook
         else:
             print("PLS Enter an correct webhook url, close this window and re-start the builder.")
